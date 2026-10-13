@@ -18,8 +18,8 @@ ul {
 
 body {
   font-family: $sans;
-  background: $paper;
-  color: $ink;
+  background: var(--color-surface);
+  color: var(--color-text);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

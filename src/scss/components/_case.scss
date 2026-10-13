@@ -9,22 +9,22 @@
     align-items: center;
     gap: 0.6rem;
     font-size: 1.4rem;
-    color: $slate;
+    color: var(--color-text-muted);
 
     &:hover {
-      color: $ink;
+      color: var(--color-text);
     }
   }
 
   &__arrow {
-    color: $amber;
+    color: var(--color-accent);
     font-weight: 700;
   }
 }
 
 .case-head {
   padding: 3.6rem 0 6rem;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 3rem 0 5rem;
@@ -76,7 +76,7 @@
     }
 
     .mosaic {
-      border: 1px solid $line;
+      border: 1px solid var(--color-border);
     }
 
     // Single-image fallback (no carousel) — the carousel itself already
@@ -84,7 +84,7 @@
     &--lead img {
       display: block;
       width: 100%;
-      border: 1px solid $line;
+      border: 1px solid var(--color-border);
     }
   }
 
@@ -95,7 +95,7 @@
     flex-wrap: wrap;
     gap: 2.4rem;
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     margin-bottom: 2.2rem;
 
     // A flex row of four items wraps unevenly at narrow widths (3+1, etc.)
@@ -107,7 +107,7 @@
     }
 
     strong {
-      color: $ink;
+      color: var(--color-text);
       font-weight: 600;
     }
   }
@@ -116,7 +116,7 @@
   // in a fixed-width mono column so every value lines up on one left edge.
   &__meta {
     margin: 2.8rem 0 0;
-    border-top: 1px solid $line;
+    border-top: 1px solid var(--color-border);
   }
 
   &__meta-row {
@@ -127,7 +127,7 @@
     grid-template-columns: 6.5rem 1fr;
     gap: 1.6rem;
     padding: 1.1rem 0;
-    border-bottom: 1px solid $line;
+    border-bottom: 1px solid var(--color-border);
 
     dt {
       margin: 0;
@@ -135,7 +135,7 @@
       font-size: 1.1rem;
       letter-spacing: 0.02em;
       text-transform: uppercase;
-      color: $slate;
+      color: var(--color-text-muted);
     }
 
     // Browsers give <dd> a 40px left margin by default — reset it, since
@@ -143,7 +143,7 @@
     dd {
       margin: 0;
       font-size: 1.4rem;
-      color: $ink;
+      color: var(--color-text);
     }
   }
 
@@ -160,7 +160,7 @@
 
   &__lead {
     font-size: 2.3rem;
-    color: $ink;
+    color: var(--color-text);
     line-height: 1.4;
     letter-spacing: -0.01em;
     // Keeps a short last line (e.g. "2022.") from being orphaned alone.
@@ -169,14 +169,14 @@
 
   &__body {
     font-size: 1.6rem;
-    color: $slate;
+    color: var(--color-text-muted);
     line-height: 1.6;
     margin-top: 1.2rem;
   }
 
   &__sub {
     font-size: 1.9rem;
-    color: $slate;
+    color: var(--color-text-muted);
     line-height: 1.5;
     margin-top: 1.8rem;
   }
@@ -190,12 +190,12 @@
     span {
       font-size: 1.2rem;
       padding: 0.5rem 1rem;
-      border: 1px solid $line;
+      border: 1px solid var(--color-border);
       border-radius: 0.3rem;
-      color: $slate;
+      color: var(--color-text-muted);
 
       strong {
-        color: $ink;
+        color: var(--color-text);
         font-weight: 700;
       }
     }
@@ -217,12 +217,12 @@
     font-family: $mono;
     font-size: 1.3rem;
     letter-spacing: 0.02em;
-    color: $amber;
+    color: var(--color-accent);
     border-bottom: 1px solid currentColor;
     padding-bottom: 0.2rem;
 
     &:hover {
-      color: $ink;
+      color: var(--color-text);
     }
   }
 }
@@ -233,7 +233,7 @@
 .case-lead {
   &__carousel {
     position: relative;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
 
     .swiper-slide img {
       display: block;
@@ -252,9 +252,9 @@
     width: 4.4rem;
     height: 4.4rem;
     border-radius: 50%;
-    border: 1px solid $line;
-    background: rgba(247, 245, 240, 0.85);
-    color: $paper;
+    border: 1px solid var(--color-border);
+    background-color: color-mix(in srgb, var(--color-surface-inverse) 85%, transparent);
+    color: var(--color-on-inverse);
     font-size: 1.8rem;
     line-height: 1;
     cursor: pointer;
@@ -262,8 +262,8 @@
     transition: background 0.2s ease, border-color 0.2s ease;
 
     &:hover {
-      background: $paper;
-      border-color: $ink;
+      background: var(--color-surface);
+      border-color: var(--color-border-strong);
     }
 
     &--prev {
@@ -284,7 +284,7 @@
 
 .case-gallery {
   padding: 7rem 0;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 5rem 0;
@@ -292,7 +292,7 @@
 
   &__label {
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     margin-bottom: 3.2rem;
   }
 
@@ -309,27 +309,27 @@
       display: block;
       width: 100%;
       height: auto;
-      border: 1px solid $line;
+      border: 1px solid var(--color-border);
     }
 
     figcaption {
       margin-top: 1rem;
       font-size: 1.3rem;
-      color: $slate;
+      color: var(--color-text-muted);
     }
   }
 }
 
 .case-stats {
   padding: 5.6rem 0;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
     background: $line;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
 
     @include media("<=tablet-size-sm") {
       grid-template-columns: 1fr;
@@ -337,7 +337,7 @@
   }
 
   &__box {
-    background: $paper;
+    background: var(--color-surface);
     padding: 3rem 2.8rem;
   }
 
@@ -351,7 +351,7 @@
     font-size: 3rem;
     font-weight: 500;
     line-height: 1.2;
-    color: $ink;
+    color: var(--color-text);
   }
 
   // A prose-length value (e.g. an award name) at the usual stat size wraps
@@ -363,7 +363,7 @@
 
   &__label {
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     margin-top: 0.6rem;
   }
 }
@@ -372,7 +372,7 @@
 // (homepage teaser card) — the separator in a "before -> after" stat.
 .arrow {
   display: inline-block;
-  color: $amber;
+  color: var(--color-accent);
   font-weight: 700;
   margin: 0 0.5rem;
   position: relative;
@@ -381,7 +381,7 @@
 
 .case-section {
   padding: 7rem 0;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 5rem 0;
@@ -400,14 +400,14 @@
 
   &__label {
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     padding-top: 0.6rem;
   }
 
   &__body {
     p {
       font-size: 1.6rem;
-      color: $slate;
+      color: var(--color-text-muted);
       line-height: 1.7;
       max-width: 68rem;
 
@@ -419,7 +419,7 @@
     h3 {
       font-size: 1.9rem;
       font-weight: 700;
-      color: $ink;
+      color: var(--color-text);
       letter-spacing: -0.01em;
       margin: 2.8rem 0 1.2rem;
 
@@ -435,7 +435,7 @@
     li {
       position: relative;
       font-size: 1.5rem;
-      color: $slate;
+      color: var(--color-text-muted);
       line-height: 1.6;
       padding-left: 2.2rem;
       margin-bottom: 1rem;
@@ -447,14 +447,14 @@
         top: 1rem;
         width: 1rem;
         height: 1px;
-        background: $amber;
+        background: var(--color-accent);
       }
     }
 
     .case-section__note {
       margin-top: 2.8rem;
       padding-left: 1.6rem;
-      border-left: 2px solid $amber;
+      border-left: 2px solid var(--color-accent);
       font-size: 1.4rem;
     }
   }
@@ -462,7 +462,7 @@
 
 .case-quote {
   padding: 7rem 0;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 5rem 0;
@@ -477,7 +477,7 @@
     font-size: 2.2rem;
     font-weight: 500;
     line-height: 1.5;
-    color: $ink;
+    color: var(--color-text);
     letter-spacing: -0.01em;
 
     @include media("<=tablet") {
@@ -490,7 +490,7 @@
     margin-top: 1.8rem;
     font-size: 1.4rem;
     font-style: normal;
-    color: $slate;
+    color: var(--color-text-muted);
   }
 }
 
@@ -507,7 +507,7 @@
 
   &__label {
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     margin-bottom: 0.6rem;
   }
 
@@ -519,10 +519,10 @@
 
   &__arrow {
     font-size: 2.2rem;
-    color: $ink;
+    color: var(--color-text);
 
     &:hover {
-      color: $amber;
+      color: var(--color-accent);
     }
   }
 }

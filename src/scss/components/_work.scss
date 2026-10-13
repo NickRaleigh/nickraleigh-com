@@ -3,7 +3,7 @@
 
 .work {
   padding: 10rem 0;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 7rem 0;
@@ -25,7 +25,7 @@
 
   span {
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
   }
 
   &--minor {
@@ -37,7 +37,7 @@
       font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: $slate;
+      color: var(--color-text-muted);
     }
   }
 }
@@ -100,7 +100,7 @@
     border-radius: 1rem;
     margin-bottom: 2.2rem;
     background: $paper-dim;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
     border-bottom: 0.4rem solid transparent;
     overflow: hidden;
     transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
@@ -124,8 +124,8 @@
     left: 1.6rem;
     z-index: 1;
     padding: 0.5rem 1.3rem;
-    background: $amber;
-    color: $paper;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
     font-size: 1.1rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -161,13 +161,13 @@
   }
 
   &:hover &__title {
-    color: $amber;
+    color: var(--color-accent);
   }
 
   &__meta {
     display: block;
     font-size: 1.35rem;
-    color: $slate;
+    color: var(--color-text-muted);
   }
 
   &__highlight {
@@ -179,13 +179,13 @@
     display: block;
     font-size: 1.7rem;
     font-weight: 500;
-    color: $ink;
+    color: var(--color-text);
   }
 
   &__highlight-label {
     display: block;
     font-size: 1.15rem;
-    color: $slate;
+    color: var(--color-text-muted);
     margin-top: 0.2rem;
     white-space: nowrap;
   }
@@ -206,7 +206,7 @@
 .work__more {
   margin-top: 5.6rem;
   padding-top: 5.6rem;
-  border-top: 1px solid $line;
+  border-top: 1px solid var(--color-border);
   text-align: center;
 
   a {
@@ -214,15 +214,15 @@
     align-items: center;
     gap: 0.8rem;
     padding: 1.4rem 2.4rem;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
     border-radius: 0.4rem;
-    color: $ink;
+    color: var(--color-text);
     font-size: 1.5rem;
     font-weight: 600;
     transition: border-color 0.2s;
 
     &:hover {
-      border-color: $ink;
+      border-color: var(--color-border-strong);
     }
   }
 }

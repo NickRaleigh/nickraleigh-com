@@ -14,13 +14,13 @@ $cm-light-grey: #ececec;
 $jost: "Jost", sans-serif;
 
 .coverage-map-panel {
-  border: 1px solid $line;
+  border: 1px solid var(--color-border);
   border-radius: 0.6rem;
   overflow: hidden;
   margin: 3rem 0;
 
   &__preview {
-    background: $white;
+    background: var(--color-surface-inverse);
     // Padding, not the panel's own margin-bottom: a child's bottom margin
     // collapses through a plain block and escapes this background entirely,
     // exposing the page's dark background in the gap instead of white.
@@ -33,7 +33,7 @@ $jost: "Jost", sans-serif;
     font-size: 1.2rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: $slate;
+    color: var(--color-text-muted);
     border-bottom: 1px solid rgba(11, 13, 18, 0.08);
   }
 
@@ -57,7 +57,7 @@ $jost: "Jost", sans-serif;
   &__mobile-note {
     padding: 1.6rem 0 0;
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     text-align: center;
     margin: 0;
   }
@@ -120,8 +120,8 @@ $cm-height-phone: 46rem;
     z-index: 20;
     top: 2rem;
     left: 2rem;
-    background: $ink;
-    color: $paper;
+    background: var(--color-surface-inverse);
+    color: var(--color-on-inverse);
     border: none;
     border-radius: 0.4rem;
     padding: 1rem 1.6rem;
@@ -147,8 +147,8 @@ $cm-height-phone: 46rem;
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    background: $ink;
-    color: $paper;
+    background: var(--color-surface-inverse);
+    color: var(--color-on-inverse);
     border: none;
     border-radius: 999px;
     padding: 1.2rem 2.2rem 1.2rem 1.6rem;
@@ -545,7 +545,7 @@ $cm-height-phone: 46rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-size: 1.3rem;
-      color: $paper;
+      color: var(--color-on-inverse);
     }
     &__wrapper {
       text-align: center;
@@ -739,7 +739,7 @@ $cm-height-phone: 46rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: $slate;
+    color: var(--color-text-muted);
     opacity: 0;
     &.animation-disabled {
       opacity: 1;
@@ -761,7 +761,7 @@ $cm-height-phone: 46rem;
     font-size: 1.8rem;
     line-height: 1.4;
     font-weight: 400;
-    color: $paper;
+    color: var(--color-on-inverse);
     @include media("<=desktop") {
       font-size: 1.6rem;
     }
@@ -848,13 +848,13 @@ $cm-height-phone: 46rem;
     padding: 0.8rem 1.2rem 0.8rem 3rem;
     border-radius: 0.4rem;
     border: 1px solid rgba(11, 13, 18, 0.15);
-    background: $white;
+    background: var(--color-surface-inverse);
     font-family: $jost;
     font-size: 1.2rem;
-    color: $paper;
+    color: var(--color-on-inverse);
     transition: border-color 150ms;
     &::placeholder {
-      color: $slate;
+      color: var(--color-text-muted);
     }
     &:focus {
       outline: none;
@@ -878,7 +878,7 @@ $cm-height-phone: 46rem;
   &__empty {
     padding: 1.2rem 1.6rem;
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
   }
 
   &__result {
@@ -895,11 +895,11 @@ $cm-height-phone: 46rem;
     &__name {
       font-size: 1.4rem;
       font-weight: 600;
-      color: $paper;
+      color: var(--color-on-inverse);
     }
     &__state {
       font-size: 1.2rem;
-      color: $slate;
+      color: var(--color-text-muted);
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
@@ -947,12 +947,12 @@ $cm-height-phone: 46rem;
       font-family: $jost;
       font-weight: 700;
       font-size: 1.4rem;
-      color: $paper;
+      color: var(--color-on-inverse);
     }
 
     span {
       font-size: 1.3rem;
-      color: $slate;
+      color: var(--color-text-muted);
     }
   }
 }

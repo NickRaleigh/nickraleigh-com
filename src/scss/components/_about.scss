@@ -4,7 +4,7 @@
 /* ── Page head ─────────────────────────────────────────────── */
 .pagehead {
   padding: 9rem 0 7rem;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 6rem 0 5rem;
@@ -12,7 +12,7 @@
 
   &__kicker {
     font-size: 1.4rem;
-    color: $slate;
+    color: var(--color-text-muted);
     margin-bottom: 1.8rem;
   }
 
@@ -29,7 +29,7 @@
 /* ── Intro ────────────────────────────────────────────────── */
 .intro {
   padding: 8rem 0;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 6rem 0;
@@ -60,7 +60,7 @@
 
   &__label {
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     padding-top: 0.6rem;
 
     @include media("<=tablet") {
@@ -75,7 +75,7 @@
     height: 16rem;
     object-fit: cover;
     border-radius: 50%;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
     filter: grayscale(0.25);
 
     @include media("<=tablet") {
@@ -98,7 +98,7 @@
     }
 
     .dim {
-      color: $slate;
+      color: var(--color-text-muted);
     }
   }
 }
@@ -106,7 +106,7 @@
 /* ── Timeline ─────────────────────────────────────────────── */
 .timeline {
   padding: 8rem 0;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 6rem 0;
@@ -118,7 +118,7 @@
   grid-template-columns: 14rem 1fr;
   gap: 4rem;
   padding: 3.2rem 0;
-  border-top: 1px solid $line;
+  border-top: 1px solid var(--color-border);
 
   &:first-of-type {
     border-top: none;
@@ -133,7 +133,7 @@
   &__year {
     font-size: 1.4rem;
     font-weight: 600;
-    color: $amber;
+    color: var(--color-accent);
   }
 
   &__title {
@@ -145,7 +145,7 @@
 
   p {
     font-size: 1.5rem;
-    color: $slate;
+    color: var(--color-text-muted);
     line-height: 1.6;
     max-width: 62rem;
   }
@@ -154,7 +154,7 @@
 /* ── Values ───────────────────────────────────────────────── */
 .values {
   padding: 8rem 0;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 6rem 0;
@@ -165,7 +165,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1px;
     background: $line;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
     margin-top: 0.8rem;
 
     @include media("<=tablet-size-sm") {
@@ -175,7 +175,7 @@
 }
 
 .value {
-  background: $paper;
+  background: var(--color-surface);
   padding: 3.2rem 3rem;
 
   &__title {
@@ -187,7 +187,7 @@
 
   &__desc {
     font-size: 1.45rem;
-    color: $slate;
+    color: var(--color-text-muted);
     line-height: 1.6;
   }
 }
@@ -195,7 +195,7 @@
 /* ── Personal ─────────────────────────────────────────────── */
 .personal {
   padding: 7rem 0;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid var(--color-border);
 
   @include media("<=tablet") {
     padding: 5rem 0;
@@ -203,12 +203,12 @@
 
   &__body {
     font-size: 1.7rem;
-    color: $slate;
+    color: var(--color-text-muted);
     line-height: 1.7;
     max-width: 68rem;
 
     strong {
-      color: $ink;
+      color: var(--color-text);
       font-weight: 600;
     }
   }

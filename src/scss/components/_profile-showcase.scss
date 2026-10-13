@@ -54,14 +54,14 @@ $profile-step-gap: 6rem;
     z-index: 1;
 
     &--accent {
-      background: $amber;
+      background: var(--color-accent);
     }
   }
 
   &__num {
     display: block;
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     letter-spacing: 0.04em;
     white-space: nowrap;
   }
@@ -69,14 +69,14 @@ $profile-step-gap: 6rem;
   &__title {
     font-size: 1.9rem;
     font-weight: 700;
-    color: $ink;
+    color: var(--color-text);
     letter-spacing: -0.01em;
     margin-top: 0.4rem;
   }
 
   &__caption {
     font-size: 1.5rem;
-    color: $slate;
+    color: var(--color-text-muted);
     line-height: 1.6;
     max-width: 52rem;
   }
@@ -93,7 +93,7 @@ $profile-step-gap: 6rem;
     width: 100%;
     padding: 0;
     margin: 0;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
     background: none;
     cursor: pointer;
     position: relative;
@@ -113,7 +113,7 @@ $profile-step-gap: 6rem;
     }
 
     &:focus-visible {
-      outline: 2px solid $amber;
+      outline: 2px solid var(--color-focus);
       outline-offset: 2px;
     }
 
@@ -139,16 +139,16 @@ $profile-step-gap: 6rem;
     right: 1.2rem;
     bottom: 1rem;
     font-size: 1.2rem;
-    color: $ink;
+    color: var(--color-text);
     letter-spacing: 0.02em;
   }
 
   &__footnote {
     margin-top: 3.6rem;
     padding-left: 1.6rem;
-    border-left: 2px solid $amber;
+    border-left: 2px solid var(--color-accent);
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
   }
 
   @include media("<=tablet") {
@@ -171,7 +171,7 @@ $profile-step-gap: 6rem;
     display: flex;
     gap: 0.4rem;
     margin-top: 6rem;
-    border-bottom: 1px solid $line;
+    border-bottom: 1px solid var(--color-border);
     overflow-x: auto;
 
     // Below tablet the scroll-snap row (see &--enhanced below) is its own
@@ -193,18 +193,18 @@ $profile-step-gap: 6rem;
     border-bottom: 2px solid transparent;
     text-align: left;
     cursor: pointer;
-    color: $slate;
+    color: var(--color-text-muted);
 
     &:focus-visible {
-      outline: 2px solid $amber;
+      outline: 2px solid var(--color-focus);
       outline-offset: 2px;
     }
 
     &[aria-selected="true"] {
-      border-bottom-color: $amber;
+      border-bottom-color: var(--color-accent);
 
       .profile-showcase__tab-title {
-        color: $ink;
+        color: var(--color-text);
       }
     }
   }
@@ -219,20 +219,20 @@ $profile-step-gap: 6rem;
   &__tab-title {
     font-size: 1.4rem;
     font-weight: 600;
-    color: $slate;
+    color: var(--color-text-muted);
   }
 
   &__changes {
     margin-top: 1.6rem;
     padding-top: 1.6rem;
-    border-top: 1px solid $line;
+    border-top: 1px solid var(--color-border);
   }
 
   &__changes-label {
     font-size: 1.2rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: $amber;
+    color: var(--color-accent);
     margin-bottom: 0.8rem;
   }
 
@@ -244,7 +244,7 @@ $profile-step-gap: 6rem;
     li {
       position: relative;
       font-size: 1.4rem;
-      color: $slate;
+      color: var(--color-text-muted);
       line-height: 1.5;
       padding-left: 1.6rem;
 
@@ -255,7 +255,7 @@ $profile-step-gap: 6rem;
         top: 0.8rem;
         width: 0.8rem;
         height: 1px;
-        background: $amber;
+        background: var(--color-accent);
       }
     }
   }
@@ -344,9 +344,9 @@ $profile-step-gap: 6rem;
 
 .profile-lightbox {
   padding: 0;
-  border: 1px solid $line;
+  border: 1px solid var(--color-border);
   background: $paper-dim;
-  color: $ink;
+  color: var(--color-text);
   width: min(92vw, 90rem);
   max-height: 88vh;
   overflow: hidden;
@@ -372,8 +372,8 @@ $profile-step-gap: 6rem;
     overflow-y: auto;
     display: flex;
     justify-content: center;
-    border: 1px solid $line;
-    background: $paper;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
   }
 
   &__img {
@@ -389,17 +389,17 @@ $profile-step-gap: 6rem;
     right: 0.8rem;
     width: 3.2rem;
     height: 3.2rem;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
     border-radius: 50%;
     background: $paper-dim;
-    color: $slate;
+    color: var(--color-text-muted);
     font-size: 1.8rem;
     line-height: 1;
     cursor: pointer;
 
     &:hover {
-      color: $ink;
-      border-color: $ink;
+      color: var(--color-text);
+      border-color: var(--color-border-strong);
     }
   }
 
@@ -413,9 +413,9 @@ $profile-step-gap: 6rem;
     width: 4.4rem;
     height: 4.4rem;
     border-radius: 50%;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
     background: rgba(11, 13, 18, 0.85);
-    color: $ink;
+    color: var(--color-text);
     font-size: 1.8rem;
     line-height: 1;
     cursor: pointer;
@@ -430,7 +430,7 @@ $profile-step-gap: 6rem;
     }
 
     &:hover {
-      border-color: $ink;
+      border-color: var(--color-border-strong);
     }
 
     @media (prefers-reduced-motion: no-preference) {
@@ -452,19 +452,19 @@ $profile-step-gap: 6rem;
 
   &__step {
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
   }
 
   &__title {
     font-size: 1.8rem;
     font-weight: 700;
-    color: $ink;
+    color: var(--color-text);
     letter-spacing: -0.01em;
   }
 
   &__caption {
     font-size: 1.4rem;
-    color: $slate;
+    color: var(--color-text-muted);
     line-height: 1.6;
   }
 }

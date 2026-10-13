@@ -2,8 +2,8 @@
 @use "../helpers/include-media" as *;
 
 .cta {
-  background: $ink;
-  color: $paper;
+  background: var(--color-surface-inverse);
+  color: var(--color-on-inverse);
   padding: 11rem 0;
 
   @include media("<=tablet") {
@@ -39,8 +39,8 @@
   // on the title. Other pages reuse the base .cta on its original light
   // treatment, paired with .btn--secondary, which this doesn't touch.
   &--dark {
-    background: $paper;
-    color: $ink;
+    background: var(--color-surface);
+    color: var(--color-text);
 
     @include media(">tablet") {
       padding: 13rem 0;
@@ -55,7 +55,7 @@
     }
 
     .cta__text {
-      color: $slate;
+      color: var(--color-text-muted);
     }
   }
 
@@ -65,12 +65,12 @@
   // border-top: the preceding section is the same background color, so
   // without it the two would run together with no visible seam.
   &--case {
-    background: $paper;
-    color: $ink;
-    border-top: 1px solid $line;
+    background: var(--color-surface);
+    color: var(--color-text);
+    border-top: 1px solid var(--color-border);
 
     .cta__text {
-      color: $slate;
+      color: var(--color-text-muted);
     }
   }
 }
@@ -86,8 +86,8 @@
   transition: background 200ms, border-color 200ms;
 
   &--primary {
-    background: $amber;
-    color: $ink;
+    background: var(--color-accent);
+    color: var(--color-text);
 
     &:hover {
       background: #f2b158;
@@ -96,7 +96,7 @@
 
   &--secondary {
     border: 1px solid $line-dark;
-    color: $paper;
+    color: var(--color-on-inverse);
 
     &:hover {
       border-color: rgba(18, 21, 28, 0.4);

@@ -86,7 +86,7 @@
   font-family: $hero-sans;
 
   &:focus-visible {
-    outline: 2px solid $amber;
+    outline: 2px solid var(--color-focus);
     outline-offset: 4px;
   }
 
@@ -126,7 +126,7 @@
 
 .mosaic-card:hover .mosaic-card__title,
 .mosaic-card:focus-visible .mosaic-card__title {
-  color: $amber;
+  color: var(--color-accent);
   text-decoration-color: currentColor;
 }
 
@@ -141,14 +141,14 @@
   font-size: 3rem;
   font-weight: 400;
   line-height: 1;
-  color: $ink;
+  color: var(--color-text);
   white-space: nowrap;
 }
 
 .mosaic-card__highlight-label {
   display: block;
   font-size: 1.3rem;
-  color: $slate;
+  color: var(--color-text-muted);
   margin-top: 0.2rem;
   white-space: nowrap;
 }

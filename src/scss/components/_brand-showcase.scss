@@ -34,7 +34,7 @@
     font-size: 1.2rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: $slate;
+    color: var(--color-text-muted);
     margin-bottom: 1.2rem;
   }
 
@@ -51,7 +51,7 @@
       width: 100%;
       height: auto;
       border-radius: 0.4rem;
-      border: 1px solid $line;
+      border: 1px solid var(--color-border);
     }
   }
 
@@ -74,7 +74,7 @@
 
   &__type-caption {
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     margin: 0.6rem 0 0;
   }
 
@@ -92,14 +92,14 @@
     display: flex;
     align-items: flex-end;
     padding: 0.8rem;
-    color: $ink;
+    color: var(--color-text);
     font-size: 1.05rem;
-    border: 1px solid $line;
+    border: 1px solid var(--color-border);
   }
 
   &__color-note {
     font-size: 1.35rem;
-    color: $slate;
+    color: var(--color-text-muted);
     margin-top: 1.4rem;
     max-width: 40rem;
   }
@@ -107,10 +107,10 @@
 }
 
 .brand-tile {
-  border: 1px solid $line;
+  border: 1px solid var(--color-border);
   border-radius: 0.6rem;
   overflow: hidden;
-  background: $paper;
+  background: var(--color-surface);
 
   img {
     display: block;
@@ -133,15 +133,15 @@
 
   &__caption {
     font-size: 1.3rem;
-    color: $slate;
+    color: var(--color-text-muted);
     padding: 1.6rem 1.8rem;
     margin: 0;
-    border-top: 1px solid $line;
+    border-top: 1px solid var(--color-border);
   }
 }
 
 .motion-study {
-  border: 1px solid $line;
+  border: 1px solid var(--color-border);
   border-radius: 0.6rem;
   overflow: hidden;
 
@@ -150,14 +150,14 @@
     flex-direction: column;
     gap: 0.3rem;
     padding: 1.4rem 1.8rem;
-    border-bottom: 1px solid $line;
+    border-bottom: 1px solid var(--color-border);
     font-size: 1.3rem;
 
     .mono {
       font-size: 1.1rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: $amber;
+      color: var(--color-accent);
     }
   }
 
