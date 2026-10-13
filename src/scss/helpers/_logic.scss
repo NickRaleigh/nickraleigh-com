@@ -1,0 +1,187 @@
+// Sass Helpers - functions & mixins that help extend the logic of vanilla sass.
+//
+
+
+@function specify($selector) {
+  // specificity override by doubling the css class name. Not a best practice, use sparingly.
+  @return '#{$selector}#{$selector}';
+}
+
+@function fraction($top, $bottom) {
+  @return calc( (#{$top} / #{$bottom}) * 100% );
+}
+
+
+@mixin when($selector) {
+  @at-root #{$selector} {
+    @content;
+  }
+}
+
+@mixin when-legacy($selector, $mode:default, $list-selectors:false) {
+  @if ( $mode == default  ) {
+    @if ( $selector == 'even' ) {
+      &:nth-child(even) {
+        @content;
+      }
+    }
+    @else if ( $selector == 'odd' ) {
+      &:nth-child(odd) {
+        @content;
+      }
+    }
+    @else if ( $selector == 'first' ) {
+      &:first-child {
+        @content;
+      }
+    }
+    @else if ( $selector == 'last' ) {
+      &:last-child {
+        @content;
+      }
+    }
+    @else if ( $selector == 'adjacent' ) {
+      &~& {
+        @content;
+      }
+    }
+    @else {
+      @if ( $list-selectors == true ) {
+        @each $i in $selector {
+          #{$i} & {
+            @content;
+          }
+        }
+      } @else {
+        #{$selector} & {
+          @content;
+        }
+      }
+    }
+  }
+  @if ( $mode == root ) {
+    @if ( $list-selectors == true ) {
+      @each $i in $selector {
+        @at-root #{$i} & {
+          @content;
+        }
+      }
+    } @else {
+      @at-root #{$selector} & {
+        @content;
+      }
+    }
+  }
+  @if ( $mode == ignore-nesting ) {
+    @if ( $list-selectors == true ) {
+      @each $i in $selector {
+        @at-root #{$i} & {
+          @content;
+        }
+      }
+    } @else {
+      @at-root #{$selector} {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin even {
+  &:nth-child(even) {
+    @content;
+  }
+}
+
+@mixin odd {
+  &:nth-child(odd) {
+    @content;
+  }
+}
+
+//contains: check if sass map contains a value
+@function contains($list, $var) {
+    @return (null != index($list, $var));
+}
+
+// hasKey: check if map has null key
+@function hasNullKey($map, $key) {
+  @if ( map-get($map, $key) == null ) {
+    @return true;
+  } @else {
+    @return false;
+  }
+}
+
+// fetch: pass a $variations map and a key. If key isn't null, return it. Otherwise return "default" from map.
+@function fetch($directory, $lookup) {
+  @if (hasNullKey($directory, $lookup)) {
+    $lookup: 'default';
+  }
+
+  @return map-get($directory, $lookup);
+}
+
+// str-split: split strings by delimeter
+@function str-split($string, $separator) {
+    $split-arr: ();
+    $index : str-index($string, $separator);
+    @while $index != null {
+        $item: str-slice($string, 1, $index - 1);
+        $split-arr: append($split-arr, $item);
+        $string: str-slice($string, $index + 1);
+        $index : str-index($string, $separator);
+    }
+    $split-arr: append($split-arr, $string);
+
+    @return $split-arr;
+}
+
+// str-replace: replace string with new string pattern
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+
+  @return $string;
+}
+
+//str-remove-doublewhitespace: remove any double spaces inside string
+@function str-remove-doublewhitespace($str) {
+  @while (str-index($str, '  ') != null) {
+    $index: str-index($str, ' ');
+    $str: "#{str-slice($str, 0, $index - 1)}#{str-slice($str, $index + 1)}";
+  }
+  @return $str;
+}
+
+//str-remove-whitespace: remove any single white spaces inside string
+@function str-remove-whitespace($str) {
+  @while (str-index($str, ' ') != null) {
+    $index: str-index($str, ' ');
+    $str: "#{str-slice($str, 0, $index - 1)}#{str-slice($str, $index + 1)}";
+  }
+  @return $str;
+}
+
+//to-number: convert to number
+
+//str-repeat: repeat number n times
+@function str-repeat($string, $times) {
+  $result: "";
+
+  @for $i from 1 through $times {
+    $result: $result + $string;
+  }
+
+  @return $result;
+}
+
+@mixin placeholder {
+  ::-webkit-input-placeholder {@content}
+  :-moz-placeholder           {@content}
+  ::-moz-placeholder          {@content}
+  :-ms-input-placeholder      {@content}
+}

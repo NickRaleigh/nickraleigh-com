@@ -1,0 +1,178 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+// Four-pane image mosaic: a wide+tall "large" pane, a narrow+tall pane, a
+// wide+short pane, and a small square — 3:1 columns, 2:1 rows, ~3:2 overall.
+// `mirror` swaps the column order (narrow column moves to the left) via
+// grid-template-areas, so the DOM/pane order never has to change.
+.mosaic {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 2fr 1fr;
+  grid-template-areas:
+    "large tall"
+    "wide square";
+  gap: 10px;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+
+  &--mirror {
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas:
+      "tall large"
+      "square wide";
+  }
+}
+
+.mosaic__pane {
+  position: relative;
+  overflow: hidden;
+  background: var(--pane-bg, $tan);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--pane-pos, center);
+    // Resting dim lives on filter (not opacity), so it darkens the pane
+    // slightly without washing out the saturated art inside it (the
+    // Overture map's blue states, the Westwood Law histogram's red bar).
+    filter: brightness(0.9);
+    transition: filter 0.25s ease;
+  }
+
+  &--large { grid-area: large; }
+  &--tall { grid-area: tall; }
+  &--wide { grid-area: wide; }
+  &--square { grid-area: square; }
+
+  // Fades the pane's cropped edge into its own background color instead of
+  // ending on a hard crop line.
+  &--fade-right::after,
+  &--fade-bottom::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &--fade-right::after {
+    background: linear-gradient(to right, transparent calc(100% - 24px), var(--pane-bg, $tan));
+  }
+
+  &--fade-bottom::after {
+    background: linear-gradient(to bottom, transparent calc(100% - 24px), var(--pane-bg, $tan));
+  }
+}
+
+// ── Card: mosaic + title/stat/description/CTA, one link ──────────────────
+.mosaic-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: stretch;
+  gap: 5.6rem 4rem;
+
+  @include media("<=new-referral-bp") {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}
+
+.mosaic-card {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  font-family: $hero-sans;
+
+  &:focus-visible {
+    outline: 2px solid $amber;
+    outline-offset: 4px;
+  }
+
+  // One coordinated response to hover/focus: panes brighten, the title
+  // underlines, the arrow nudges right — all on the same timing.
+  &:hover .mosaic__pane img,
+  &:focus-visible .mosaic__pane img {
+    filter: brightness(1);
+  }
+}
+
+.mosaic-card__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2.2rem;
+}
+
+.mosaic-card__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.6rem;
+}
+
+.mosaic-card__title {
+  font-family: $display;
+  font-size: clamp(3.6rem, 3.6vw, 5.2rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.12em;
+  transition: color 0.25s ease, text-decoration-color 0.25s ease;
+}
+
+.mosaic-card:hover .mosaic-card__title,
+.mosaic-card:focus-visible .mosaic-card__title {
+  color: $amber;
+  text-decoration-color: currentColor;
+}
+
+.mosaic-card__highlight {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.mosaic-card__highlight-value {
+  display: block;
+  font-family: $hero-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1;
+  color: $ink;
+  white-space: nowrap;
+}
+
+.mosaic-card__highlight-label {
+  display: block;
+  font-size: 1.3rem;
+  color: $slate;
+  margin-top: 0.2rem;
+  white-space: nowrap;
+}
+
+.mosaic-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.mosaic-card__arrow {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mosaic-card__arrow {
+    transition: transform 0.25s ease;
+  }
+
+  .mosaic-card:hover .mosaic-card__arrow,
+  .mosaic-card:focus-visible .mosaic-card__arrow {
+    transform: translateX(4px);
+  }
+}

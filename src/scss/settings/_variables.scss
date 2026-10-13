@@ -1,0 +1,63 @@
+// type variables
+// Switzer/Boska are self-hosted (scss/settings/_typography.scss); the
+// "* Fallback" faces defined there are size-adjusted stand-ins so the real
+// font swapping in doesn't reflow the page.
+$sans: "Switzer", "Switzer Fallback", system-ui, sans-serif;
+$display: "Boska", "Boska Fallback", Georgia, serif;
+$mono: "JetBrains Mono", ui-monospace, monospace;
+
+// The homepage hero's own type pair (Hanken Grotesk + Instrument Serif,
+// loaded via Google Fonts in base.html.twig) — distinct from $sans/$display
+// above, which is what the rest of the site uses. Shared between
+// _home-hero.scss and the hero-card variant in _work.scss.
+$hero-sans: "Hanken Grotesk", $sans;
+$hero-serif: "Instrument Serif", Georgia, serif;
+
+// colors
+$black: #000000;
+$white: #ffffff;
+$tan: #f1eee3;
+
+// dark theme palette (was paper/ink editorial light theme; swapped for a
+// techier dark-by-default look, same semantic roles)
+$ink: #f4f2ec;
+$ink-soft: #e6e2d6;
+$paper: #0b0d12;
+$paper-dim: #14171f;
+$amber: #e8a33d;
+$slate: #9aa3b2;
+$line: rgba(247, 245, 240, 0.14);
+$line-dark: rgba(18, 21, 28, 0.5);
+$wrap-width: 118rem;
+
+$color-1: #d67163;
+$color-2: #c4664d;
+$color-3: #9d521d;
+$color-4: #cf7d52;
+$color-5: #ee9654;
+$color-6: #ac4c33;
+$color-7: #681667;
+$color-8: #658694;
+$color-9: #5e947f;
+$color-10: #33a496;
+
+// sizes
+$container-width: 185rem;
+$section-padding: 30rem;
+
+// breakpoints
+$breakpoints: (
+  phone-size-sm: 300px,
+  phone: 380px,
+  phone-size-md: 390px,
+  phone-size-lg: 450px,
+  tablet-size-sm: 550px,
+  tablet: 768px,
+  new-referral-bp: 920px,
+  desktop: 1024px,
+  desktop-size-md: 1024px,
+  laptop-size-sm: 1450px,
+  desktop-size-lg: 1240px,
+  page-header-bp: 1650px,
+  desktop-size-xl: 1920px,
+);

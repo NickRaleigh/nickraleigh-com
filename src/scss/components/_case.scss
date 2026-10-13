@@ -1,0 +1,528 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+.case-back {
+  padding: 3.2rem 0 0;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.4rem;
+    color: $slate;
+
+    &:hover {
+      color: $ink;
+    }
+  }
+
+  &__arrow {
+    color: $amber;
+    font-weight: 700;
+  }
+}
+
+.case-head {
+  padding: 3.6rem 0 6rem;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 3rem 0 5rem;
+  }
+
+  // The mosaic pulls enough visual weight on its own that the usual bottom
+  // padding before .case-stats reads as too much air underneath it. No
+  // border either — .case-stats is already a bordered box, so a rule right
+  // above it would read as two frames stacked back to back.
+  &--media {
+    padding-bottom: 4rem;
+    border-bottom: none;
+
+    @include media("<=new-referral-bp") {
+      padding-bottom: 5rem;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    // Text column is deliberately narrower than the media column (not an
+    // even split) — the mosaic reads as the dominant visual, text as caption.
+    // 36rem (not narrower) because the meta table's longer values need the
+    // room: at a tighter column, "Founding Designer & Frontend Developer"
+    // wraps even with the label column cut to its minimum.
+    grid-template-columns: minmax(24rem, 36rem) 1fr;
+    align-items: start;
+    gap: 5.6rem;
+
+    // Matches .mosaic-cards' own 2-col -> 1-col breakpoint, so this grid
+    // collapses at the same width the homepage mosaic grid does.
+    @include media("<=new-referral-bp") {
+      grid-template-columns: 1fr;
+      gap: 3.2rem;
+    }
+  }
+
+  &__media {
+    // Grid items default to min-width: auto, so a flex-based child (the
+    // Swiper carousel: slides with width:100% + flex-shrink:0) can force
+    // this track to "blow out" past the grid's own 1fr track width while
+    // it resolves intrinsic size — the classic CSS Grid blowout bug.
+    // min-width: 0 makes it respect the track instead of ballooning.
+    min-width: 0;
+
+    // Below the text when stacked, so the title still reads first.
+    @include media("<=new-referral-bp") {
+      order: -1;
+    }
+
+    .mosaic {
+      border: 1px solid $line;
+    }
+
+    // Single-image fallback (no carousel) — the carousel itself already
+    // borders its own frame via .case-lead__carousel.
+    &--lead img {
+      display: block;
+      width: 100%;
+      border: 1px solid $line;
+    }
+  }
+
+  // Fallback inline meta row, used only on case studies without the
+  // mosaic/table hero treatment (see &__meta below for that version).
+  &__meta-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4rem;
+    font-size: 1.3rem;
+    color: $slate;
+    margin-bottom: 2.2rem;
+
+    // A flex row of four items wraps unevenly at narrow widths (3+1, etc.)
+    // — a fixed 2-column grid keeps it tidy instead.
+    @include media("<=tablet") {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem 1.6rem;
+    }
+
+    strong {
+      color: $ink;
+      font-weight: 600;
+    }
+  }
+
+  // Ruled label/value table, used on the mosaic hero treatment. Labels sit
+  // in a fixed-width mono column so every value lines up on one left edge.
+  &__meta {
+    margin: 2.8rem 0 0;
+    border-top: 1px solid $line;
+  }
+
+  &__meta-row {
+    display: grid;
+    // 6.5rem comfortably fits the longest label ("Timeline") with room to
+    // spare — sized to the labels, not a round guess, so the value column
+    // gets back every pixel it doesn't need.
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1.6rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid $line;
+
+    dt {
+      margin: 0;
+      font-family: $mono;
+      font-size: 1.1rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: $slate;
+    }
+
+    // Browsers give <dd> a 40px left margin by default — reset it, since
+    // the grid column (not indentation) is what separates it from the label.
+    dd {
+      margin: 0;
+      font-size: 1.4rem;
+      color: $ink;
+    }
+  }
+
+  &__title {
+    font-family: $display;
+    // Full-width line now (not constrained to the text column), so this
+    // scales off the viewport rather than a fixed column width.
+    font-size: clamp(7.2rem, 4.8rem + 4.8vw, 13.2rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 0.94;
+    margin-bottom: 3.6rem;
+  }
+
+  &__lead {
+    font-size: 2.3rem;
+    color: $ink;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    // Keeps a short last line (e.g. "2022.") from being orphaned alone.
+    text-wrap: balance;
+  }
+
+  &__body {
+    font-size: 1.6rem;
+    color: $slate;
+    line-height: 1.6;
+    margin-top: 1.2rem;
+  }
+
+  &__sub {
+    font-size: 1.9rem;
+    color: $slate;
+    line-height: 1.5;
+    margin-top: 1.8rem;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 2.6rem;
+
+    span {
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid $line;
+      border-radius: 0.3rem;
+      color: $slate;
+
+      strong {
+        color: $ink;
+        font-weight: 700;
+      }
+    }
+  }
+
+  // Lives inside &__media, directly under the mosaic — so it reads as a
+  // caption for the tiles rather than a floating row with no edge to align to.
+  &__jumplinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 2rem;
+    margin-top: 2rem;
+  }
+
+  &__code-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: $mono;
+    font-size: 1.3rem;
+    letter-spacing: 0.02em;
+    color: $amber;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 0.2rem;
+
+    &:hover {
+      color: $ink;
+    }
+  }
+}
+
+// &__carousel and &__nav live in the case-head media column now (see
+// .case-head__media--lead below) — only those two BEM pieces remain here,
+// kept under the .case-lead name the carousel JS (app.js) selects by.
+.case-lead {
+  &__carousel {
+    position: relative;
+    border: 1px solid $line;
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      border: none;
+    }
+  }
+
+  &__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.4rem;
+    height: 4.4rem;
+    border-radius: 50%;
+    border: 1px solid $line;
+    background: rgba(247, 245, 240, 0.85);
+    color: $paper;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      background: $paper;
+      border-color: $ink;
+    }
+
+    &--prev {
+      left: 1.6rem;
+    }
+
+    &--next {
+      right: 1.6rem;
+    }
+
+    @include media("<=tablet") {
+      width: 3.6rem;
+      height: 3.6rem;
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.case-gallery {
+  padding: 7rem 0;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 5rem 0;
+  }
+
+  &__label {
+    font-size: 1.3rem;
+    color: $slate;
+    margin-bottom: 3.2rem;
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  &__item {
+    margin: 0;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid $line;
+    }
+
+    figcaption {
+      margin-top: 1rem;
+      font-size: 1.3rem;
+      color: $slate;
+    }
+  }
+}
+
+.case-stats {
+  padding: 5.6rem 0;
+  border-bottom: 1px solid $line;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: $line;
+    border: 1px solid $line;
+
+    @include media("<=tablet-size-sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__box {
+    background: $paper;
+    padding: 3rem 2.8rem;
+  }
+
+  // min-height + bottom alignment: a --sm value sits in the same vertical
+  // space as a normal-size one, so the label row below it lines up across
+  // all three cells instead of floating higher wherever the value is short.
+  &__num {
+    display: flex;
+    align-items: flex-end;
+    min-height: 3.6rem;
+    font-size: 3rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: $ink;
+  }
+
+  // A prose-length value (e.g. an award name) at the usual stat size wraps
+  // to two lines and reads as a different kind of object than its
+  // single-line number/percentage neighbors — sized down to fit one line.
+  &__num--sm {
+    font-size: 1.9rem;
+  }
+
+  &__label {
+    font-size: 1.3rem;
+    color: $slate;
+    margin-top: 0.6rem;
+  }
+}
+
+// Shared between .case-stats__num (case page) and .mosaic-card__highlight-value
+// (homepage teaser card) — the separator in a "before -> after" stat.
+.arrow {
+  display: inline-block;
+  color: $amber;
+  font-weight: 700;
+  margin: 0 0.5rem;
+  position: relative;
+  top: -0.15em;
+}
+
+.case-section {
+  padding: 7rem 0;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 5rem 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 22rem 1fr;
+    gap: 5.6rem;
+
+    @include media("<=tablet") {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  &__label {
+    font-size: 1.3rem;
+    color: $slate;
+    padding-top: 0.6rem;
+  }
+
+  &__body {
+    p {
+      font-size: 1.6rem;
+      color: $slate;
+      line-height: 1.7;
+      max-width: 68rem;
+
+      & + p {
+        margin-top: 2rem;
+      }
+    }
+
+    h3 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: $ink;
+      letter-spacing: -0.01em;
+      margin: 2.8rem 0 1.2rem;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    ul {
+      margin-top: 1.4rem;
+    }
+
+    li {
+      position: relative;
+      font-size: 1.5rem;
+      color: $slate;
+      line-height: 1.6;
+      padding-left: 2.2rem;
+      margin-bottom: 1rem;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 1rem;
+        width: 1rem;
+        height: 1px;
+        background: $amber;
+      }
+    }
+
+    .case-section__note {
+      margin-top: 2.8rem;
+      padding-left: 1.6rem;
+      border-left: 2px solid $amber;
+      font-size: 1.4rem;
+    }
+  }
+}
+
+.case-quote {
+  padding: 7rem 0;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 5rem 0;
+  }
+
+  blockquote {
+    max-width: 74rem;
+    margin: 0;
+  }
+
+  p {
+    font-size: 2.2rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: $ink;
+    letter-spacing: -0.01em;
+
+    @include media("<=tablet") {
+      font-size: 1.9rem;
+    }
+  }
+
+  cite {
+    display: block;
+    margin-top: 1.8rem;
+    font-size: 1.4rem;
+    font-style: normal;
+    color: $slate;
+  }
+}
+
+.case-next {
+  padding: 6rem 0;
+
+  .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  &__label {
+    font-size: 1.3rem;
+    color: $slate;
+    margin-bottom: 0.6rem;
+  }
+
+  &__title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  &__arrow {
+    font-size: 2.2rem;
+    color: $ink;
+
+    &:hover {
+      color: $amber;
+    }
+  }
+}

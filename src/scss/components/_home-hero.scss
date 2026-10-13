@@ -1,0 +1,92 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+.hero {
+  font-family: $hero-sans;
+  padding: 7rem 0 9rem;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 5rem 0 6rem;
+  }
+
+  &__name {
+    font-family: $hero-serif;
+    font-size: clamp(6.4rem, 17.5vw, 26.4rem);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 0.9;
+    // Bottom padding is in em (relative to this element's own huge
+    // clamped font-size), not rem, so the italic "g"'s descender swash
+    // still clears the infobar rule below at every viewport width.
+    padding: 1.8rem 0 0.32em;
+
+    em {
+      font-style: italic;
+    }
+  }
+
+  &__infobar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 2.4rem;
+    padding: 1.1rem 0;
+    border-top: 1px solid $line;
+    border-bottom: 1px solid $line;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: $slate;
+  }
+
+  &__infobar-item {
+    flex: 1 1 20rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  &__statement-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.6rem 4.8rem;
+    padding: clamp(2rem, 2.4vw, 3.2rem) 0 clamp(2.4rem, 2.8vw, 4rem);
+  }
+
+  &__statement {
+    flex: 0 1 auto;
+    white-space: nowrap;
+    font-size: clamp(2.8rem, 3.5vw, 5rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+
+    @include media("<=tablet") {
+      white-space: normal;
+    }
+  }
+
+  &__more {
+    margin-top: clamp(2.4rem, 2.8vw, 4rem);
+    padding-top: 0.8rem;
+    border-top: 1px solid $line;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      min-height: 4.4rem;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: $slate;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $ink;
+      }
+    }
+  }
+}

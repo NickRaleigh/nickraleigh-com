@@ -1,0 +1,470 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+$profile-rail-width: 1.6rem;
+$profile-node-size: 0.8rem;
+$profile-step-gap: 6rem;
+
+.profile-showcase {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $profile-step-gap;
+    margin-top: 6rem;
+  }
+
+  &__step {
+    position: relative;
+
+    &:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc(#{$profile-rail-width} / 2 - 0.5px);
+      width: 1px;
+      height: calc(100% + #{$profile-step-gap});
+      background: $line;
+    }
+  }
+
+  &__step-head {
+    align-items: start;
+    margin-bottom: 2rem;
+  }
+
+  &__step-label {
+    display: flex;
+    gap: 1.2rem;
+  }
+
+  &__rail {
+    flex-shrink: 0;
+    width: $profile-rail-width;
+    display: flex;
+    justify-content: center;
+    padding-top: 0.4rem;
+  }
+
+  &__node {
+    width: $profile-node-size;
+    height: $profile-node-size;
+    border-radius: 50%;
+    background: $slate;
+    position: relative;
+    z-index: 1;
+
+    &--accent {
+      background: $amber;
+    }
+  }
+
+  &__num {
+    display: block;
+    font-size: 1.3rem;
+    color: $slate;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  &__title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: $ink;
+    letter-spacing: -0.01em;
+    margin-top: 0.4rem;
+  }
+
+  &__caption {
+    font-size: 1.5rem;
+    color: $slate;
+    line-height: 1.6;
+    max-width: 52rem;
+  }
+
+  &__media {
+    position: relative;
+  }
+
+  &__thumb {
+    // The full design shows at its natural aspect ratio (not cropped to a
+    // fixed box) — markers are positioned by percentage against the whole
+    // image, so cropping it would throw them off.
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: 1px solid $line;
+    background: none;
+    cursor: pointer;
+    position: relative;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    &:hover img {
+      opacity: 0.9;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $amber;
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      img {
+        transition: opacity 0.2s ease;
+      }
+    }
+  }
+
+  &__fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5.6rem;
+    background: linear-gradient(to bottom, rgba(11, 13, 18, 0), $paper);
+    pointer-events: none;
+  }
+
+  &__view-label {
+    position: absolute;
+    right: 1.2rem;
+    bottom: 1rem;
+    font-size: 1.2rem;
+    color: $ink;
+    letter-spacing: 0.02em;
+  }
+
+  &__footnote {
+    margin-top: 3.6rem;
+    padding-left: 1.6rem;
+    border-left: 2px solid $amber;
+    font-size: 1.3rem;
+    color: $slate;
+  }
+
+  @include media("<=tablet") {
+    &__list {
+      margin-top: 4rem;
+      gap: 4rem;
+    }
+
+    &__step:not(:last-child)::before {
+      height: calc(100% + 4rem);
+    }
+  }
+
+  // --- JS-enhanced tab control + single-frame crossfade -------------------
+  // Everything below only applies once app.js finds `[data-profile-showcase]`
+  // and adds `--enhanced`. No JS means none of this runs and the rules above
+  // are all that apply: today's plain stacked list.
+
+  &__control {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 6rem;
+    border-bottom: 1px solid $line;
+    overflow-x: auto;
+
+    // Below tablet the scroll-snap row (see &--enhanced below) is its own
+    // navigation — swipe instead of a tab control.
+    @include media("<=tablet") {
+      display: none;
+    }
+  }
+
+  &__tab {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 9rem;
+    padding: 0 0.6rem 1.2rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    text-align: left;
+    cursor: pointer;
+    color: $slate;
+
+    &:focus-visible {
+      outline: 2px solid $amber;
+      outline-offset: 2px;
+    }
+
+    &[aria-selected="true"] {
+      border-bottom-color: $amber;
+
+      .profile-showcase__tab-title {
+        color: $ink;
+      }
+    }
+  }
+
+  &__tab-num {
+    font-family: $mono;
+    font-size: 1.2rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  &__tab-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $slate;
+  }
+
+  &__changes {
+    margin-top: 1.6rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid $line;
+  }
+
+  &__changes-label {
+    font-size: 1.2rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $amber;
+    margin-bottom: 0.8rem;
+  }
+
+  &__changes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    li {
+      position: relative;
+      font-size: 1.4rem;
+      color: $slate;
+      line-height: 1.5;
+      padding-left: 1.6rem;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.8rem;
+        width: 0.8rem;
+        height: 1px;
+        background: $amber;
+      }
+    }
+  }
+
+  &--enhanced {
+    .profile-showcase__list {
+      position: relative;
+      margin-top: 3.2rem;
+    }
+
+    // The inactive steps are absolutely positioned (out of flow, so they
+    // don't affect the frame's height); the active one is left in normal
+    // flow, so the frame is always exactly as tall as what's showing. Both
+    // occupy the same box during the crossfade since the outgoing step is
+    // still positioned over it the instant --active is removed.
+    .profile-showcase__step {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+
+      &::before {
+        display: none;
+      }
+
+      &--active {
+        position: relative;
+        inset: auto;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+
+    // Hidden only above tablet — the tab control already names the step
+    // there. Below tablet the control itself is hidden (scroll-snap row
+    // instead), so this is the only place a step's name still shows.
+    @include media(">tablet") {
+      .profile-showcase__step-label {
+        display: none;
+      }
+
+      // With the label column gone, the caption has no reason to stay
+      // pinned to that narrow grid column — let it use the full width.
+      .profile-showcase__step-head {
+        display: block;
+      }
+
+      .profile-showcase__caption {
+        max-width: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .profile-showcase__step {
+        transition: opacity 300ms ease;
+      }
+    }
+
+    // Below tablet, the frame-and-tabs model gives way to a horizontal
+    // scroll-snap row — swiping reads better on touch than a tab control.
+    @include media("<=tablet") {
+      .profile-showcase__list {
+        display: flex;
+        grid-template-columns: none;
+        gap: 2rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        margin-top: 2.4rem;
+      }
+
+      .profile-showcase__step {
+        position: relative;
+        inset: auto;
+        flex: 0 0 100%;
+        scroll-snap-align: start;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+  }
+}
+
+.profile-lightbox {
+  padding: 0;
+  border: 1px solid $line;
+  background: $paper-dim;
+  color: $ink;
+  width: min(92vw, 90rem);
+  max-height: 88vh;
+  overflow: hidden;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.75);
+  }
+
+  &__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    max-height: 88vh;
+    padding: 2rem 2rem 2.4rem;
+  }
+
+  &__frame {
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    border: 1px solid $line;
+    background: $paper;
+  }
+
+  &__img {
+    display: block;
+    max-width: 100%;
+    min-width: 0;
+    height: auto;
+  }
+
+  &__close {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    border: 1px solid $line;
+    border-radius: 50%;
+    background: $paper-dim;
+    color: $slate;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover {
+      color: $ink;
+      border-color: $ink;
+    }
+  }
+
+  &__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.4rem;
+    height: 4.4rem;
+    border-radius: 50%;
+    border: 1px solid $line;
+    background: rgba(11, 13, 18, 0.85);
+    color: $ink;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    transform: translateY(-50%);
+
+    &--prev {
+      left: 1.6rem;
+    }
+
+    &--next {
+      right: 1.6rem;
+    }
+
+    &:hover {
+      border-color: $ink;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: border-color 0.2s ease;
+    }
+
+    @include media("<=tablet") {
+      width: 3.6rem;
+      height: 3.6rem;
+      font-size: 1.5rem;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  &__step {
+    font-size: 1.3rem;
+    color: $slate;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: $ink;
+    letter-spacing: -0.01em;
+  }
+
+  &__caption {
+    font-size: 1.4rem;
+    color: $slate;
+    line-height: 1.6;
+  }
+}

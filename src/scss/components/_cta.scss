@@ -1,0 +1,105 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+.cta {
+  background: $ink;
+  color: $paper;
+  padding: 11rem 0;
+
+  @include media("<=tablet") {
+    padding: 8rem 0;
+  }
+
+  &__title {
+    font-size: clamp(3.6rem, 5vw, 5.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    max-width: 70rem;
+  }
+
+  &__text {
+    color: rgba(18, 21, 28, 0.62);
+    font-size: 1.7rem;
+    margin-top: 2.2rem;
+    max-width: 52rem;
+    line-height: 1.5;
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-top: 4rem;
+  }
+
+  // Homepage-only variant: same dark background as the rest of that page
+  // (.position's border-bottom directly above already supplies the one
+  // hairline separating the two sections) with the hero's display serif
+  // on the title. Other pages reuse the base .cta on its original light
+  // treatment, paired with .btn--secondary, which this doesn't touch.
+  &--dark {
+    background: $paper;
+    color: $ink;
+
+    @include media(">tablet") {
+      padding: 13rem 0;
+    }
+
+    .cta__title {
+      font-family: $hero-serif;
+      font-size: clamp(5.2rem, 8vw, 9.6rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .cta__text {
+      color: $slate;
+    }
+  }
+
+  // Case-study variant: same dark background as the rest of that page, but
+  // keeps the base sans title treatment — the hero-serif swap above is
+  // specifically the homepage hero's own pairing, not the case-study one.
+  // border-top: the preceding section is the same background color, so
+  // without it the two would run together with no visible seam.
+  &--case {
+    background: $paper;
+    color: $ink;
+    border-top: 1px solid $line;
+
+    .cta__text {
+      color: $slate;
+    }
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.4rem 2.4rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-radius: 0.4rem;
+  transition: background 200ms, border-color 200ms;
+
+  &--primary {
+    background: $amber;
+    color: $ink;
+
+    &:hover {
+      background: #f2b158;
+    }
+  }
+
+  &--secondary {
+    border: 1px solid $line-dark;
+    color: $paper;
+
+    &:hover {
+      border-color: rgba(18, 21, 28, 0.4);
+    }
+  }
+}

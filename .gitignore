@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Editor undo-history backup files (emacs undo-tree)
+*.~undo-tree~

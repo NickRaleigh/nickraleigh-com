@@ -1,0 +1,22 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+.footer {
+  background: $ink;
+  color: rgba(18, 21, 28, 0.55);
+  border-top: 1px solid $line-dark;
+  padding: 3rem 0;
+  font-size: 1.3rem;
+
+  .wrap {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @include media("<=tablet-size-sm") {
+    .wrap {
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+  }
+}

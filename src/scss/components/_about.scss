@@ -1,0 +1,215 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+/* ── Page head ─────────────────────────────────────────────── */
+.pagehead {
+  padding: 9rem 0 7rem;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 6rem 0 5rem;
+  }
+
+  &__kicker {
+    font-size: 1.4rem;
+    color: $slate;
+    margin-bottom: 1.8rem;
+  }
+
+  &__title {
+    font-family: $display;
+    font-size: clamp(4.2rem, 6vw, 6.8rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.02;
+    max-width: 78rem;
+  }
+}
+
+/* ── Intro ────────────────────────────────────────────────── */
+.intro {
+  padding: 8rem 0;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 6rem 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 22rem 1fr;
+    gap: 5.6rem;
+
+    @include media("<=tablet") {
+      grid-template-columns: 1fr;
+      gap: 2.8rem;
+    }
+  }
+
+  &__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    @include media("<=tablet") {
+      flex-direction: row;
+      align-items: center;
+      gap: 1.6rem;
+    }
+  }
+
+  &__label {
+    font-size: 1.3rem;
+    color: $slate;
+    padding-top: 0.6rem;
+
+    @include media("<=tablet") {
+      padding-top: 0;
+      order: 2;
+    }
+  }
+
+  &__photo {
+    display: block;
+    width: 16rem;
+    height: 16rem;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid $line;
+    filter: grayscale(0.25);
+
+    @include media("<=tablet") {
+      width: 8rem;
+      height: 8rem;
+    }
+  }
+
+  &__body {
+    p {
+      font-size: clamp(2rem, 2.4vw, 2.6rem);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.5;
+      max-width: 76rem;
+
+      & + p {
+        margin-top: 2.4rem;
+      }
+    }
+
+    .dim {
+      color: $slate;
+    }
+  }
+}
+
+/* ── Timeline ─────────────────────────────────────────────── */
+.timeline {
+  padding: 8rem 0;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 6rem 0;
+  }
+}
+
+.tl-row {
+  display: grid;
+  grid-template-columns: 14rem 1fr;
+  gap: 4rem;
+  padding: 3.2rem 0;
+  border-top: 1px solid $line;
+
+  &:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  @include media("<=tablet-size-sm") {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  &__year {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $amber;
+  }
+
+  &__title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    font-size: 1.5rem;
+    color: $slate;
+    line-height: 1.6;
+    max-width: 62rem;
+  }
+}
+
+/* ── Values ───────────────────────────────────────────────── */
+.values {
+  padding: 8rem 0;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 6rem 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: $line;
+    border: 1px solid $line;
+    margin-top: 0.8rem;
+
+    @include media("<=tablet-size-sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.value {
+  background: $paper;
+  padding: 3.2rem 3rem;
+
+  &__title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+  }
+
+  &__desc {
+    font-size: 1.45rem;
+    color: $slate;
+    line-height: 1.6;
+  }
+}
+
+/* ── Personal ─────────────────────────────────────────────── */
+.personal {
+  padding: 7rem 0;
+  border-bottom: 1px solid $line;
+
+  @include media("<=tablet") {
+    padding: 5rem 0;
+  }
+
+  &__body {
+    font-size: 1.7rem;
+    color: $slate;
+    line-height: 1.7;
+    max-width: 68rem;
+
+    strong {
+      color: $ink;
+      font-weight: 600;
+    }
+  }
+}

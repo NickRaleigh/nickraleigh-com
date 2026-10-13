@@ -1,0 +1,21 @@
+@use "../settings/variables" as *;
+
+.color--white {
+    color: $white;
+}
+
+.color--black {
+    color: $black;
+}
+
+.bg-color--white {
+    background-color: $white;
+}
+
+.bg-color--black {
+    background-color: $black;
+}
+
+.bg-color--grey {
+    background: #f1eee9;
+}

@@ -1,0 +1,85 @@
+// Self-hosted display (Boska) and body (Switzer) fonts, from Fontshare.
+// Only the weights actually used are included:
+//   Boska: 500 (display headings) + 500 italic (the hero name's accent letters)
+//   Switzer: 400/500/600/700 (body copy through to bold emphasis)
+//
+// The most-used weights (Boska 500, Switzer 400/700) also get a
+// <link rel="preload"> in base.html.twig's <head> — @font-face here can't
+// start the fetch on its own until app.css is parsed, so the preload is
+// what lets the browser start downloading them in parallel with that,
+// same as the old Google Fonts <link> did.
+//
+// Each real font pairs with a size-adjusted "Fallback" face: a local system
+// font (Georgia / Arial) with its ascent/descent/line-gap/size overridden to
+// match the real font's own metrics. The browser lays out text in that
+// fallback the instant CSS is ready, at virtually the same dimensions the
+// real font will occupy once it swaps in — so font-display: swap doesn't
+// reflow the page out from under anything already on screen. Metrics were
+// computed once from the font files themselves (fontkit) against published
+// metrics for Georgia/Arial (@capsizecss/metrics), not guessed.
+
+@font-face {
+  font-family: "Boska";
+  src: url("/fonts/Boska-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Boska";
+  src: url("/fonts/Boska-MediumItalic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Boska Fallback";
+  src: local("Georgia");
+  ascent-override: 87.6985%;
+  descent-override: 22.8382%;
+  line-gap-override: 8.2217%;
+  size-adjust: 109.4659%;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer Fallback";
+  src: local("Arial");
+  ascent-override: 78.4353%;
+  descent-override: 20.0090%;
+  line-gap-override: 7.2032%;
+  size-adjust: 124.9437%;
+}

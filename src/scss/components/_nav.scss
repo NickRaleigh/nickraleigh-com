@@ -1,0 +1,58 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 13, 18, 0.88);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid $line;
+
+  .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 6.8rem;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__logo {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+
+  &__name {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    color: $ink;
+  }
+
+  &__links {
+    display: flex;
+    gap: 3.6rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: $slate;
+
+    @include media("<=phone-size-lg") {
+      display: none;
+    }
+  }
+
+  &__link {
+    transition: color 200ms;
+
+    &:hover,
+    &.visible,
+    &.is-active {
+      color: $ink;
+    }
+  }
+}

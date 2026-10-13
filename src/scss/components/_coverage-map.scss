@@ -1,0 +1,1097 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+@use "../helpers/sizing" as *;
+@use "../helpers/perch" as *;
+@use "../helpers/animation" as *;
+@use "../helpers/logic" as *;
+
+// Local stand-ins for values that lived in the original app's design tokens
+// (Overture's own accent blue and a light neutral grey, and Jost, the
+// typeface the original product UI actually used instead of this site's own
+// Inter).
+$cm-blue: #1890ff;
+$cm-light-grey: #ececec;
+$jost: "Jost", sans-serif;
+
+.coverage-map-panel {
+  border: 1px solid $line;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  margin: 3rem 0;
+
+  &__preview {
+    background: $white;
+    // Padding, not the panel's own margin-bottom: a child's bottom margin
+    // collapses through a plain block and escapes this background entirely,
+    // exposing the page's dark background in the gap instead of white.
+    padding-bottom: 4rem;
+  }
+
+  &__preview-label {
+    padding: 1.2rem 2rem;
+    font-family: $mono;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $slate;
+    border-bottom: 1px solid rgba(11, 13, 18, 0.08);
+  }
+
+  &__mobile-preview {
+    display: none;
+
+    @include media("<=tablet") {
+      display: block;
+      padding: 0 2rem 2.4rem;
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 982 / 605;
+      border-radius: 0.6rem;
+      object-fit: cover;
+    }
+  }
+
+  &__mobile-note {
+    padding: 1.6rem 0 0;
+    font-size: 1.3rem;
+    color: $slate;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+// Shared between the globe's own height and the hero placeholder's
+// min-height, so the pre-mount reservation can't silently drift from the
+// mounted component's real size.
+$cm-height-desktop: 60rem;
+$cm-height-tablet: 50rem;
+$cm-height-phone: 46rem;
+
+.coverage-map {
+  $this: ".coverage-map";
+  $USA: "#{$this}__USA";
+  $state: "#{$USA}__state";
+  $animation-speed: 5s;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  height: $cm-height-desktop;
+  font-family: $jost;
+  // Shipped (full-demo) colors. The hero's --minimal modifier overrides
+  // these further down to a dark-page-friendly palette; the lit-state blue
+  // ($cm-blue, below) is intentionally left out of this scheme so it stays
+  // identical in both variants.
+  --cm-dome-start: #d2d2d2;
+  --cm-dome-end: #ffffff;
+  --cm-bg-start: #f8f8f8;
+  --cm-bg-end: #ffffff;
+  --cm-state-fill: #c9c9c9;
+  // Desktop-only: the entrance sequence, dome composition, and search card
+  // all assume real width to work with. Below tablet the full demo is
+  // hidden and its mobile-note points people at a desktop instead.
+  @include media("<=tablet") {
+    display: none;
+    height: $cm-height-tablet;
+  }
+  @include media("<=phone-size-lg") {
+    height: $cm-height-phone;
+  }
+
+  &--minimal {
+    --cm-dome-start: #262a33;
+    --cm-dome-end: transparent;
+    --cm-bg-start: transparent;
+    --cm-bg-end: transparent;
+    --cm-state-fill: #3a3f4a;
+
+    // The dome's left/right edges get hard-clipped by .coverage-map's own
+    // overflow:hidden, showing a straight seam where the box ends instead
+    // of fading away. Masking the bottom hides that seam under a fade.
+    $fade: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+    mask-image: $fade;
+    -webkit-mask-image: $fade;
+  }
+
+  &__demo-control {
+    position: absolute;
+    z-index: 20;
+    top: 2rem;
+    left: 2rem;
+    background: $ink;
+    color: $paper;
+    border: none;
+    border-radius: 0.4rem;
+    padding: 1rem 1.6rem;
+    font-family: $mono;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: opacity 150ms;
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+
+  // The full demo's always-visible play/replay trigger, centered over the
+  // map. Unlike __replay (the hero's passive after-the-fact chip), this
+  // stays up the whole time so a visitor can set off the entrance on their
+  // own terms, the same way the original PlayButton worked.
+  &__play {
+    position: absolute;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: $ink;
+    color: $paper;
+    border: none;
+    border-radius: 999px;
+    padding: 1.2rem 2.2rem 1.2rem 1.6rem;
+    font-family: $mono;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    transition: transform 150ms;
+    &:hover {
+      transform: translate(-50%, -50%) scale(1.04);
+    }
+
+    &__icon {
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-top: 0.6rem solid transparent;
+      border-bottom: 0.6rem solid transparent;
+      border-left: 0.9rem solid $paper;
+    }
+  }
+
+  &__globe {
+    width: 133.9rem;
+    height: 116.5rem;
+    background: linear-gradient(to bottom, var(--cm-dome-start) 0%, var(--cm-dome-end) 39%);
+    position: absolute;
+    border-radius: 72.9rem 72.9rem 0px 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-position: 0% 100%;
+    background-size: 100% 200%;
+    bottom: -71rem;
+    opacity: 0;
+
+    &.animation-disabled {
+      background-position: 0% 39%;
+      background-size: 100% 100%;
+      bottom: -59rem;
+      opacity: 1;
+      @include media("<=tablet") {
+        bottom: 0;
+      }
+    }
+
+    @include media(">tablet") {
+      @include animate-in($animation-speed, $delay: 2s) {
+        0% {
+          background-position: 0% 100%;
+          background-size: 100% 200%;
+          bottom: -71rem;
+          opacity: 0;
+        }
+        100% {
+          background-position: 0% 39%;
+          background-size: 100% 100%;
+          bottom: -59rem;
+          opacity: 1;
+        }
+      }
+
+      // The hero is a backdrop behind the intro, not a timed showcase — it
+      // should settle in sooner. Overriding just the delay (not the whole
+      // animation shorthand) is enough; duration/keyframes are unchanged.
+      .coverage-map--minimal & {
+        animation-delay: 0.5s;
+      }
+    }
+    // CANDIDATE 1 (testing): between roughly 1024px and 1920px, .coverage-map
+    // itself stays flat around 990px wide (.wrap caps out below this globe's
+    // fixed rem width), so .coverage-map__globe silently overflows and its
+    // overflow:hidden ancestor crops it — Canada/Mexico, toward the globe's
+    // left edge, is the first thing cropped away as the window narrows
+    // through here. transform:scale() shrinks width AND height together
+    // around the same centered point, so nothing inside (already correctly
+    // positioned at full size) gets re-tuned or distorted — it's the same
+    // picture, smaller. 0.791 is sized to just clear the container at the
+    // narrow (~1025px) edge of this range; it under-fills a bit at the wide
+    // (~1560px) edge rather than risk clipping again.
+    @include media("<=1560px") {
+      // translateY nudges the whole (already-shrunk) dome down slightly;
+      // tell me the right number and I'll swap it in.
+      transform: translateX(-50%) scale(0.791) translateY(2rem);
+      // Default transform-origin (center) shrinks the dome toward its own
+      // middle, which pushes its visible cap down and opens a gap above
+      // the map / below the "Welcome to your trusted network" panel.
+      // Pivoting from the top instead keeps the cap anchored where it was
+      // and only pulls in the (mostly off-screen anyway) bottom.
+      transform-origin: center top;
+    }
+    @include media("<=desktop") {
+      width: 112rem;
+      // Un-does the <=1560px scale above so this breakpoint's own existing,
+      // separately-tuned width step is unaffected by the new rule.
+      transform: translateX(-50%);
+    }
+    @include media("<=tablet") {
+      @include spring(100%);
+      background: linear-gradient(to bottom, var(--cm-dome-start) 0%, var(--cm-dome-end) 100%);
+      border-radius: 0;
+      height: 100%;
+      bottom: 0;
+      // The dome's own reveal keyframes only exist above tablet (see the
+      // >tablet block above); below it, nothing else sets opacity to 1, so
+      // without this the globe would stay invisible at this breakpoint
+      // whenever the animate-in (rather than animation-disabled) class is
+      // the one applied. Scoped to <=tablet only — doesn't touch the
+      // shipped full-demo look on desktop.
+      opacity: 1;
+    }
+  }
+
+  &--minimal .coverage-map__globe {
+    // The dome's mobile background (above) is a flat, edge-to-edge rectangle
+    // with no fade — on the hero it reads as a lighter panel sitting on the
+    // page rather than the states just floating on it. Dropping it entirely
+    // is simpler than trying to fade a shape with no room to fade into.
+    @include media("<=tablet") {
+      background: none;
+    }
+  }
+  &__background {
+    @include spring(100%);
+    background: linear-gradient(to bottom, var(--cm-bg-start) 0%, var(--cm-bg-end) 100%);
+    background-repeat: repeat;
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-size: 100% 0%;
+    &.animation-disabled {
+      background-size: 100% 100%;
+    }
+    @include animate-in($animation-speed) {
+      0% {
+        background-size: 100% 0%;
+      }
+      100% {
+        background-size: 100% 100%;
+      }
+    }
+  }
+  &__north-america {
+  }
+  &__canada-and-mexico {
+    opacity: 0;
+    &.animation-disabled {
+      opacity: 1;
+    }
+    @include animate-in($animation-speed) {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    @include media("<=tablet") {
+      display: none;
+    }
+    img {
+      @include spring(151rem);
+      height: auto;
+      object-fit: contain;
+      position: relative;
+      top: -2.6rem;
+      @include media("<=desktop") {
+        top: -2rem;
+      }
+    }
+  }
+  &__USA {
+    @include spring(151rem);
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: -4.85rem;
+    z-index: 1;
+    opacity: 0;
+    @include media("<=desktop-size-xl") {
+      top: -8.18rem;
+    }
+    @include media("<=1560px") {
+      top: -16.7rem;
+    }
+    @include media("<=desktop") {
+      top: -23.2rem;
+    }
+    @include media("<=tablet") {
+      top: 0;
+      height: auto;
+    }
+
+    &.animation-disabled {
+      opacity: 1;
+    }
+
+    @include animate-in($animation-speed) {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    &__svg {
+      @include spring(100%);
+      position: relative;
+      z-index: 10;
+      // Nudges the states back down within the <=1560px scaled-down dome
+      // (see .coverage-map__globe's "CANDIDATE 1" comment above) — the
+      // scale() there shrinks the whole picture from its center, which
+      // left the map sitting higher than it should within the dome.
+      @include media("<=1560px") {
+        top: 8.5rem;
+      }
+      @include media("<=desktop") {
+        top: 7rem;
+      }
+      @include media("<=tablet") {
+        height: 100%;
+        top: 0;
+      }
+    }
+    &__ak-hi-border {
+      position: absolute;
+      width: 100%;
+      top: 2rem;
+      z-index: 0;
+      @include media("<=desktop-size-xl") {
+        top: 5rem;
+      }
+      @include media("<=1560px") {
+        top: 14rem;
+      }
+      @include media("<=desktop") {
+        top: 21rem;
+      }
+      @include media("<=tablet") {
+        display: none;
+      }
+    }
+    &__state {
+      fill: var(--cm-state-fill);
+      transition: all 125ms;
+      cursor: pointer;
+      position: relative;
+      &:hover {
+        @include media(">tablet") {
+          fill: #5cb1ff;
+        }
+      }
+      &--selected {
+        fill: var(--cm-state-fill);
+        @include animate(250ms) {
+          0% {
+            fill: var(--cm-state-fill);
+          }
+          100% {
+            fill: $cm-blue;
+          }
+        }
+        &:hover {
+          @include media(">tablet") {
+            opacity: 0.9;
+          }
+        }
+      }
+      &--added {
+        fill: #c9c9c9;
+        stroke-dasharray: 0%;
+        stroke-opacity: 0;
+        stroke-width: 0px;
+        stroke: transparent;
+        @include animate(1.5s) {
+          0% {
+            stroke-opacity: 0;
+            stroke-width: 5px;
+            fill: #c9c9c9;
+            stroke: transparent;
+          }
+          50% {
+            stroke-opacity: 1;
+            stroke-width: 5px;
+            stroke: $white;
+            fill: #c9c9c9;
+          }
+          80% {
+            stroke-opacity: 1;
+            stroke-width: 5px;
+            stroke: $white;
+            fill: #e2e2e2;
+          }
+          100% {
+            stroke-opacity: 0;
+            stroke: transparent;
+            stroke-width: 5px;
+            fill: $cm-blue;
+          }
+        }
+        &:hover {
+          @include media(">tablet") {
+            opacity: 0.9;
+          }
+        }
+      }
+      &--existing {
+        @include animate(1.5s) {
+          0% {
+            stroke-opacity: 0;
+            stroke-width: 5px;
+            fill: $cm-blue;
+            stroke: transparent;
+          }
+          50% {
+            stroke-opacity: 1;
+            stroke-width: 5px;
+            stroke: $white;
+            fill: $cm-blue;
+          }
+          80% {
+            stroke-opacity: 1;
+            stroke-width: 5px;
+            stroke: $white;
+            fill: $cm-blue;
+          }
+          100% {
+            stroke-opacity: 0;
+            stroke: transparent;
+            stroke-width: 5px;
+            fill: $cm-blue;
+          }
+        }
+      }
+      &--search-dimmed {
+        opacity: 0.25;
+        transition: opacity 200ms;
+      }
+      &--search-match {
+        fill: $cm-blue;
+        transition: fill 150ms;
+        @include animate(1.2s, $loop: true) {
+          0% {
+            stroke-opacity: 0;
+            stroke-width: 6px;
+            stroke: $cm-blue;
+          }
+          50% {
+            stroke-opacity: 0.9;
+            stroke-width: 6px;
+            stroke: $cm-blue;
+          }
+          100% {
+            stroke-opacity: 0;
+            stroke-width: 6px;
+            stroke: $cm-blue;
+          }
+        }
+      }
+    }
+    &__region {
+      fill: var(--cm-state-fill);
+    }
+  }
+  &__info-box {
+    @include spring(30rem);
+    height: auto;
+    // Rendered through a portal to document.body (see InfoBox/index.js), so
+    // it's no longer a DOM descendant of .coverage-map and needs its own
+    // font-family rather than inheriting it.
+    font-family: $jost;
+    background-color: $white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 2rem 2rem;
+    opacity: 0;
+    // The box tracks the cursor and can end up directly under it. Without
+    // this, the cursor lands on the box instead of the map path beneath it,
+    // firing mouseout -> hide -> mouseover -> show in a rapid loop (visible
+    // as a flickering cursor and a popup that sometimes never settles).
+    pointer-events: none;
+    box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.08);
+    @include animate(125ms, $delay: 200ms) {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    &__title {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 1.3rem;
+      color: $paper;
+    }
+    &__wrapper {
+      text-align: center;
+      @include perch("+==");
+    }
+    &__attorneys {
+      @include perch("+==");
+      @include spring(100%);
+      &__img-wrapper {
+        @include spring(13rem);
+        @include perch("-+-");
+        overflow: hidden;
+      }
+      &__img {
+        @include size(4rem);
+        min-width: 4rem;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+        opacity: 0;
+        left: 50%;
+        transform: rotateY(70deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $cm-light-grey;
+        color: $cm-blue;
+        font-family: $mono;
+        font-size: 1.2rem;
+        @include when-legacy("adjacent") {
+          margin-left: -10%;
+          z-index: 1;
+        }
+        @include animate-in(325ms, $delay: 150ms) {
+          0% {
+            opacity: 0;
+            left: 50%;
+            transform: rotateY(70deg);
+          }
+          100% {
+            opacity: 1;
+            left: 0%;
+            transform: rotateY(0deg);
+          }
+        }
+        &--overflow {
+          @include perch("-+-");
+          background-color: $cm-light-grey;
+          color: $cm-blue;
+          font-weight: 700;
+          font-size: 1.5rem;
+        }
+      }
+      &__count {
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $white;
+        background-color: $cm-blue;
+        font-size: 1.2rem;
+        border-radius: 1.5rem;
+        padding: 0.5rem 1.5rem;
+        margin-top: 0.5rem;
+        @include spring(15rem);
+      }
+      &__list {
+        @include spring(20rem);
+        font-size: 1.55rem;
+        color: #9a9a9a;
+        margin-top: 1rem;
+        display: block;
+        line-height: 1.1;
+      }
+    }
+  }
+}
+
+// The AK/HI border and Canada/Mexico graphics are external image files with
+// their own baked-in grey/white gradients (not inline SVG), so they can't
+// take the --cm-* custom properties above. A filter is the pragmatic way to
+// mute them for the dark hero without touching the source files or their
+// geometry.
+.coverage-map--minimal {
+  .coverage-map__USA__ak-hi-border,
+  .coverage-map__canada-and-mexico img {
+    filter: invert(1) brightness(0.55) opacity(0.6);
+  }
+
+  // Alaska/Hawaii sit in their own inset, offset into the bottom-left —
+  // on mobile's narrow width that's space better spent letting the lower
+  // 48 (where every lit state actually is) fill it.
+  @include media("<=tablet") {
+    .coverage-map__USA__ak-hi {
+      display: none;
+    }
+  }
+
+  // The hero is a non-interactive teaser: InfoBox is already unmounted
+  // (see index.js), and this also kills the :hover fill-brighten (CSS,
+  // independent of InfoBox) and the pointer cursor, so hovering a state
+  // does nothing at all.
+  .coverage-map__USA__state {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  // DC's marker has a hardcoded white stroke (it's an SVG attribute, not
+  // themed) meant to be legible next to the InfoBox tooltip naming it. With
+  // no tooltip or legend in the hero, it reads as a stray artifact.
+  .coverage-map__USA__state--DC {
+    display: none;
+  }
+
+  // A soft glow instead of a flat fill, so lit states read as lit against
+  // the dark page rather than just a different flat color. Full demo (on
+  // its white card) is untouched.
+  .coverage-map__USA__state--selected,
+  .coverage-map__USA__state--existing {
+    filter: drop-shadow(0 0 3px rgba(24, 144, 255, 0.65));
+  }
+}
+
+// Positions the play/replay buttons (both absolutely positioned) relative
+// to the mounted widget itself, not whatever positioned ancestor happens to
+// be further up the page.
+.coverage-map-autoplay {
+  position: relative;
+  // Before React mounts anything inside it, this div is empty — zero
+  // height, zero area. It's also the element the hero's IntersectionObserver
+  // watches, and a zero-area target never reports isIntersecting: true (its
+  // intersection ratio is undefined), so autoplay would never fire.
+  // Inheriting the mount point's own reserved min-height keeps it non-empty
+  // from the start.
+  min-height: inherit;
+}
+
+// Reserves the demo's rendered height before React lazy-mounts into it, so
+// there's no layout shift once the IntersectionObserver fires. min-height,
+// not height: the full demo's search card (pulled up over the map with a
+// negative margin) is taller than the map alone, so a fixed height here
+// would cap the container short and let that card's content spill into the
+// code tabs below it once mounted.
+// The containing section is hidden below tablet (see .coverage-map's own
+// <=tablet display:none), so there's nothing to reserve space for there —
+// only the desktop reservation applies.
+#coverage-map-demo {
+  display: block;
+  min-height: $cm-height-desktop;
+
+  @include media("<=tablet") {
+    min-height: 0;
+  }
+}
+
+.coverage-map__panel {
+  position: relative;
+  z-index: 2;
+  font-family: $jost;
+  background: $white;
+  border-radius: 0.6rem;
+  margin: -13rem 4rem 0;
+  padding: 2.2rem 2.8rem 3.6rem;
+  border: 1px solid rgba(11, 13, 18, 0);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  // The frame (border/shadow) materializes on its own, independent of the
+  // text/input fades below it, matching the original's slow-build box.
+  &.animation-disabled {
+    border-color: rgba(11, 13, 18, 0.08);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  }
+  @include animate-in(2.2s, $delay: 300ms) {
+    0% {
+      border-color: rgba(11, 13, 18, 0);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+      border-color: rgba(11, 13, 18, 0.08);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    }
+  }
+  @include media("<=tablet") {
+    display: none;
+  }
+}
+
+.coverage-map__intro {
+  margin-bottom: 1.4rem;
+
+  &__pretext {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $slate;
+    opacity: 0;
+    &.animation-disabled {
+      opacity: 1;
+    }
+    // Arrives with the search input, after the headline has already
+    // finished settling in, same as the original's own reveal order.
+    @include animate-in(400ms, $delay: 2300ms) {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__title {
+    margin: 0.4rem 0 0;
+    font-size: 1.8rem;
+    line-height: 1.4;
+    font-weight: 400;
+    color: $paper;
+    @include media("<=desktop") {
+      font-size: 1.6rem;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    span {
+      display: block;
+      opacity: 0;
+      filter: blur(8px);
+      &.animation-disabled {
+        opacity: 1;
+        filter: blur(0);
+      }
+      @include animate-in(550ms) {
+        0% {
+          opacity: 0;
+          filter: blur(8px);
+        }
+        100% {
+          opacity: 1;
+          filter: blur(0);
+        }
+      }
+      &:nth-child(1) {
+        animation-delay: 200ms;
+      }
+      &:nth-child(2) {
+        animation-delay: 1750ms;
+      }
+    }
+  }
+}
+
+.coverage-map__search {
+  position: relative;
+  opacity: 0;
+  &.animation-disabled {
+    opacity: 1;
+  }
+  // Arrives together with the pretext, after the headline above it.
+  @include animate-in(400ms, $delay: 2300ms) {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  &__field {
+    position: relative;
+    @include spring(26rem);
+    max-width: 100%;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 1.4rem;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid $slate;
+      border-radius: 50%;
+      transform: translateY(-60%);
+      pointer-events: none;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 2.15rem;
+      width: 2px;
+      height: 0.7rem;
+      background: $slate;
+      transform: translateY(15%) rotate(45deg);
+      pointer-events: none;
+    }
+  }
+
+  &__input {
+    @include spring(100%);
+    padding: 0.8rem 1.2rem 0.8rem 3rem;
+    border-radius: 0.4rem;
+    border: 1px solid rgba(11, 13, 18, 0.15);
+    background: $white;
+    font-family: $jost;
+    font-size: 1.2rem;
+    color: $paper;
+    transition: border-color 150ms;
+    &::placeholder {
+      color: $slate;
+    }
+    &:focus {
+      outline: none;
+      border-color: $cm-blue;
+    }
+  }
+
+  &__results {
+    position: absolute;
+    margin-top: 0.6rem;
+    width: 34rem;
+    max-width: 100%;
+    background: $white;
+    border: 1px solid $cm-light-grey;
+    border-radius: 0.6rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    z-index: 6;
+  }
+
+  &__empty {
+    padding: 1.2rem 1.6rem;
+    font-size: 1.3rem;
+    color: $slate;
+  }
+
+  &__result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.6rem;
+    cursor: pointer;
+    transition: background 120ms;
+    &:hover {
+      background: $cm-light-grey;
+    }
+    &__name {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: $paper;
+    }
+    &__state {
+      font-size: 1.2rem;
+      color: $slate;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+  }
+}
+
+.inner-circle-search__stat-counter {
+  position: absolute;
+  z-index: 20;
+  bottom: 16rem;
+  right: 2rem;
+  opacity: 0;
+  &.animation-disabled {
+    opacity: 1;
+  }
+  @include animate-in(600ms, $delay: 1s) {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  &__wrapper {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    background: $white;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 999px;
+    padding: 0.8rem 1.6rem;
+    transition: transform 200ms;
+
+    &--pulsate {
+      transform: scale(1.05);
+    }
+
+    &__countup {
+      font-family: $jost;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: $paper;
+    }
+
+    span {
+      font-size: 1.3rem;
+      color: $slate;
+    }
+  }
+}
+
+.code-showcase {
+  // Solarized Dark (solarized.base03 background, base0 foreground)
+  $sol-base03: #002b36;
+  $sol-base02: #073642;
+  $sol-base01: #586e75;
+  $sol-base0: #839496;
+  $sol-base1: #93a1a1;
+  $sol-yellow: #b58900;
+  $sol-orange: #cb4b16;
+  $sol-red: #dc322f;
+  $sol-magenta: #d33682;
+  $sol-blue: #268bd2;
+  $sol-cyan: #2aa198;
+  $sol-green: #859900;
+
+  border-top: 1px solid rgba($sol-base0, 0.15);
+  background: $sol-base03;
+
+  &__radio {
+    display: none;
+  }
+
+  &__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    background: $sol-base02;
+    padding: 0.6rem 0.6rem 0;
+
+    label {
+      font-family: $mono;
+      font-size: 1.2rem;
+      color: rgba($sol-base1, 0.6);
+      padding: 0.8rem 1.4rem;
+      cursor: pointer;
+      border-radius: 0.4rem 0.4rem 0 0;
+      transition: color 150ms, background 150ms;
+      &:hover {
+        color: $sol-base1;
+      }
+    }
+  }
+
+  &__panels {
+    position: relative;
+  }
+
+  &__panel {
+    display: none;
+    margin: 0;
+    padding: 2rem 2rem 2rem 5.6rem;
+    max-height: 34rem;
+    overflow: auto;
+    font-family: $mono;
+    font-size: 1.3rem;
+    line-height: 1.55;
+    position: relative;
+
+    code {
+      font-family: inherit;
+      color: $sol-base0;
+      white-space: pre;
+      position: relative;
+    }
+  }
+
+  // Prism's line-numbers plugin (wired up in mount.tsx) appends
+  // .line-numbers-rows into <code> once highlighting finishes — it has to
+  // run after Prism, since Prism rebuilds the code block's markup from
+  // its own text content and would wipe out any line markup added ahead
+  // of time (which is what briefly broke this). Styled here to match the
+  // Solarized Dark theme rather than pulling in the plugin's own CSS.
+  .line-numbers-rows {
+    position: absolute;
+    // Positioned against <code>'s own box (set position:relative above),
+    // which already starts right at line 1 — no extra offset needed here,
+    // or row 1 ends up lined up with line 2 instead.
+    top: 0;
+    left: -3.6rem;
+    width: 2.8rem;
+    font-size: inherit;
+    line-height: inherit;
+    pointer-events: none;
+    user-select: none;
+    counter-reset: linenumber;
+    border-right: 1px solid rgba($sol-base0, 0.15);
+
+    span {
+      display: block;
+      counter-increment: linenumber;
+
+      &::before {
+        content: counter(linenumber);
+        display: block;
+        padding-right: 0.8rem;
+        text-align: right;
+        color: rgba($sol-base0, 0.35);
+      }
+    }
+  }
+
+  &__caption {
+    padding: 1.4rem 2rem;
+    background: $sol-base02;
+    color: rgba($sol-base1, 0.7);
+    font-size: 1.3rem;
+    margin: 0;
+  }
+
+  // radio-driven tab switching, no JS required
+  $cm-tab-ids: index, context, types, mock-data, helpers, autoplaydemo, background, camx, infobox, intro, searchbar, statcounter, usa, usstate, styles;
+  @each $id in $cm-tab-ids {
+    #cm-tab-#{$id}:checked ~ .code-showcase__tabs label[for="cm-tab-#{$id}"] {
+      color: $sol-yellow;
+      background: $sol-base03;
+    }
+    #cm-tab-#{$id}:checked ~ .code-showcase__panels .code-showcase__panel[data-tab="#{$id}"] {
+      display: block;
+    }
+  }
+
+  // Prism tokens, standard Solarized Dark syntax mapping
+  .token.comment { color: $sol-base01; font-style: italic; }
+  .token.string,
+  .token.attr-value { color: $sol-cyan; }
+  .token.keyword { color: $sol-green; }
+  .token.function { color: $sol-blue; }
+  .token.punctuation { color: $sol-base0; }
+  .token.tag,
+  .token.class-name { color: $sol-blue; }
+  .token.attr-name { color: $sol-yellow; }
+  .token.number,
+  .token.boolean { color: $sol-magenta; }
+  .token.property { color: $sol-blue; }
+  .token.selector { color: $sol-blue; }
+  .token.operator { color: $sol-green; }
+  .token.constant { color: $sol-orange; }
+}
