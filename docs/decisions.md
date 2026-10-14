@@ -116,12 +116,52 @@ Pattern: `color-` + role, base word first, then modifier (`surface` / `surface-i
   - [ ] CTA secondary button text
   - [ ] work badge text (`on-accent`)
   - [ ] coverage map panel surface (#fff → #f4f2ec)
+- **Exception to "no component tokens":** kept `--color-step-marker` / `--color-step-marker-strong` for the profile showcase timeline nodes. **Why (your words): TODO**
+- **New token:** `--color-on-inverse-muted` (slate) for muted icons/placeholder text on the inverse surface. Naming order is convention, not law; base role first keeps related tokens sorted and autocompleting together.
 - **Tokens describe intent, not implementation:** choose by what the user sees, not by the CSS property. The 1px-gap grids (`background` behind `gap: 1px`) and the profile timeline rail (1px `::before`) are dividers, so they use `--color-border` even though the property is `background`. The "`color:` takes text tokens" check is a heuristic; when it disagrees with the visual role, the role wins.
 - **Learned:** `var(--name)`, not `--var(name)`. Custom properties are resolved by the browser at runtime, so the tokens file doesn't need to `@use` the palette. A selector nested inside `@each` within `:root` compiles to a descendant selector (`:root .black`). Sass can't create variables dynamically or destructure maps.
+
+### Content as typed TypeScript literals (not YAML)
+
+- **Decided:** Convert the two case studies' YAML into typed TS objects. No YAML parser, no `fs` reads.
+- **Why:** The compiler validates content shape (a typo like `type: 'lsit'` fails the build instead of silently rendering nothing). One author and two case studies, so YAML's "non-devs can edit it" advantage doesn't apply.
+- **Trade-off:** long prose is clunkier in TS strings. Fine at this scale, reconsider if articles come back.
+- **Tests:** only for what types can't enforce (image paths exist, unique section ids, every slug has data).
+- **Still open:** inline HTML in strings (`| raw` in Twig). React escapes by default.
 
 ### Session 1 summary (my words)
 
 I learned about tokenizing design system values, separating them into two layers: the primitive variable and its contextual use. I learned how to set up Next.js and wire up SCSS files.
+
+---
+
+## 2026-10-14 · Session 2: layout shell (Milestone 3/4)
+
+### Layout shell
+
+- **Decided:** `layout.tsx` only composes `<Nav />`, `{children}`, `<Footer />`. Components live in `src/components/`, outside `app/` (every folder in `app/` is a potential route segment).
+- **Skipped for now:** everything in the old `<head>` (Next generates charset/viewport; title/OG/canonical come from the `metadata` export in Milestone 6), font preloads and Google Fonts (`next/font` decision later), Clarity analytics, old `app.js`.
+- **Images:** `images: { unoptimized: true }` because static export has no server to optimize images on request. `next/image` requires `width` + `height` (reserves space, prevents layout shift) and root-relative `src`.
+- **Favicon:** Next auto-links `src/app/favicon.ico`. The scaffold's default was being served; replaced with the real one. Only convention filenames work there (`favicon.ico`, `icon.png`, `apple-icon.png`).
+- **Open:** nav active state (layout is a server component and doesn't know the URL); footer year is computed at build time, not per request; logo alt text (decorative next to the name, so likely `""`).
+
+### Site config as a typed const
+
+- **Decided:** `src/config/site.ts` exports a `SiteConfig` type and a `config` const. Shared primitives (`Picture`, `Anchor`) live in `src/types/base.ts`.
+- **Rejected:** env vars (not secret, not per-environment); React Context (runtime, client-only; server components can just import).
+- **Learned:**
+  - Annotation (`: T`) replaces what TS knows with `T`; `satisfies T` checks against `T` but keeps the inferred type (matters with broad types like `Record<string, string>`). Annotation is enough here.
+  - Optional means "fine to omit". `width?`/`height?` on `Picture` allowed a config that crashed `next/image` at runtime, and `tsc` still passed. A passing type check doesn't prove the types are right.
+  - `readonly` is one level deep: `readonly links: Anchor[]` locks the property but not the array. Needs `readonly links: readonly Anchor[]`. `as const` is the deep alternative.
+  - Named a type `Image`, which collided with `next/image` and the DOM global. Renamed to `Picture`.
+  - Keys: use a stable unique value (`href`), not the array index.
+- **BEM modifier per link** (`nav__link link--about`, via `toLowerHyphenCase`): kept on purpose as a hook for styling single instances, even though no SCSS uses it yet.
+
+### Assets
+
+- **Decided:** keep all old `public/uploads` (12MB, including out-of-scope case studies) in case other case studies get rebuilt.
+- **Cost noted:** deployed on every build, and binaries committed to git stay in history permanently. Originals also exist in `nr-symfony`.
+
 
 ---
 
