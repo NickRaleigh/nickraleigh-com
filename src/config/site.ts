@@ -19,7 +19,7 @@ export const config: SiteConfig = {
   nav: {
     logo: {
       src: "/uploads/logo-white-lines.png",
-      alt: "Logo",
+      alt: "",
       width: 163,
       height: 163,
     },

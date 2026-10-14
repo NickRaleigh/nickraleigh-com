@@ -161,6 +161,7 @@ I learned about tokenizing design system values, separating them into two layers
 
 - **Decided:** keep all old `public/uploads` (12MB, including out-of-scope case studies) in case other case studies get rebuilt.
 - **Cost noted:** deployed on every build, and binaries committed to git stay in history permanently. Originals also exist in `nr-symfony`.
+- **Then:** `public/uploads` gitignored for now. Must un-ignore the folders actually used (logo, `overture/`, `car-accident-reporting-app/`) before deploying, since Vercel builds from git.
 
 
 ---

@@ -45,4 +45,7 @@ next-env.d.ts
 
 
 # uploads
-public/uploads
+public/uploads/*
+!public/uploads/logo-white-lines.png
+!public/uploads/overture/
+!public/uploads/car-accident-reporting-app/
