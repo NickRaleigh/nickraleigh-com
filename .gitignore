@@ -42,3 +42,7 @@ next-env.d.ts
 
 # Editor undo-history backup files (emacs undo-tree)
 *.~undo-tree~
+
+
+# uploads
+public/uploads
