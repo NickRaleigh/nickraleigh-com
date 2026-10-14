@@ -1,7 +1,9 @@
 :root {
+    // colors
     --color-surface: var(--paper);
     --color-text: var(--ink);
     --color-text-muted: var(--slate);
+    --color-on-inverse-muted: var(--slate);
     --color-border: var(--line);
     --color-border-strong: var(--ink);
     --color-accent: var(--amber);
@@ -9,4 +11,6 @@
     --color-surface-inverse: var(--ink);
     --color-on-inverse: var(--paper);
     --color-focus: var(--amber);
+    --color-step-marker: var(--slate);
+    --color-step-marker-strong: var(--amber);
 }

@@ -328,7 +328,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    background: $line;
+    background: var(--color-border);
     border: 1px solid var(--color-border);
 
     @include media("<=tablet-size-sm") {

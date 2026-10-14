@@ -109,6 +109,14 @@ Pattern: `color-` + role, base word first, then modifier (`surface` / `surface-i
 - **Bulk pass:** ~160 unambiguous usages converted with one scripted `sed` pass (e.g. `color: $slate` → `var(--color-text-muted)`, `1px solid $line` → `var(--color-border)`). Ambiguous ones done by hand.
 - **Coverage map:** its white panel is treated as the inverse surface (`$white` → `--color-surface-inverse`, #fff → #f4f2ec). A deliberate small visual change; text inside uses `on-inverse`.
 - **Rules learned:** `color:` takes text or `on-*` tokens; surface tokens go on `background`. Pick the token by what the element sits on, not by which value happens to match (`on-accent` and `on-inverse` are both `--paper` today, but they're separate decisions).
+- **Bug fixed during port:** coverage map search icon handle was rotated `45deg` (pointing the wrong way); now `-45deg`.
+- **Lesson:** converting styles before pages exist means no visual check. CSS silently drops invalid declarations (`ar(`, `background: solid …`, a border with no style), so the build passes while elements vanish. Hand-converted items need a browser check once ported:
+  - [ ] coverage map search icon + placeholder (`on-inverse-muted`)
+  - [ ] case nav `color-mix()` background
+  - [ ] CTA secondary button text
+  - [ ] work badge text (`on-accent`)
+  - [ ] coverage map panel surface (#fff → #f4f2ec)
+- **Tokens describe intent, not implementation:** choose by what the user sees, not by the CSS property. The 1px-gap grids (`background` behind `gap: 1px`) and the profile timeline rail (1px `::before`) are dividers, so they use `--color-border` even though the property is `background`. The "`color:` takes text tokens" check is a heuristic; when it disagrees with the visual role, the role wins.
 - **Learned:** `var(--name)`, not `--var(name)`. Custom properties are resolved by the browser at runtime, so the tokens file doesn't need to `@use` the palette. A selector nested inside `@each` within `:root` compiles to a descendant selector (`:root .black`). Sass can't create variables dynamically or destructure maps.
 
 ### Session 1 summary (my words)
@@ -121,5 +129,6 @@ I learned about tokenizing design system values, separating them into two layers
 
 - "How this site is built" case study (top priority after launch)
 - Fix `include-media` Sass `if()` deprecation warnings
+- Add Stylelint (would catch invalid values like `ar(` that CSS silently drops)
 - Remaining 6 case studies, articles, packages
 - Contact form backend
