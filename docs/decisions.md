@@ -166,8 +166,32 @@ I learned about tokenizing design system values, separating them into two layers
 
 ---
 
+## 2026-10-25 · Session 3: homepage hero (Milestone 4)
+
+### Parity before enhancement
+- **Decided:** finish the page-for-page port and ship before any visual or interactive upgrades. Keep SCSS for now; native CSS features are fine inside `.scss`.
+- **Why:** shipping is the goal, parity gives a baseline to judge enhancements against, and "ported, shipped, then improved X because Y" is a clearer story.
+
+### Hero name italics as JSX, not an HTML string
+- **Decided:** an `ItalicName` component maps each character to plain text or `<em>`, driven by index positions in content (`italics.lastName: [1, 5]`). Replaced a string-building helper plus `dangerouslySetInnerHTML`.
+- **Why:** React can render arrays of strings and elements directly; building HTML strings is the template-engine habit. Positions instead of letters remove the old bug where a missing letter (`indexOf` returning -1) silently replaced the last character, and handle repeated letters.
+- **Learned:**
+  - In a destructuring pattern, `:` renames, it doesn't type. Types go after the whole pattern: `({ a, b }: Props)`.
+  - `(string | ReactElement)[]` vs `string | ReactElement[]`: parentheses decide what the `[]` applies to. `ReactNode` is the usual "anything renderable" type.
+  - Parameters that only read an array should be `readonly T[]`: accepts both mutable and readonly arrays. A readonly array can't be passed where a mutable one is expected.
+  - Index keys are safe when the list never reorders, inserts or removes items and the items hold no state (letters of a name). Risky otherwise.
+  - Types check shape, not meaning: passing `italics.firstName` to the last name compiled fine.
+- **Accessibility:** `sr-only` plain name + `aria-hidden` styled name, because some screen readers split words at inline element boundaries. Chosen over the old site's `aria-label` on the `<h1>` (inconsistent support on non-interactive elements, not auto-translated). JSX strips line breaks between elements, so an explicit `{" "}` sits between the two halves, outside every span, so both sighted users and screen readers get the space.
+
+### Case study URLs
+- `/work/overture` and `/work/car-accident-reporting-app` (matching the old site).
+
+---
+
 ## Later list
 
+- **v2 after launch:** visual and interactive enhancements (more React state, motion). Parity first, one enhancement at a time, each with a reason.
+- Evaluate dropping Sass for native CSS (nesting is native; the blocker is `include-media` breakpoints). Meanwhile, native CSS inside `.scss` is fine.
 - "How this site is built" case study (top priority after launch)
 - Fix `include-media` Sass `if()` deprecation warnings
 - Add Stylelint (would catch invalid values like `ar(` that CSS silently drops)
