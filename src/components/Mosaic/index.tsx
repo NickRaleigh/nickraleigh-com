@@ -18,7 +18,7 @@ export function Mosaic({ content }: MosaicProps) {
                 key={`${m}-${a}`}
                 className={bem("mosaic__pane", {
                   large: a === 0,
-                  "fade-right": a === 1,
+                  fadeRight: a === 1,
                   wide: a === 2,
                   square: a === 3,
                 })}
@@ -38,7 +38,7 @@ export function Mosaic({ content }: MosaicProps) {
               <span className="mosaic-card__title">{c.title}</span>
               <span className="mosaic-card__highlight">
                 <span className="mosaic-card__highlight-value">
-                  {c.stat.title}
+                  {c.stat.title.map((g) => g)}
                 </span>
                 <span className="mosaic-card__highlight-label">
                   {c.stat.description}

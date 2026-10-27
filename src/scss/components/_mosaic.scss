@@ -49,7 +49,7 @@
 
   // Fades the pane's cropped edge into its own background color instead of
   // ending on a hard crop line.
-  &--fade-right::after,
+  &--fadeRight::after,
   &--fade-bottom::after {
     content: "";
     position: absolute;
@@ -57,7 +57,7 @@
     pointer-events: none;
   }
 
-  &--fade-right::after {
+  &--fadeRight::after {
     background: linear-gradient(to right, transparent calc(100% - 24px), var(--pane-bg, $tan));
   }
 

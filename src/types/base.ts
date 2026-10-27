@@ -14,3 +14,7 @@ export type TextBlock = {
   readonly title: string;
   readonly description: string;
 };
+
+export type CTA = TextBlock & {
+  readonly link: Anchor;
+};

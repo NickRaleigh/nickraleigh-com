@@ -1,9 +1,15 @@
-import type { Picture, Anchor, TextBlock } from "@/types/base";
+import type { Picture } from "@/types/base";
+import type { ReactElement } from "react";
+import type { TextBlock, CTA } from "@/types/base";
+
 export type Mosaic = {
   readonly title: string;
   readonly imgs: Picture[];
   readonly link: string;
-  readonly stat: TextBlock;
+  readonly stat: {
+    readonly title: (string | ReactElement)[];
+    readonly description: string;
+  };
 };
 
 export type HomepageContent = {
@@ -18,4 +24,8 @@ export type HomepageContent = {
     readonly tagLine: string;
   };
   readonly mosaics: Mosaic[];
+  readonly whatIDo: {
+    readonly missionStatement: TextBlock;
+    readonly competencies: TextBlock[];
+  };
 };

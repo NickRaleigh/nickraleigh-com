@@ -240,3 +240,11 @@ I learned about tokenizing design system values, separating them into two layers
 - Add Stylelint (would catch invalid values like `ar(` that CSS silently drops)
 - Remaining 6 case studies, articles, packages
 - Contact form backend
+
+---
+
+## 2026-10-27 · Pending Symfony style change for coverage-map
+
+- `nr-symfony` commit `14ae2e1` ("Hide the trusted-network member list on mobile coverage-map preview") landed after the `8b8aeb1` parity freeze. It adds a `<=tablet` `display: none` to `.inner-circle__section-wrapper` in `scss/components/_coverage-map.scss`.
+- **Not synced:** that selector (and the whole `NetworkMembers`/trusted-network list) doesn't exist in `nr-nextjs`'s `_coverage-map.scss` yet — the current file there is a partial early port (demo visuals, stat counter only).
+- **Why no action now:** per [[port-scope]], the full coverage map is deferred and will be taken wholesale from Symfony plus a token sed when it's actually built as a client component, not merged incrementally like `_mosaic`/`_typography`/`_variables`/`_case` were. This fix comes along for free then — no separate tracking needed beyond this note.
