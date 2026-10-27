@@ -107,6 +107,7 @@
 
 .mosaic-card__row {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 1.6rem;
@@ -118,6 +119,9 @@
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.01em;
+  // The title holds its line; a long stat label wraps instead.
+  flex-shrink: 0;
+  white-space: nowrap;
   text-decoration-line: underline;
   text-decoration-color: transparent;
   text-underline-offset: 0.12em;
@@ -131,7 +135,10 @@
 }
 
 .mosaic-card__highlight {
-  flex-shrink: 0;
+  // Sits beside the title at its narrowest (the value), then takes the
+  // leftover width; drops below the title only when even that won't fit.
+  flex: 1 1 0;
+  min-width: min-content;
   text-align: right;
 }
 
@@ -150,7 +157,7 @@
   font-size: 1.3rem;
   color: var(--color-text-muted);
   margin-top: 0.2rem;
-  white-space: nowrap;
+  text-wrap: balance;
 }
 
 .mosaic-card__cta {
@@ -174,5 +181,38 @@
   .mosaic-card:hover .mosaic-card__arrow,
   .mosaic-card:focus-visible .mosaic-card__arrow {
     transform: translateX(4px);
+  }
+}
+
+// Side by side, the stat spans both lines (title + CTA), so a two-line label
+// runs alongside the CTA instead of pushing it down. Both cards' CTAs then
+// sit at the same height, set only by the title.
+@include media(">new-referral-bp") {
+  .mosaic-card__text {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 1.6rem;
+  }
+
+  .mosaic-card__row {
+    display: contents;
+  }
+
+  .mosaic-card__title {
+    grid-area: 1 / 1;
+  }
+
+  .mosaic-card__highlight {
+    grid-area: 1 / 2 / 3 / 3;
+    align-self: baseline;
+  }
+
+  .mosaic-card__cta {
+    grid-area: 2 / 1;
+    justify-self: start;
+    align-self: start;
+    // The stat no longer sets this row's height, so restore the space it used to.
+    margin-top: 2.7rem;
   }
 }

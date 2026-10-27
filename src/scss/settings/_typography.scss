@@ -83,3 +83,33 @@
   line-gap-override: 7.2032%;
   size-adjust: 124.9437%;
 }
+
+// Instrument Serif: the homepage hero's <h1>. Self-hosted here (was loaded
+// via the Google Fonts <link> in base.html.twig, which cost an extra
+// CSS-fetch-then-font-fetch round trip and had no metric-matched fallback,
+// so the swap from Georgia to Instrument Serif was both slow to arrive and
+// visibly jumped). Same preload + size-adjust treatment as Boska/Switzer.
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/InstrumentSerif-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/InstrumentSerif-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Serif Fallback";
+  src: local("Georgia");
+  ascent-override: 129.426%;
+  descent-override: 40.5273%;
+  line-gap-override: 0%;
+  size-adjust: 76.4916%;
+}

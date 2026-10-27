@@ -186,10 +186,53 @@ I learned about tokenizing design system values, separating them into two layers
 ### Case study URLs
 - `/work/overture` and `/work/car-accident-reporting-app` (matching the old site).
 
+### Parity target and syncing from Symfony
+- **Decided:** full parity with `nr-symfony` at commit `8b8aeb1` (2026-10-21), including the rebuilt plain-JS coverage map and the new Referral Signals demo. `nr-symfony` is frozen from here; new features go into the Next.js site after launch.
+- **Why freeze:** features were still being added to the old site mid-port, so the parity target kept moving and every change became double work.
+- **How styles sync:** three-way merge per file (`git merge-file`), using the Symfony commit the SCSS was copied from (`a96d1de`) as base, so token conversions here and fixes there both survive. Clean merges applied: `_mosaic`, `_typography` (self-hosted Instrument Serif + fallback), `_variables`.
+- **Changed plan:** the coverage map is no longer a React/TS app on the old site; it was rebuilt as plain JS. Revisit how it becomes a client component.
+- **`_case.scss` synced:** all Symfony changes (63 lines) merged; the jump links are now grouped pills (`&__jumplinks-label/-row/-group/-divider`, `&__code-link` pill with `color-mix()` alphas). Label uses `--color-text-muted`; the 1px divider uses `--color-border` (a divider, even though the property is `background`).
+- **New page discovered:** `/work/overture/status-banner` (the Referral Signals demo is its own route). Added to the parity page list.
+- **Working agreement:** syncing existing Symfony styles is mechanical porting, done by Claude so the user can focus on TypeScript/React. New styles and token decisions remain the user's.
+
+## 2026-10-26 · Session 3 (cont.): redesign considered, then rejected
+
+### Redesign instead of parity (proposed, then rejected; see below)
+- **Proposed:** stop porting the old visual design. Content stays locked (same pages, copy, case studies, demos); visual design changes. Design is time-boxed in a design tool and ends with a token sheet + page layouts before building. Pending the user's confirmation of the new lock.
+- **Why:** the old design was AI-generated and doesn't represent the user's taste (11 years, design background). Learning goals (TS, React, Next, tokens) are served as well or better by writing original CSS. Old site stays live, so there's no pressure to finish quickly.
+- **Kept:** Next setup, layout shell, typed config, content-as-TS, `ItalicName`, the two-layer token approach. **Dropped:** most of the ported SCSS.
+- **Risk to guard:** redesigns have no natural finish line. Define "done" up front.
+
+### Light theme
+- **Decided:** light background.
+- **Why (user):** matches the work (all screenshots are of light tools) and stands out among mostly dark developer portfolios.
+- **Also:** long case-study reading is easier as dark-on-light; light screenshots look native on a light page. "Techy" feel comes from type, mono details, accent and interaction, not background.
+- **Token payoff:** semantic names stay; only primitives change.
+
+### Hero direction (exploring)
+- References: UXfolio research page (editorial, huge tight uppercase type, single acid accent, soft glow) and a dark portfolio with a draggable "rearrange my name" hero.
+- Leaning: UXfolio's restraint + one interaction (rearrangeable name, built on `ItalicName`'s per-letter elements; a client component with state).
+- Guardrails: work visible within the first scroll; color switcher and side rail are v2; check text contrast over the glow.
+
+### Final direction: port with targeted fixes
+- **Decided:** port the current site (parity with `nr-symfony` at `8b8aeb1`), fix accessibility issues along the way, then improve specific parts after launch. No full redesign.
+- **Why:** reviewing the live site showed it has a real identity (editorial serif hero with italic letters, work visible on first screen, clear hierarchy). The weak spots are specific (the generic "01/02/03" service cards), not the whole design. A redesign mockup that dropped the serif identity read as a ransom note, which confirmed it. Targeted fixes give a site the user likes without an open-ended redesign.
+- **Light theme:** not part of the port; possible later by swapping primitives behind the semantic tokens.
+
+### Accessibility fixes found on the live site (do during the port)
+- [ ] "Get in touch ›" contrast is 1.93:1 (needs 4.5:1)
+- [ ] Add a `<main>` landmark
+- [ ] Add a skip link
+- [ ] Heading outline: work section has no heading; service `<h3>`s have no `<h2>` above them
+- [ ] Custom visible focus style for all links (most use the faint default 1px ring on dark)
+- Already good: `lang`, alt on all images, one `<h1>`, `prefers-reduced-motion`, named work cards.
+
 ---
 
 ## Later list
 
+- **After port:** homepage as full-height sections (`min-height: 100svh`, normal scrolling, no scroll snapping or scroll-jacking). Case studies stay long-form. Use "one idea per section" as an editing rule, not a CSS constraint.
+- **After port:** replace the generic "01/02/03" service cards.
 - **v2 after launch:** visual and interactive enhancements (more React state, motion). Parity first, one enhancement at a time, each with a reason.
 - Evaluate dropping Sass for native CSS (nesting is native; the blocker is `include-media` breakpoints). Meanwhile, native CSS inside `.scss` is fine.
 - "How this site is built" case study (top priority after launch)

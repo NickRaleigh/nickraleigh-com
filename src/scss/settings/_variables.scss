@@ -6,12 +6,12 @@ $sans: "Switzer", "Switzer Fallback", system-ui, sans-serif;
 $display: "Boska", "Boska Fallback", Georgia, serif;
 $mono: "JetBrains Mono", ui-monospace, monospace;
 
-// The homepage hero's own type pair (Hanken Grotesk + Instrument Serif,
-// loaded via Google Fonts in base.html.twig) — distinct from $sans/$display
-// above, which is what the rest of the site uses. Shared between
-// _home-hero.scss and the hero-card variant in _work.scss.
+// The homepage hero's own type pair. Hanken Grotesk still loads via Google
+// Fonts in base.html.twig; Instrument Serif is self-hosted below (it's the
+// hero <h1>, so it gets the same size-adjusted "* Fallback" treatment as
+// Switzer/Boska to avoid a flash on load).
 $hero-sans: "Hanken Grotesk", $sans;
-$hero-serif: "Instrument Serif", Georgia, serif;
+$hero-serif: "Instrument Serif", "Instrument Serif Fallback", Georgia, serif;
 
 // colors
 $black: #000000;

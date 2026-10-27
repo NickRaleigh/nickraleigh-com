@@ -1,11 +1,16 @@
 export type Picture = {
-    readonly src: string;
-    readonly alt: string;
-    readonly width: number;
-    readonly height: number;
-}
+  readonly src: string;
+  readonly alt: string;
+  readonly width: number;
+  readonly height: number;
+};
 
 export type Anchor = {
-    readonly href: string;
-    readonly text: string;
-}
+  readonly href: string;
+  readonly text: string;
+};
+
+export type TextBlock = {
+  readonly title: string;
+  readonly description: string;
+};

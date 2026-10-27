@@ -1,5 +1,6 @@
 import { homeContent } from "./content";
 import { toLowerHyphenCase } from "@/utils/helpers";
+import { Mosaic } from "@/components/Mosaic";
 
 type ItalicProps = {
   readonly text: string;
@@ -16,7 +17,7 @@ function ItalicName({ text, lettersIndex }: ItalicProps) {
 }
 
 export default function Home() {
-  const { hero } = homeContent;
+  const { hero, mosaics } = homeContent;
   return (
     <>
       <header className="hero">
@@ -53,136 +54,137 @@ export default function Home() {
         </div>
 
         <div className="wrap">
-          <div className="mosaic-cards">
-            <a className="mosaic-card" href="/work/overture">
-              <div className="mosaic">
-                <span className="mosaic__pane mosaic__pane--large">
-                  <img
-                    src="/uploads/overture/mosaic-large@1x.webp?v=1791478611"
-                    srcSet="/uploads/overture/mosaic-large@1x.webp?v=1791478611 1x, /uploads/overture/mosaic-large.webp?v=1791478611 2x"
-                    width="542"
-                    height="312"
-                    alt="Coverage map of US states with active Overture attorneys"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </span>
-                <span className="mosaic__pane mosaic__pane--tall mosaic__pane--fade-right">
-                  <img
-                    src="/uploads/overture/mosaic-tall@1x.webp?v=1791576132"
-                    srcSet="/uploads/overture/mosaic-tall@1x.webp?v=1791576132 1x, /uploads/overture/mosaic-tall.webp?v=1791576132 2x"
-                    width="176"
-                    height="313"
-                    alt="An attorney&#039;s profile page on Overture"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </span>
-                <span className="mosaic__pane mosaic__pane--wide">
-                  <img
-                    src="/uploads/overture/mosaic-wide@1x.webp?v=1791478611"
-                    srcSet="/uploads/overture/mosaic-wide@1x.webp?v=1791478611 1x, /uploads/overture/mosaic-wide.webp?v=1791478611 2x"
-                    width="542"
-                    height="151"
-                    alt="Referral status tracker showing the steps of a referral"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </span>
-                <span className="mosaic__pane mosaic__pane--square">
-                  <img
-                    src="/uploads/overture/mosaic-square@1x.webp?v=1791478611"
-                    srcSet="/uploads/overture/mosaic-square@1x.webp?v=1791478611 1x, /uploads/overture/mosaic-square.webp?v=1791478611 2x"
-                    width="177"
-                    height="148"
-                    alt="The Overture wordmark"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </span>
-              </div>
-              <div className="mosaic-card__text">
-                <div className="mosaic-card__row">
-                  <span className="mosaic-card__title">Overture</span>
-                  <span className="mosaic-card__highlight">
-                    <span className="mosaic-card__highlight-value">6,000+</span>
-                    <span className="mosaic-card__highlight-label">
-                      attorneys on the platform
-                    </span>
-                  </span>
-                </div>
-                <span className="mosaic-card__cta">
-                  Read the case study{" "}
-                  <span className="mosaic-card__arrow">&rsaquo;</span>
-                </span>
-              </div>
-            </a>
-            <a className="mosaic-card" href="/work/car-accident-reporting-app">
-              <div className="mosaic mosaic--mirror">
-                <span className="mosaic__pane mosaic__pane--large">
-                  <img
-                    src="/uploads/car-accident-reporting-app/mosaic-large@1x.webp?v=1791478611"
-                    srcSet="/uploads/car-accident-reporting-app/mosaic-large@1x.webp?v=1791478611 1x, /uploads/car-accident-reporting-app/mosaic-large.webp?v=1791478611 2x"
-                    width="542"
-                    height="312"
-                    alt="Map of reported crashes clustered by location"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </span>
-                <span className="mosaic__pane mosaic__pane--tall mosaic__pane--fade-bottom">
-                  <img
-                    src="/uploads/car-accident-reporting-app/mosaic-tall@1x.webp?v=1791478611"
-                    srcSet="/uploads/car-accident-reporting-app/mosaic-tall@1x.webp?v=1791478611 1x, /uploads/car-accident-reporting-app/mosaic-tall.webp?v=1791478611 2x"
-                    width="176"
-                    height="313"
-                    alt="Ranked list of the most dangerous roads by crash count"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </span>
-                <span className="mosaic__pane mosaic__pane--wide">
-                  <img
-                    src="/uploads/car-accident-reporting-app/mosaic-wide@1x.webp?v=1791478611"
-                    srcSet="/uploads/car-accident-reporting-app/mosaic-wide@1x.webp?v=1791478611 1x, /uploads/car-accident-reporting-app/mosaic-wide.webp?v=1791478611 2x"
-                    width="542"
-                    height="151"
-                    alt="Charts of collision types and crash time of day"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </span>
-                <span className="mosaic__pane mosaic__pane--square">
-                  <img
-                    src="/uploads/car-accident-reporting-app/mosaic-square@1x.webp?v=1791478611"
-                    srcSet="/uploads/car-accident-reporting-app/mosaic-square@1x.webp?v=1791478611 1x, /uploads/car-accident-reporting-app/mosaic-square.webp?v=1791478611 2x"
-                    width="177"
-                    height="148"
-                    alt="The Westwood Law logo"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </span>
-              </div>
-              <div className="mosaic-card__text">
-                <div className="mosaic-card__row">
-                  <span className="mosaic-card__title">Westwood Law</span>
-                  <span className="mosaic-card__highlight">
-                    <span className="mosaic-card__highlight-value">
-                      260<span className="arrow">›</span>2,000+
-                    </span>
-                    <span className="mosaic-card__highlight-label">
-                      monthly organic clicks, May to Aug 2026
-                    </span>
-                  </span>
-                </div>
-                <span className="mosaic-card__cta">
-                  Read the case study{" "}
-                  <span className="mosaic-card__arrow">&rsaquo;</span>
-                </span>
-              </div>
-            </a>
-          </div>
+          <Mosaic content={mosaics} />
+          {/* <div className="mosaic-cards"> */}
+          {/*   <a className="mosaic-card" href="/work/overture"> */}
+          {/*     <div className="mosaic"> */}
+          {/*       <span className="mosaic__pane mosaic__pane--large"> */}
+          {/*         <img */}
+          {/*           src="/uploads/overture/mosaic-large@1x.webp?v=1791478611" */}
+          {/*           srcSet="/uploads/overture/mosaic-large@1x.webp?v=1791478611 1x, /uploads/overture/mosaic-large.webp?v=1791478611 2x" */}
+          {/*           width="542" */}
+          {/*           height="312" */}
+          {/*           alt="Coverage map of US states with active Overture attorneys" */}
+          {/*           loading="eager" */}
+          {/*           decoding="async" */}
+          {/*         /> */}
+          {/*       </span> */}
+          {/*       <span className="mosaic__pane mosaic__pane--tall mosaic__pane--fade-right"> */}
+          {/*         <img */}
+          {/*           src="/uploads/overture/mosaic-tall@1x.webp?v=1791576132" */}
+          {/*           srcSet="/uploads/overture/mosaic-tall@1x.webp?v=1791576132 1x, /uploads/overture/mosaic-tall.webp?v=1791576132 2x" */}
+          {/*           width="176" */}
+          {/*           height="313" */}
+          {/*           alt="An attorney&#039;s profile page on Overture" */}
+          {/*           loading="eager" */}
+          {/*           decoding="async" */}
+          {/*         /> */}
+          {/*       </span> */}
+          {/*       <span className="mosaic__pane mosaic__pane--wide"> */}
+          {/*         <img */}
+          {/*           src="/uploads/overture/mosaic-wide@1x.webp?v=1791478611" */}
+          {/*           srcSet="/uploads/overture/mosaic-wide@1x.webp?v=1791478611 1x, /uploads/overture/mosaic-wide.webp?v=1791478611 2x" */}
+          {/*           width="542" */}
+          {/*           height="151" */}
+          {/*           alt="Referral status tracker showing the steps of a referral" */}
+          {/*           loading="eager" */}
+          {/*           decoding="async" */}
+          {/*         /> */}
+          {/*       </span> */}
+          {/*       <span className="mosaic__pane mosaic__pane--square"> */}
+          {/*         <img */}
+          {/*           src="/uploads/overture/mosaic-square@1x.webp?v=1791478611" */}
+          {/*           srcSet="/uploads/overture/mosaic-square@1x.webp?v=1791478611 1x, /uploads/overture/mosaic-square.webp?v=1791478611 2x" */}
+          {/*           width="177" */}
+          {/*           height="148" */}
+          {/*           alt="The Overture wordmark" */}
+          {/*           loading="eager" */}
+          {/*           decoding="async" */}
+          {/*         /> */}
+          {/*       </span> */}
+          {/*     </div> */}
+          {/*     <div className="mosaic-card__text"> */}
+          {/*       <div className="mosaic-card__row"> */}
+          {/*         <span className="mosaic-card__title">Overture</span> */}
+          {/*         <span className="mosaic-card__highlight"> */}
+          {/*           <span className="mosaic-card__highlight-value">6,000+</span> */}
+          {/*           <span className="mosaic-card__highlight-label"> */}
+          {/*             attorneys on the platform */}
+          {/*           </span> */}
+          {/*         </span> */}
+          {/*       </div> */}
+          {/*       <span className="mosaic-card__cta"> */}
+          {/*         Read the case study{" "} */}
+          {/*         <span className="mosaic-card__arrow">&rsaquo;</span> */}
+          {/*       </span> */}
+          {/*     </div> */}
+          {/*   </a> */}
+          {/*   <a className="mosaic-card" href="/work/car-accident-reporting-app"> */}
+          {/*     <div className="mosaic mosaic--mirror"> */}
+          {/*       <span className="mosaic__pane mosaic__pane--large"> */}
+          {/*         <img */}
+          {/*           src="/uploads/car-accident-reporting-app/mosaic-large@1x.webp?v=1791478611" */}
+          {/*           srcSet="/uploads/car-accident-reporting-app/mosaic-large@1x.webp?v=1791478611 1x, /uploads/car-accident-reporting-app/mosaic-large.webp?v=1791478611 2x" */}
+          {/*           width="542" */}
+          {/*           height="312" */}
+          {/*           alt="Map of reported crashes clustered by location" */}
+          {/*           loading="eager" */}
+          {/*           decoding="async" */}
+          {/*         /> */}
+          {/*       </span> */}
+          {/*       <span className="mosaic__pane mosaic__pane--tall mosaic__pane--fade-bottom"> */}
+          {/*         <img */}
+          {/*           src="/uploads/car-accident-reporting-app/mosaic-tall@1x.webp?v=1791478611" */}
+          {/*           srcSet="/uploads/car-accident-reporting-app/mosaic-tall@1x.webp?v=1791478611 1x, /uploads/car-accident-reporting-app/mosaic-tall.webp?v=1791478611 2x" */}
+          {/*           width="176" */}
+          {/*           height="313" */}
+          {/*           alt="Ranked list of the most dangerous roads by crash count" */}
+          {/*           loading="eager" */}
+          {/*           decoding="async" */}
+          {/*         /> */}
+          {/*       </span> */}
+          {/*       <span className="mosaic__pane mosaic__pane--wide"> */}
+          {/*         <img */}
+          {/*           src="/uploads/car-accident-reporting-app/mosaic-wide@1x.webp?v=1791478611" */}
+          {/*           srcSet="/uploads/car-accident-reporting-app/mosaic-wide@1x.webp?v=1791478611 1x, /uploads/car-accident-reporting-app/mosaic-wide.webp?v=1791478611 2x" */}
+          {/*           width="542" */}
+          {/*           height="151" */}
+          {/*           alt="Charts of collision types and crash time of day" */}
+          {/*           loading="eager" */}
+          {/*           decoding="async" */}
+          {/*         /> */}
+          {/*       </span> */}
+          {/*       <span className="mosaic__pane mosaic__pane--square"> */}
+          {/*         <img */}
+          {/*           src="/uploads/car-accident-reporting-app/mosaic-square@1x.webp?v=1791478611" */}
+          {/*           srcSet="/uploads/car-accident-reporting-app/mosaic-square@1x.webp?v=1791478611 1x, /uploads/car-accident-reporting-app/mosaic-square.webp?v=1791478611 2x" */}
+          {/*           width="177" */}
+          {/*           height="148" */}
+          {/*           alt="The Westwood Law logo" */}
+          {/*           loading="eager" */}
+          {/*           decoding="async" */}
+          {/*         /> */}
+          {/*       </span> */}
+          {/*     </div> */}
+          {/*     <div className="mosaic-card__text"> */}
+          {/*       <div className="mosaic-card__row"> */}
+          {/*         <span className="mosaic-card__title">Westwood Law</span> */}
+          {/*         <span className="mosaic-card__highlight"> */}
+          {/*           <span className="mosaic-card__highlight-value"> */}
+          {/*             260<span className="arrow">›</span>2,000+ */}
+          {/*           </span> */}
+          {/*           <span className="mosaic-card__highlight-label"> */}
+          {/*             monthly organic clicks, May to Aug 2026 */}
+          {/*           </span> */}
+          {/*         </span> */}
+          {/*       </div> */}
+          {/*       <span className="mosaic-card__cta"> */}
+          {/*         Read the case study{" "} */}
+          {/*         <span className="mosaic-card__arrow">&rsaquo;</span> */}
+          {/*       </span> */}
+          {/*     </div> */}
+          {/*   </a> */}
+          {/* </div> */}
 
           <div className="hero__more">
             <a href="/work">Earlier work &rsaquo;</a>

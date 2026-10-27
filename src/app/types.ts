@@ -1,3 +1,11 @@
+import type { Picture, Anchor, TextBlock } from "@/types/base";
+export type Mosaic = {
+  readonly title: string;
+  readonly imgs: Picture[];
+  readonly link: string;
+  readonly stat: TextBlock;
+};
+
 export type HomepageContent = {
   readonly hero: {
     readonly firstName: string;
@@ -9,4 +17,5 @@ export type HomepageContent = {
     readonly infoBar: [one: string, two: string, three: string, four: string];
     readonly tagLine: string;
   };
+  readonly mosaics: Mosaic[];
 };
