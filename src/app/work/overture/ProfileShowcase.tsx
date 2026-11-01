@@ -61,7 +61,7 @@ export function ProfileShowcase({ steps }: ProfileShowcaseProps) {
 
             {step.changes && (
               <div className="profile-showcase__changes">
-                <div className="profile-showcase__changes-label mono">
+                <div className="profile-showcase__changes-label eyebrow">
                   What improved in this round
                 </div>
                 <ul className="profile-showcase__changes-list">

@@ -64,7 +64,7 @@ export default function WestwoodLawCaseStudy() {
         <section className="case-section" key={section.label}>
           <div className="wrap">
             <div className="case-section__grid">
-              <span className="case-section__label mono">{section.label}</span>
+              <span className="case-section__label eyebrow">{section.label}</span>
               <div className="case-section__body">{section.body}</div>
             </div>
           </div>
@@ -73,7 +73,7 @@ export default function WestwoodLawCaseStudy() {
 
       <section className="case-gallery">
         <div className="wrap">
-          <span className="case-gallery__label mono">{gallery.label}</span>
+          <span className="case-gallery__label eyebrow">{gallery.label}</span>
           <div className="case-gallery__items">
             <figure className="case-gallery__item">
               <Image
@@ -91,7 +91,7 @@ export default function WestwoodLawCaseStudy() {
       <section className="case-next">
         <div className="wrap">
           <div>
-            <div className="case-next__label">{nextCase.label}</div>
+            <div className="case-next__label eyebrow">{nextCase.label}</div>
             <div className="case-next__title">{nextCase.title}</div>
           </div>
           <Link href={nextCase.href} className="case-next__arrow">

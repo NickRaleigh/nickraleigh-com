@@ -49,6 +49,19 @@ a {
   font-family: $mono;
 }
 
+// Uppercase, letter-spaced section/caption labels ("// trusted networks",
+// pageheads' own kicker, spec labels, etc.) — previously styled with .mono
+// (JetBrains/Fira Code), which read as "this is code" rather than "this is
+// a label." Switzer at a heavier weight with real letter-spacing is the
+// same job .mono was doing (small, quiet, sets a section apart) without
+// borrowing the monospace font's identity for plain text.
+.eyebrow {
+  font-family: $sans;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

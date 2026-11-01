@@ -1201,11 +1201,19 @@ $cm-height-phone: 46rem;
   // Solarized Dark theme rather than pulling in the plugin's own CSS.
   .line-numbers-rows {
     position: absolute;
-    // Positioned against <code>'s own box (set position:relative above),
-    // which already starts right at line 1 — no extra offset needed here,
-    // or row 1 ends up lined up with line 2 instead.
+    // .line-numbers-rows is a sibling of <code>, not a descendant of it —
+    // dangerouslySetInnerHTML owns <code>'s entire child list, so the
+    // numbers can't be nested inside it the way the real Prism plugin's
+    // comment above assumed. Its containing block is .code-showcase__panel
+    // (<pre>, position: relative above) instead, whose own 5.6rem
+    // padding-left is what actually reserves the gutter's space — so the
+    // offset has to be measured from <pre>'s edge, not <code>'s: flush
+    // against the left padding edge, with its right edge landing exactly
+    // where the code text starts (padding-left minus this element's own
+    // width), not a negative offset tuned for a containing block this
+    // isn't inside.
     top: 0;
-    left: -3.6rem;
+    left: 2.8rem;
     width: 2.8rem;
     font-size: inherit;
     line-height: inherit;

@@ -8,7 +8,7 @@ export default function About() {
     <>
       <header className="pagehead">
         <div className="wrap">
-          <div className="pagehead__kicker">{pagehead.kicker}</div>
+          <div className="pagehead__kicker eyebrow">{pagehead.kicker}</div>
           <h1 className="pagehead__title">{pagehead.title}</h1>
         </div>
       </header>
@@ -17,7 +17,7 @@ export default function About() {
         <div className="wrap">
           <div className="intro__grid">
             <div className="intro__aside">
-              <span className="intro__label mono">{intro.label}</span>
+              <span className="intro__label eyebrow">{intro.label}</span>
               <Image
                 className="intro__photo"
                 src={intro.photo.src}

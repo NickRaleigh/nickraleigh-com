@@ -116,7 +116,7 @@ export const OverturePageContent: OverturePage = {
   },
   sections: [
     {
-      label: "// overview",
+      label: "overview",
       body: (
         <>
           <h3>A lawyer referral network for small firms</h3>
@@ -161,7 +161,7 @@ export const OverturePageContent: OverturePage = {
   ],
   coverageMap: {
     id: "coverage-map-showcase",
-    label: "// trusted networks",
+    label: "trusted networks",
     title: "Trusted networks",
     description: (
       <p>
@@ -186,7 +186,7 @@ export const OverturePageContent: OverturePage = {
   },
   profilePage: {
     id: "profile-showcase",
-    label: "// the profile page",
+    label: "the profile page",
     title: "From contact card to referral decision",
     description: `Every referral on Overture starts with one attorney
     deciding whether to trust another with a client. The profile page is
@@ -265,7 +265,7 @@ export const OverturePageContent: OverturePage = {
   },
   brand: {
     id: "brand-showcase",
-    label: "// brand conceptualization",
+    label: "brand conceptualization",
     intro: `Before any of the frontend existed, Overture was a brand style
     guide: a type pairing, a deliberately restrained palette, and a logo
     mark built from a simple geometric lockup. Two motion studies below
@@ -344,7 +344,7 @@ export const OverturePageContent: OverturePage = {
     ],
   },
   screens: {
-    label: "// a few screens",
+    label: "a few screens",
     items: [
       {
         picture: {

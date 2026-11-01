@@ -9,7 +9,7 @@ export default function Work() {
     <>
       <header className="pagehead">
         <div className="wrap">
-          <div className="pagehead__kicker">{pagehead.kicker}</div>
+          <div className="pagehead__kicker eyebrow">{pagehead.kicker}</div>
           <h1 className="pagehead__title">{pagehead.title}</h1>
           <p className="pagehead__lead">{pagehead.description}</p>
         </div>

@@ -4,7 +4,7 @@
 // font swapping in doesn't reflow the page.
 $sans: "Switzer", "Switzer Fallback", system-ui, sans-serif;
 $display: "Boska", "Boska Fallback", Georgia, serif;
-$mono: "JetBrains Mono", ui-monospace, monospace;
+$mono: "Fira Code", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
 // The homepage hero's own type pair. Hanken Grotesk still loads via Google
 // Fonts in base.html.twig; Instrument Serif is self-hosted below (it's the

@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/Mosaic/Card";
@@ -49,7 +50,7 @@ export default function OvertureCaseStudy() {
             <div className="case-head__media">
               <Card imgs={OvertureMosaic.imgs} />
               <nav className="case-head__jumplinks" aria-label="Section links">
-                <span className="case-head__jumplinks-label mono">Jump to</span>
+                <span className="case-head__jumplinks-label eyebrow">Jump to</span>
                 <div className="case-head__jumplinks-row">
                   <div className="case-head__jumplinks-group">
                     {quickLinks.map((link) => (
@@ -77,7 +78,9 @@ export default function OvertureCaseStudy() {
                 <div
                   className={`mono ${bem("case-stats__num", stat.title.variant ? { [stat.title.variant]: true } : {})}`}
                 >
-                  {stat.title.text.map((x) => x)}
+                  {stat.title.text.map((x, i) => (
+                    <Fragment key={i}>{x}</Fragment>
+                  ))}
                 </div>
                 <div className="case-stats__label">{stat.description}</div>
               </div>
@@ -101,7 +104,7 @@ export default function OvertureCaseStudy() {
         <section className="case-section" key={section.label}>
           <div className="wrap">
             <div className="case-section__grid">
-              <span className="case-section__label mono">{section.label}</span>
+              <span className="case-section__label eyebrow">{section.label}</span>
               <div className="case-section__body">{section.body}</div>
             </div>
           </div>
@@ -111,15 +114,18 @@ export default function OvertureCaseStudy() {
       <section className="case-section" id={coverageMap.id}>
         <div className="wrap">
           <div className="case-section__grid">
-            <span className="case-section__label mono">{coverageMap.label}</span>
-            <div className="case-section__body">{coverageMap.description}</div>
+            <span className="case-section__label eyebrow">{coverageMap.label}</span>
+            <div className="case-section__body">
+              <h3>{coverageMap.title}</h3>
+              {coverageMap.description}
+            </div>
           </div>
         </div>
 
         <div className="wrap">
           <div className="coverage-map-panel">
             <div className="coverage-map-panel__preview">
-              <span className="coverage-map-panel__preview-label mono">
+              <span className="coverage-map-panel__preview-label eyebrow">
                 {coverageMap.previewLabel}
               </span>
               <div id="coverage-map-demo">
@@ -146,7 +152,7 @@ export default function OvertureCaseStudy() {
       <section className="case-section" id={profilePage.id}>
         <div className="wrap">
           <div className="case-section__grid">
-            <span className="case-section__label mono">{profilePage.label}</span>
+            <span className="case-section__label eyebrow">{profilePage.label}</span>
             <div className="case-section__body">
               <h3>{profilePage.title}</h3>
               <p>{profilePage.description}</p>
@@ -160,8 +166,9 @@ export default function OvertureCaseStudy() {
       <section className="case-section" id="growth">
         <div className="wrap">
           <div className="case-section__grid">
-            <span className="case-section__label mono">// where it went</span>
+            <span className="case-section__label eyebrow">where it went</span>
             <div className="case-section__body">
+              <h3>From product work to growth</h3>
               <p>
                 More recently the role stretched into growth. I have built
                 technical SEO and content campaigns aimed at the different
@@ -190,15 +197,16 @@ export default function OvertureCaseStudy() {
       <section className="case-section" id={brand.id}>
         <div className="wrap">
           <div className="case-section__grid">
-            <span className="case-section__label mono">{brand.label}</span>
+            <span className="case-section__label eyebrow">{brand.label}</span>
             <div className="case-section__body">
+              <h3>The brand before the product</h3>
               <p>{brand.intro}</p>
 
               <div className="brand-showcase">
                 <div className="brand-showcase__grid">
                   <div className="brand-showcase__col">
                     <div className="brand-tile brand-tile--sketches">
-                      <div className="brand-showcase__spec-label mono">
+                      <div className="brand-showcase__spec-label eyebrow">
                         Logo process sketches
                       </div>
                       <div className="brand-showcase__sketches">
@@ -225,7 +233,7 @@ export default function OvertureCaseStudy() {
                     </div>
 
                     <div className="brand-tile brand-tile--type">
-                      <div className="brand-showcase__spec-label mono">
+                      <div className="brand-showcase__spec-label eyebrow">
                         Typography &amp; color
                       </div>
                       <p className="brand-showcase__type-sample brand-showcase__type-sample--serif">
@@ -264,7 +272,7 @@ export default function OvertureCaseStudy() {
                     {brand.studies.map((study) => (
                       <div className="motion-study brand-tile--study" key={study.num}>
                         <div className="motion-study__label">
-                          <span className="mono">{study.num}</span>
+                          <span className="eyebrow">{study.num}</span>
                           <span>{study.title}</span>
                         </div>
                         <div
@@ -298,7 +306,7 @@ export default function OvertureCaseStudy() {
 
       <section className="case-gallery">
         <div className="wrap">
-          <span className="case-gallery__label mono">{screens.label}</span>
+          <span className="case-gallery__label eyebrow">{screens.label}</span>
           <div className="case-gallery__items">
             {screens.items.map((item) => (
               <figure className="case-gallery__item" key={item.picture.src}>
@@ -318,7 +326,7 @@ export default function OvertureCaseStudy() {
       <section className="case-next">
         <div className="wrap">
           <div>
-            <div className="case-next__label">{nextCase.label}</div>
+            <div className="case-next__label eyebrow">{nextCase.label}</div>
             <div className="case-next__title">{nextCase.title}</div>
           </div>
           <Link href={nextCase.href} className="case-next__arrow">

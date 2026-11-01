@@ -68,9 +68,10 @@ export const WestwoodLawPageContent: WestwoodLawPage = {
   ],
   sections: [
     {
-      label: "// the build",
+      label: "the build",
       body: (
         <>
+          <h3>A Django platform, built in-house</h3>
           <p>
             I designed and built this in-house for Westwood Law, a personal
             injury and employment law firm and a sister brand of Overture,
@@ -134,9 +135,10 @@ export const WestwoodLawPageContent: WestwoodLawPage = {
       ),
     },
     {
-      label: "// the seo problem",
+      label: "the seo problem",
       body: (
         <>
+          <h3>A site invisible in search</h3>
           <p>
             The site had been live for years but was barely showing up in
             search: competing against far more established firms for
@@ -154,7 +156,7 @@ export const WestwoodLawPageContent: WestwoodLawPage = {
       ),
     },
     {
-      label: "// programmatic local seo",
+      label: "programmatic local seo",
       body: (
         <>
           <h3>Public data as local landing pages</h3>
@@ -193,9 +195,10 @@ export const WestwoodLawPageContent: WestwoodLawPage = {
       ),
     },
     {
-      label: "// the result",
+      label: "the result",
       body: (
         <>
+          <h3>A fast turnaround in search visibility</h3>
           <p>
             Over the first four months, average search position moved from
             16.8 to 10.6, from the middle of page 2 to the edge of page 1,
@@ -226,7 +229,7 @@ export const WestwoodLawPageContent: WestwoodLawPage = {
     },
   ],
   gallery: {
-    label: "// a few screens",
+    label: "a few screens",
     picture: {
       src: "/uploads/car-accident-reporting-app/crash-reports.jpg",
       alt: "The CHP crash-report tool listing recent injury and fatal crashes",

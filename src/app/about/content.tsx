@@ -6,7 +6,7 @@ export const aboutContent: AboutPage = {
     title: "Building web experiences that look right and get found, for over a decade.",
   },
   intro: {
-    label: "// background",
+    label: "background",
     photo: {
       src: "/uploads/nick-profil-square.jpg",
       alt: "Nick Raleigh",

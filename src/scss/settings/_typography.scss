@@ -113,3 +113,19 @@
   line-gap-override: 0%;
   size-adjust: 76.4916%;
 }
+
+// Fira Code: replaces JetBrains Mono as $mono. Used for actual code/data
+// (CodeShowcase, index numbers, stat values) now that eyebrow-style labels
+// have their own treatment (see .eyebrow in generic/_theme.scss) instead of
+// borrowing the code font. Only Regular is included — nothing using $mono
+// sets a heavier weight. No metric-matched fallback face: unlike Boska/
+// Switzer/Instrument Serif, $mono never carries large reflow-prone body
+// text, so the swap-in jump is negligible and not worth fabricating
+// unmeasured ascent/descent numbers for.
+@font-face {
+  font-family: "Fira Code";
+  src: url("/fonts/FiraCode-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
