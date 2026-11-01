@@ -43,12 +43,12 @@ export const OverturePageContent: OverturePage = {
     title:
       "A nationwide lawyer-to-lawyer referral network I helped start in 2022.",
     description:
-      "I built the brand, turned our whiteboard sessions into the product design, and built and still own the React frontend.",
+      "I designed the brand from scratch, translating early whiteboard sessions into high-fidelity mockups, then crafted the entire frontend with React. I've owned every new UI feature, bugfix, and UX improvement since 2022",
   },
   metaRows: [
     {
       title: "Role",
-      description: "Founding Designer & Frontend Developer",
+      description: "Founding Designer & Senior Frontend Developer",
     },
     {
       title: "Timeline",
@@ -88,22 +88,22 @@ export const OverturePageContent: OverturePage = {
   statsBar: [
     {
       title: {
-	text: [ "6,000+" ],
+        text: ["6,000+"],
       },
       description: "attorneys on the network",
     },
     {
       title: {
         variant: "sm",
-        text: [ "Vendor of the Year" ],
+        text: ["Vendor of the Year"],
       },
       description: "California Lawyers Association",
     },
     {
       title: {
-	text: [ "~50", <span className='arrow'>›</span>, "~850" ]
+        text: ["~50", <span className="arrow">›</span>, "~850"],
       },
-	description: "daily organic clicks from one SEO initiative"
+      description: "daily organic clicks from one SEO initiative",
     },
   ],
   quote: {
@@ -119,41 +119,64 @@ export const OverturePageContent: OverturePage = {
       label: "overview",
       body: (
         <>
-          <h3>A lawyer referral network for small firms</h3>
+          <h3>A peer referral platform for small firms and solo attorneys</h3>
           <p>
-            Overture is a lawyer referral network. When a firm takes a case
-            outside its expertise, it can hand the matter to a trusted
-            colleague through the platform and ethically share the fee.
-            Both attorneys have to trust it completely, and their shared
-            client has to be able to follow along.
+            Overtue was built around giving attorneys the tools to legally refer
+            work outside of their wheelhouse to a network of vetted, qualified
+            attorneys, while collecting referral fees.
           </p>
           <p>
-            In 2022 I was the design and frontend half of the five-person
-            group that started it. I built the brand from nothing, turned
-            our whiteboard sessions into UI mockups, and built the entire
-            React frontend from my own designs. I have owned it ever
-            since.
+            The main workflow of the platform includes posting referrals,
+            viewing and chatting with candidates, selecting one (or several)
+            attorneys simultanously to engage the client, and sending out a
+            client-attorney introduction for the selected attorney(s) handling
+            the referral.
           </p>
-          <h3>What I own</h3>
+          <p>
+            Overture also tracks the status of every referral so both sides know
+            who needs to take the next step, step-by-step engagement agreement
+            e-signature delivery to client, and simplified client invoicing that
+            automatically splits fees to all parties.
+          </p>
+          <p>
+            In early 2022 the CEO of our parent company asked me to put together
+            a few simple Figma screens to show colleagues and potential
+            investors. In a few short months thereafter, with some strong
+            initial interest, I was delighted to be the founding designer for
+            all things Overture. I worked with our small team to expand the
+            initial Figma mockup into a real platform, starting with the brand
+            and design system, and mapping our whiteboard UX sessions into
+            designed mockups.
+          </p>
+          <p>
+            In a larger company, branding, UI design, and frontend development
+            would've been handled by different actors.{" "}
+            <b>
+              In a small startup like Overture, I owned the full-breadth of all
+              of these deliverables. It was on this project that I really was
+              able to engage the work I love doing: solving a problem visually,
+              technically, and how it best suits the user.
+            </b>
+          </p>
+          <h3>My Contributions and Responsibilities:</h3>
           <ul>
             <li>
-              The brand: identity, voice, and the visual system the whole
-              product is built on
-            </li>
-            <li>The React frontend end to end, on a Django backend</li>
-            <li>
-              The member dashboard, where attorneys manage and track
-              referrals
+              Branding: identity, design system, marketing website & email
+              templates
             </li>
             <li>
-              The referral lifecycle, from posting a matter through
-              engagement and payment
+              The React frontend, integrating API endpoints built by our backend
+              engineers on Django
             </li>
-            <li>The attorney directory and search</li>
             <li>
-              The public marketing site, revised as the positioning
-              evolved
+              Introducing new features starting as an idea from product owners,
+              developing them into Figma mockups, then building code around
+              them, and finally refining them as users interact with them.
             </li>
+            <li>
+              The public marketing site, revised as the positioning evolved
+            </li>
+            <li>Keeping the codebase stable and manageable for over 4 years</li>
           </ul>
         </>
       ),
@@ -165,18 +188,22 @@ export const OverturePageContent: OverturePage = {
     title: "Trusted networks",
     description: (
       <p>
-        The trusted-network map is some of the most involved frontend work
-        I did on Overture: an animated US map, live state highlighting,
-        and an info panel that tracks mouse position and network data at
-        once. The original relies on Overture&rsquo;s live Redux store, so
-        what&rsquo;s mounted below is a decoupled rebuild running on mock
-        data, using the same components and styles shown in the tabs
-        underneath it.
+        One of the most involved frontend concepts that I helped drive was a
+        network map tool. Each user adds their attorney colleagues to their
+        network and the US map highlights the state based on the new member's
+        practice states. It was thought of as a way to "gamify" every user's
+        referral coverage and to incetivize connecting with other attorneys.
+        <br /> <br /> I manually built an SVG map React component, used Redux to
+        track application states live, wrote a dynamically-populated tooltip
+        that follows mouse movements, and orchestrated animation timing using
+        homemade scss mixins. <br /> <br /> Below is a working demo decoupled
+        from the live applicaiton, using mock data, alongside the code.
       </p>
     ),
     previewLabel:
       "Shipped feature of the Overture member dashboard. Live demo, running on mock data.",
-    mobileNote: "Recorded preview — the interactive demo runs on larger screens.",
+    mobileNote:
+      "Recorded preview: the interactive demo runs on larger screens.",
     mobileVideo: {
       src: "/uploads/overture/hero-map-preview.webm",
       alt: "Recorded preview of the trusted network map",
