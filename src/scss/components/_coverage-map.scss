@@ -22,7 +22,7 @@ $jost: "Jost", sans-serif;
   margin: 3rem 0;
 
   &__preview {
-    background: var(--color-surface-inverse);
+    background: $white;
     // Padding, not the panel's own margin-bottom: a child's bottom margin
     // collapses through a plain block and escapes this background entirely,
     // exposing the page's dark background in the gap instead of white.
@@ -860,7 +860,7 @@ $cm-height-phone: 46rem;
     padding: 0.8rem 1.2rem 0.8rem 3rem;
     border-radius: 0.4rem;
     border: 1px solid rgba(11, 13, 18, 0.15);
-    background: var(--color-surface-inverse);
+    background: $white;
     font-family: $jost;
     font-size: 1.2rem;
     color: var(--color-on-inverse);

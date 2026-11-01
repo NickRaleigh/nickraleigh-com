@@ -112,32 +112,33 @@ export default function OvertureCaseStudy() {
         <div className="wrap">
           <div className="case-section__grid">
             <span className="case-section__label mono">{coverageMap.label}</span>
-            <div className="case-section__body">
-              {coverageMap.description}
-              <div className="coverage-map-panel">
-                <div className="coverage-map-panel__preview">
-                  <span className="coverage-map-panel__preview-label mono">
-                    {coverageMap.previewLabel}
-                  </span>
-                  <div id="coverage-map-demo">
-                    <AutoplayDemo variant="full" />
-                  </div>
-                </div>
-                <div className="coverage-map-panel__mobile-preview">
-                  <video
-                    src={coverageMap.mobileVideo.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
-                </div>
-                <p className="coverage-map-panel__mobile-note">
-                  {coverageMap.mobileNote}
-                </p>
-                <CodeShowcase />
+            <div className="case-section__body">{coverageMap.description}</div>
+          </div>
+        </div>
+
+        <div className="wrap">
+          <div className="coverage-map-panel">
+            <div className="coverage-map-panel__preview">
+              <span className="coverage-map-panel__preview-label mono">
+                {coverageMap.previewLabel}
+              </span>
+              <div id="coverage-map-demo">
+                <AutoplayDemo variant="full" />
               </div>
             </div>
+            <div className="coverage-map-panel__mobile-preview">
+              <video
+                src={coverageMap.mobileVideo.src}
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+              <p className="coverage-map-panel__mobile-note">
+                {coverageMap.mobileNote}
+              </p>
+            </div>
+            <CodeShowcase />
           </div>
         </div>
       </section>

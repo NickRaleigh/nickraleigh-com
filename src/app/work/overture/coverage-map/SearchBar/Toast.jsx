@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const TOAST_DURATION_MS = 3000;
@@ -11,8 +11,17 @@ const Toast = ({ message, onDismiss }) => {
   const timeoutRef = useRef(null);
   // Next.js server-renders client components too (no document there),
   // unlike the original's purely client-side mount — bail out of the
-  // portal until this is actually running in a browser.
-  const canPortal = typeof document !== "undefined";
+  // portal until this is actually running in a browser. A plain `typeof
+  // document !== "undefined"` check here would be true on the client's very
+  // first render too (before hydration finishes), disagreeing with the
+  // server's `null` and forcing React to tear down and rebuild this whole
+  // subtree. Gating on state set inside an effect delays it until after
+  // hydration, so the first client render still matches the server.
+  const [canPortal, setCanPortal] = useState(false);
+
+  useEffect(() => {
+    setCanPortal(true);
+  }, []);
 
   useEffect(() => {
     if (timeoutRef.current !== null) {
