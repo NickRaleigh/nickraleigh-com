@@ -1,16 +1,40 @@
 import { config } from "@/config/site";
 import Link from "next/link";
 
-export function CTA() {
+type CTALink = {
+  readonly href: string;
+  readonly text: string;
+  readonly variant?: "primary" | "secondary";
+};
+
+type CTAProps = {
+  readonly variant?: "dark" | "case";
+  readonly id?: string;
+  readonly title?: string;
+  readonly description?: string;
+  readonly links?: readonly CTALink[];
+};
+
+export function CTA({ variant, id, title, description, links }: CTAProps) {
+  const resolvedLinks = links ?? [{ ...config.CTA.link, variant: "primary" as const }];
   return (
-    <section className="cta cta--dark" id="contact">
+    <section
+      className={`cta${variant ? ` cta--${variant}` : ""}`}
+      id={id}
+    >
       <div className="wrap">
-        <h2 className="cta__title">{config.CTA.title}</h2>
-        <p className="cta__text">{config.CTA.description}</p>
+        <h2 className="cta__title">{title ?? config.CTA.title}</h2>
+        <p className="cta__text">{description ?? config.CTA.description}</p>
         <div className="cta__links">
-          <Link href={config.CTA.link.href} className="btn btn--primary">
-            {config.CTA.link.text}
-          </Link>
+          {resolvedLinks.map((link) => (
+            <Link
+              href={link.href}
+              className={`btn btn--${link.variant ?? "primary"}`}
+              key={link.href}
+            >
+              {link.text}
+            </Link>
+          ))}
         </div>
       </div>
     </section>

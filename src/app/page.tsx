@@ -78,7 +78,7 @@ export default function Home() {
         </div>
       </section>
 
-      <CTA />
+      <CTA variant="dark" id="contact" />
     </>
   );
 }

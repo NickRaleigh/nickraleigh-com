@@ -24,6 +24,14 @@
     line-height: 1.02;
     max-width: 78rem;
   }
+
+  &__lead {
+    font-size: 1.7rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    max-width: 64rem;
+    margin-top: 2rem;
+  }
 }
 
 /* ── Intro ────────────────────────────────────────────────── */

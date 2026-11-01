@@ -37,8 +37,8 @@ export const config: SiteConfig = {
     ],
   },
   CTA: {
-    title: "Contact Nick",
-    description: `I like working with teams that care as much about how something feels to use as how it&#039;s built. If that sounds like yours, let's talk.`,
+    title: "Let's talk.",
+    description: `I like working with teams that care as much about how something feels to use as how it's built. If that sounds like yours, let's talk.`,
     link: {
       href: "/contact",
       text: "Get in touch",

@@ -1,6 +1,6 @@
 import type { Picture } from "@/types/base";
 import type { ReactElement } from "react";
-import type { TextBlock, CTA } from "@/types/base";
+import type { TextBlock } from "@/types/base";
 
 export type Mosaic = {
   readonly title: string;

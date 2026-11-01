@@ -1,7 +1,7 @@
 import type { Mosaic } from "@/app/types";
-import { isEven, bem } from "@/utils/helpers";
-import Image from "next/image";
 import Link from "next/link";
+import { Card } from "./Card";
+import { isEven } from "@/utils/helpers";
 
 type MosaicProps = {
   readonly content: Mosaic[];
@@ -12,27 +12,7 @@ export function Mosaic({ content }: MosaicProps) {
     <div className="mosaic-cards">
       {content.map((c, i) => (
         <Link className="mosaic-card" key={`${c}-${i}`} href={c.link}>
-          <div className={bem("mosaic", { mirror: isEven(i) })}>
-            {c.imgs.map((m, a) => (
-              <span
-                key={`${m}-${a}`}
-                className={bem("mosaic__pane", {
-                  large: a === 0,
-                  fadeRight: a === 1,
-                  wide: a === 2,
-                  square: a === 3,
-                })}
-              >
-                <Image
-                  className="nav__logo"
-                  src={m.src}
-                  alt={m.alt}
-                  width={m.width}
-                  height={m.height}
-                />
-              </span>
-            ))}
-          </div>
+          <Card imgs={c.imgs} flip={isEven(i)} />
           <div className="mosaic-card__text">
             <div className="mosaic-card__row">
               <span className="mosaic-card__title">{c.title}</span>
