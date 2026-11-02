@@ -69,7 +69,7 @@ export type OverturePage = {
     readonly id: string;
     readonly label: string;
     readonly title: string;
-    readonly description: string;
+    readonly description: ReactNode;
     readonly steps: readonly ProfileStep[];
     readonly footnote: string;
   };

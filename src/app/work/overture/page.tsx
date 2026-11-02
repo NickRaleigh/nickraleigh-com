@@ -50,7 +50,9 @@ export default function OvertureCaseStudy() {
             <div className="case-head__media">
               <Card imgs={OvertureMosaic.imgs} />
               <nav className="case-head__jumplinks" aria-label="Section links">
-                <span className="case-head__jumplinks-label eyebrow">Jump to</span>
+                <span className="case-head__jumplinks-label eyebrow">
+                  Jump to
+                </span>
                 <div className="case-head__jumplinks-row">
                   <div className="case-head__jumplinks-group">
                     {quickLinks.map((link) => (
@@ -104,7 +106,9 @@ export default function OvertureCaseStudy() {
         <section className="case-section" key={section.label}>
           <div className="wrap">
             <div className="case-section__grid">
-              <span className="case-section__label eyebrow">{section.label}</span>
+              <span className="case-section__label eyebrow">
+                {section.label}
+              </span>
               <div className="case-section__body">{section.body}</div>
             </div>
           </div>
@@ -114,7 +118,9 @@ export default function OvertureCaseStudy() {
       <section className="case-section" id={coverageMap.id}>
         <div className="wrap">
           <div className="case-section__grid">
-            <span className="case-section__label eyebrow">{coverageMap.label}</span>
+            <span className="case-section__label eyebrow">
+              {coverageMap.label}
+            </span>
             <div className="case-section__body">
               <h3>{coverageMap.title}</h3>
               {coverageMap.description}
@@ -152,10 +158,12 @@ export default function OvertureCaseStudy() {
       <section className="case-section" id={profilePage.id}>
         <div className="wrap">
           <div className="case-section__grid">
-            <span className="case-section__label eyebrow">{profilePage.label}</span>
+            <span className="case-section__label eyebrow">
+              {profilePage.label}
+            </span>
             <div className="case-section__body">
               <h3>{profilePage.title}</h3>
-              <p>{profilePage.description}</p>
+              {profilePage.description}
               <ProfileShowcase steps={profilePage.steps} />
               <p className="case-section__note">{profilePage.footnote}</p>
             </div>
@@ -166,29 +174,40 @@ export default function OvertureCaseStudy() {
       <section className="case-section" id="growth">
         <div className="wrap">
           <div className="case-section__grid">
-            <span className="case-section__label eyebrow">where it went</span>
+            <span className="case-section__label eyebrow">Looking back</span>
             <div className="case-section__body">
-              <h3>From product work to growth</h3>
+              <h3>Four years on one project</h3>
               <p>
-                More recently the role stretched into growth. I have built
-                technical SEO and content campaigns aimed at the different
-                reasons an attorney joins: some want a professional
-                community, some want to send referral work, some want to
-                receive it.
+                Owning one product for this long changes how I work. You stop
+                shipping things you’ll regret, because you’re the one who has to
+                maintain them. A referral network lives or dies on trust, so the
+                frontend has to feel dependable first and clever second.
               </p>
               <p>
-                One directory SEO initiative I proposed and built took the
-                site from roughly 50 organic search clicks a day to around
-                850, and it now brings in a steady flow of new signups on
-                its own.
+                A referral network lives or dies on trust, so the frontend has
+                to feel dependable first and clever second.
               </p>
               <p>
-                Owning one product for this long changes how you work. You
-                stop shipping things you will regret, because you are the
-                one who has to maintain them. A referral network lives or
-                dies on trust, so the frontend has to feel dependable first
-                and clever second.
+                In hindsight, here are the biggest things I'd do differently:
               </p>
+              <ul>
+                <li>
+                  Work close to the user, early. Every app has its own audience
+                  with their own preferences and workflows.
+                </li>
+                <li>
+                  Build rougher things first and see if they get traction. The
+                  Inner Circle was a complex component to ship before knowing if
+                  users would use it. The finesse and craftsmanship best serve a
+                  working idea.
+                </li>
+                <li>
+                  Build accessibility in from the start. Hover-only interactions
+                  and visual-first components were easy to ship and are harder
+                  to fix later. It’s the first thing I’d bake into the component
+                  library if I started over.
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -270,7 +289,10 @@ export default function OvertureCaseStudy() {
 
                   <div className="brand-showcase__col brand-showcase__col--right">
                     {brand.studies.map((study) => (
-                      <div className="motion-study brand-tile--study" key={study.num}>
+                      <div
+                        className="motion-study brand-tile--study"
+                        key={study.num}
+                      >
                         <div className="motion-study__label">
                           <span className="eyebrow">{study.num}</span>
                           <span>{study.title}</span>

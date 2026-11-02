@@ -184,20 +184,35 @@ export const OverturePageContent: OverturePage = {
   ],
   coverageMap: {
     id: "coverage-map-showcase",
-    label: "trusted networks",
-    title: "Trusted networks",
+    label: "Trusted networks",
+    title: "Inner Circle",
     description: (
       <p>
-        One of the most involved frontend concepts that I helped drive was a
-        network map tool. Each user adds their attorney colleagues to their
-        network and the US map highlights the state based on the new member's
-        practice states. It was thought of as a way to "gamify" every user's
-        referral coverage and to incetivize connecting with other attorneys.
-        <br /> <br /> I manually built an SVG map React component, used Redux to
-        track application states live, wrote a dynamically-populated tooltip
-        that follows mouse movements, and orchestrated animation timing using
-        homemade scss mixins. <br /> <br /> Below is a working demo decoupled
-        from the live applicaiton, using mock data, alongside the code.
+        Inner Circle is a coverage map I designed and built. As attorneys add
+        colleagues to their network, the map lights up every state those
+        colleagues practice in. The idea was to “gamify” referral coverage and
+        give people a reason to connect with more attorneys.
+        <br />
+        <br />
+        We wanted attorneys to see at a glance where their network had coverage
+        and, more importantly, where it didn’t. I designed a plain list of
+        colleagues first, but it was hard to spot the gaps. A map makes them
+        obvious: any unlit state is somewhere you can’t send a referral yet. The
+        goal was to fill the whole map, so attorneys would have someone to send
+        any referral to, anywhere in the country.
+        <br />
+        <br />
+        The concept was already dense, so instead of adding drill-down views,
+        hovering a state shows every connection you have there. All the detail
+        stays in one place without making the map harder to navigate. The
+        animation was meant to make lighting up a new state feel like a small
+        reward.
+        <br />
+        <br />I built the SVG map as a custom React component, used Redux to
+        keep it in sync as the network changes, wrote a tooltip that follows the
+        cursor and fills in each state’s details, and timed the animations with
+        homemade SCSS mixins. Below is a working demo, separated from the live
+        app and running on mock data, alongside the code.
       </p>
     ),
     previewLabel:
@@ -214,11 +229,33 @@ export const OverturePageContent: OverturePage = {
   profilePage: {
     id: "profile-showcase",
     label: "the profile page",
-    title: "From contact card to referral decision",
-    description: `Every referral on Overture starts with one attorney
-    deciding whether to trust another with a client. The profile page is
-    where that decision gets made. It took three rounds of design to get
-    the page to answer the right question.`,
+    title: "From contact card to trust signals",
+    description: (
+      <>
+        <p>
+          When an attorney posts a referral, several colleagues respond, and the
+          poster has to choose one, usually by reading each responder's profile.
+          V1 shipped to meet our launch deadline and was little more than a
+          contact card. Profiles looked alike, so people were choosing on very
+          little information.
+        </p>
+        <p>
+          Over three rounds of design, I reworked the page around one question:
+          can I trust this person with my client? Signals are ordered by
+          strength. Common ground comes first, because a shared school, bar
+          association or network is the strongest reason to trust someone.
+          Client reviews from Avvo, Martindale and Google come next, then peer
+          recommendations, which are fewer but carry real weight with other
+          attorneys.
+        </p>
+        <p>
+          Later we made these profiles publically available and indexed by
+          search engines. Organic search clicks grew from about 50 a day to
+          around 850, and the directory now brings in a steady flow of new
+          signups on its own.
+        </p>
+      </>
+    ),
     steps: [
       {
         num: "01",
