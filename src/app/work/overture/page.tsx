@@ -49,24 +49,6 @@ export default function OvertureCaseStudy() {
             </div>
             <div className="case-head__media">
               <Card imgs={OvertureMosaic.imgs} />
-              <nav className="case-head__jumplinks" aria-label="Section links">
-                <span className="case-head__jumplinks-label eyebrow">
-                  Jump to
-                </span>
-                <div className="case-head__jumplinks-row">
-                  <div className="case-head__jumplinks-group">
-                    {quickLinks.map((link) => (
-                      <Link
-                        href={link.href}
-                        className="case-head__code-link"
-                        key={link.href}
-                      >
-                        {link.text}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </nav>
             </div>
           </div>
         </div>
@@ -109,7 +91,25 @@ export default function OvertureCaseStudy() {
               <span className="case-section__label eyebrow">
                 {section.label}
               </span>
-              <div className="case-section__body">{section.body}</div>
+              <div className="case-section__layout">
+                <div className="case-section__body">{section.body}</div>
+                <aside className="case-section__contents">
+                  <span className="case-section__contents-label eyebrow">
+                    Jump to
+                  </span>
+                  <nav aria-label="Section links">
+                    {quickLinks.map((link) => (
+                      <Link
+                        href={link.href}
+                        className="case-section__contents-link"
+                        key={link.href}
+                      >
+                        {link.text}
+                      </Link>
+                    ))}
+                  </nav>
+                </aside>
+              </div>
             </div>
           </div>
         </section>
@@ -171,51 +171,12 @@ export default function OvertureCaseStudy() {
         </div>
       </section>
 
-      <section className="case-section" id="growth">
-        <div className="wrap">
-          <div className="case-section__grid">
-            <span className="case-section__label eyebrow">Looking back</span>
-            <div className="case-section__body">
-              <h3>Four years on one project</h3>
-              <p>
-                Owning one product for this long changes how I work. You stop
-                shipping things you’ll regret, because you’re the one who has to
-                maintain them. A referral network lives or dies on trust, so the
-                frontend has to feel dependable first and clever second.
-              </p>
-
-              <p>
-                In hindsight, here are the biggest things I'd do differently:
-              </p>
-              <ul>
-                <li>
-                  Work close to the user, early. Every app has its own audience
-                  with their own preferences and workflows.
-                </li>
-                <li>
-                  Build rougher things first and see if they get traction. The
-                  Inner Circle was a complex component to ship before knowing if
-                  users would use it. The finesse and craftsmanship best serve a
-                  working idea.
-                </li>
-                <li>
-                  Build accessibility in from the start. Hover-only interactions
-                  and visual-first components were easy to ship and are harder
-                  to fix later. It’s the first thing I’d bake into the component
-                  library if I started over.
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="case-section" id={brand.id}>
         <div className="wrap">
           <div className="case-section__grid">
             <span className="case-section__label eyebrow">{brand.label}</span>
             <div className="case-section__body">
-              <h3>The brand before the product</h3>
+              <h3>Developing the look and feel</h3>
               <p>{brand.intro}</p>
 
               <div className="brand-showcase">
@@ -373,16 +334,70 @@ export default function OvertureCaseStudy() {
           <span className="case-gallery__label eyebrow">{screens.label}</span>
           <div className="case-gallery__items">
             {screens.items.map((item) => (
-              <figure className="case-gallery__item" key={item.picture.src}>
-                <Image
-                  src={item.picture.src}
-                  alt={item.picture.alt}
-                  width={item.picture.width}
-                  height={item.picture.height}
-                />
+              <figure
+                className="case-gallery__item"
+                key={item.picture?.src ?? item.video?.src}
+              >
+                {item.video ? (
+                  <video
+                    src={item.video.src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                ) : (
+                  item.picture && (
+                    <Image
+                      src={item.picture.src}
+                      alt={item.picture.alt}
+                      width={item.picture.width}
+                      height={item.picture.height}
+                    />
+                  )
+                )}
                 <figcaption>{item.caption}</figcaption>
               </figure>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="case-section" id="growth">
+        <div className="wrap">
+          <div className="case-section__grid">
+            <span className="case-section__label eyebrow">Looking back</span>
+            <div className="case-section__body">
+              <h3>Four years on one project</h3>
+              <p>
+                Owning one product for this long changes how I work. You stop
+                shipping things you’ll regret, because you’re the one who has to
+                maintain them. A referral network lives or dies on trust, so the
+                frontend has to feel dependable first and clever second.
+              </p>
+
+              <p>
+                In hindsight, here are the biggest things I'd do differently:
+              </p>
+              <ul>
+                <li>
+                  Work close to the user, early. Every app has its own audience
+                  with their own preferences and workflows.
+                </li>
+                <li>
+                  Build rougher things first and see if they get traction. The
+                  Inner Circle was a complex component to ship before knowing if
+                  users would use it. The finesse and craftsmanship best serve a
+                  working idea.
+                </li>
+                <li>
+                  Build accessibility in from the start. Hover-only interactions
+                  and visual-first components were easy to ship and are harder
+                  to fix later. It’s the first thing I’d bake into the component
+                  library if I started over.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>

@@ -65,7 +65,7 @@ export const OverturePageContent: OverturePage = {
   ],
   quickLinks: [
     {
-      text: "Trusted network map",
+      text: "Inner Circle",
       href: "#coverage-map-showcase",
     },
     {
@@ -77,12 +77,12 @@ export const OverturePageContent: OverturePage = {
       href: "#profile-showcase",
     },
     {
-      text: "Growth",
-      href: "#growth",
+      text: "Brand & design system",
+      href: "#brand-showcase",
     },
     {
-      text: "Brand",
-      href: "#brand-showcase",
+      text: "Looking back",
+      href: "#growth",
     },
   ],
   statsBar: [
@@ -329,7 +329,7 @@ export const OverturePageContent: OverturePage = {
   },
   brand: {
     id: "brand-showcase",
-    label: "brand conceptualization",
+    label: "brand and design systems",
     intro: `Before any of the frontend existed, Overture was a brand style
     guide: a type pairing, a deliberately restrained palette, and a logo
     mark built from a simple geometric lockup. Two motion studies below
@@ -434,6 +434,15 @@ export const OverturePageContent: OverturePage = {
     label: "a few screens",
     items: [
       {
+        video: {
+          src: "/uploads/overture/onboarding-workflow.webm",
+          alt: "Recorded capture of the Overture onboarding flow",
+          width: 2307,
+          height: 1215,
+        },
+        caption: "The onboarding flow",
+      },
+      {
         picture: {
           src: "/uploads/overture/dashboard-anonymized.png",
           alt: "The Overture member dashboard",
@@ -453,12 +462,48 @@ export const OverturePageContent: OverturePage = {
       },
       {
         picture: {
-          src: "/uploads/overture/directory.jpg",
+          src: "/uploads/overture/attorney-directory.png",
           alt: "The Overture attorney directory and search",
-          width: 1600,
-          height: 900,
+          width: 1966,
+          height: 1127,
         },
         caption: "Attorney directory and search",
+      },
+      {
+        picture: {
+          src: "/uploads/overture/referral-status-tracker.png",
+          alt: "The referral status tracker, showing each step of a referral",
+          width: 2317,
+          height: 1219,
+        },
+        caption: "Referral status tracker",
+      },
+      {
+        picture: {
+          src: "/uploads/overture/esign-upload-flow.png",
+          alt: "The e-signature upload flow for an engagement agreement",
+          width: 1480,
+          height: 1014,
+        },
+        caption: "E-signature upload flow",
+      },
+      {
+        picture: {
+          src: "/uploads/overture/invoice-preview.png",
+          alt: "A client invoice preview, with fees split across parties",
+          width: 2479,
+          height: 2250,
+        },
+        caption: "Client invoice preview",
+      },
+      {
+        picture: {
+          src: "/uploads/overture/client-introduction-modal.png",
+          alt: "The client-attorney introduction modal",
+          width: 2318,
+          height: 1165,
+        },
+        caption: "Client-attorney introduction",
       },
     ],
   },

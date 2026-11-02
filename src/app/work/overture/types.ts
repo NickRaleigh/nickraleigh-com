@@ -39,7 +39,8 @@ type MotionStudy = {
 };
 
 type GalleryItem = {
-  readonly picture: Picture;
+  readonly picture?: Picture;
+  readonly video?: Picture;
   readonly caption: string;
 };
 

@@ -201,79 +201,6 @@
     }
   }
 
-  // Lives inside &__media, directly under the mosaic — so it reads as a
-  // caption for the tiles rather than a floating row with no edge to align to.
-  &__jumplinks {
-    margin-top: 2rem;
-  }
-
-  // Matches &__meta-row's dt styling exactly (mono, uppercase, slate) so
-  // this reads as the same kind of caption already used in the text
-  // column opposite it ("ROLE", "TIMELINE") — not the "// section label"
-  // convention used for actual page sections further down, which read as
-  // a stray code comment when borrowed for a nav caption.
-  &__jumplinks-label {
-    display: block;
-    font-size: 1.1rem;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    margin-bottom: 0.8rem;
-  }
-
-  &__jumplinks-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.8rem;
-  }
-
-  &__jumplinks-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-  }
-
-  // Separates the two links that mount a live demo from the three that
-  // just jump further down this same page — otherwise all five read as
-  // one undifferentiated row of chips. Hidden once the row wraps (narrow
-  // viewports): a vertical rule stranded at the start of its own line
-  // reads as a stray mark, not a divider, so the group gap alone carries
-  // the separation there.
-  &__jumplinks-divider {
-    width: 1px;
-    height: 2rem;
-    background: var(--color-border);
-
-    @include media("<=tablet") {
-      display: none;
-    }
-  }
-
-  // Pills, not underlined text: this row mixes two different behaviors
-  // (jump to a section here vs. leave for a separate page), and a flat
-  // list of underlined links made that distinction invisible until you
-  // clicked. The arrow span the external one carries (markup, not CSS)
-  // is the actual signal; the pill shape is just so five short labels
-  // read as a row of chips instead of a run-on sentence.
-  &__code-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: $mono;
-    font-size: 1.2rem;
-    letter-spacing: 0.02em;
-    color: var(--color-accent);
-    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
-    border-radius: 999px;
-    padding: 0.6rem 1.4rem;
-    transition: background 150ms, border-color 150ms;
-
-    &:hover {
-      background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-      border-color: var(--color-accent);
-    }
-  }
 }
 
 // &__carousel and &__nav live in the case-head media column now (see
@@ -354,7 +281,8 @@
   &__item {
     margin: 0;
 
-    img {
+    img,
+    video {
       display: block;
       width: 100%;
       height: auto;
@@ -522,6 +450,59 @@
       padding-left: 1.6rem;
       border-left: 2px solid var(--color-accent);
       font-size: 1.4rem;
+    }
+  }
+
+  // Only the generic `sections` loop (currently just "overview") uses this
+  // — the body's own max-width: 68rem already leaves the rest of the row
+  // empty on wide viewports, so the contents nav fills space that's
+  // otherwise just air, rather than competing with the body for room.
+  &__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 68rem) 1fr;
+    gap: 4rem;
+
+    @include media("<=new-referral-bp") {
+      grid-template-columns: 1fr;
+      gap: 2.4rem;
+    }
+  }
+
+  &__contents {
+    position: sticky;
+    // Clears the sticky site nav (6.8rem tall) plus a little breathing room.
+    top: 8.8rem;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+
+    @include media("<=new-referral-bp") {
+      position: static;
+    }
+  }
+
+  &__contents-label {
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+  }
+
+  &__contents-link {
+    display: block;
+    font-size: 1.4rem;
+    color: var(--color-text-muted);
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--color-border);
+    transition: color 150ms;
+
+    &:last-child {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    &:hover {
+      color: var(--color-accent);
     }
   }
 }
