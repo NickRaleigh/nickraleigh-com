@@ -272,14 +272,33 @@
     margin-bottom: 3.2rem;
   }
 
-  &__items {
+  // MediaGallery.tsx: one large preview plus the thumbnail strip that
+  // drives it, replacing the old column of 8 full-width items (one scroll
+  // beat each — see git history for &__items/&__item if that's ever
+  // wanted back).
+  &__viewer {
     display: flex;
     flex-direction: column;
-    gap: 4rem;
+    gap: 2rem;
   }
 
-  &__item {
+  &__preview {
     margin: 0;
+
+    figcaption {
+      margin-top: 1rem;
+      font-size: 1.3rem;
+      color: var(--color-text-muted);
+    }
+  }
+
+  &__preview-trigger {
+    display: block;
+    width: 100%;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: zoom-in;
 
     img,
     video {
@@ -289,10 +308,128 @@
       border: 1px solid var(--color-border);
     }
 
+    &:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  &__thumbs {
+    display: flex;
+    gap: 1.2rem;
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+
+    // A visible scrollbar reads as "there's more" on a horizontally
+    // clipped strip; the browser default is fine, just thin it down a
+    // touch so it doesn't compete with the thumbnails themselves.
+    scrollbar-width: thin;
+  }
+
+  &__thumb {
+    flex: 0 0 auto;
+    width: 12rem;
+    padding: 0;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+
+    img,
+    video {
+      display: block;
+      width: 100%;
+      height: 6.75rem;
+      object-fit: cover;
+      border: 1px solid var(--color-border);
+      opacity: 0.6;
+      transition:
+        opacity 120ms ease,
+        border-color 120ms ease;
+    }
+
+    &:hover img,
+    &:hover video {
+      opacity: 0.85;
+    }
+
+    &[aria-selected="true"] img,
+    &[aria-selected="true"] video {
+      opacity: 1;
+      border-color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  // Fixed to the viewport, not wherever &__viewer happens to sit in the
+  // page: a plain position: fixed overlay, not a portal, so this only
+  // works as long as nothing between here and <body> sets a transform/
+  // filter/contain that would create its own containing block instead.
+  &__lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    background: rgba(11, 13, 18, 0.9);
+    cursor: zoom-out;
+
+    @include media("<=tablet") {
+      padding: 2rem;
+    }
+  }
+
+  &__lightbox-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 4rem;
+    height: 4rem;
+    font-size: 2.8rem;
+    line-height: 1;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-text);
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--color-text);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  &__lightbox-media {
+    margin: 0;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: default;
+
+    img,
+    video {
+      display: block;
+      max-width: 100%;
+      max-height: 80vh;
+      width: auto;
+      height: auto;
+    }
+
     figcaption {
-      margin-top: 1rem;
-      font-size: 1.3rem;
+      margin-top: 1.2rem;
+      font-size: 1.4rem;
       color: var(--color-text-muted);
+      text-align: center;
     }
   }
 }
@@ -382,7 +519,38 @@
     margin-bottom: 0.8rem;
   }
 
+  // Pairs the body copy with an &__aside (currently just the status-banner
+  // demo) on wide viewports. &__aside is a fixed width, not a shared-leftover
+  // flex item: with &__body's own content wanting its full 68rem cap, there
+  // was rarely any free space left in the row for &__aside to grow into, so
+  // its own max-width went unreachable in practice. &__body instead absorbs
+  // whatever width &__aside doesn't take (still bounded by its own 68rem
+  // cap on wide-enough viewports). Stacks below the text on narrower
+  // viewports, same as everything else in this section.
+  &__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 4rem;
+
+    @include media("<=desktop") {
+      flex-direction: column;
+    }
+  }
+
+  &__aside {
+    flex: 0 0 46rem;
+    width: 46rem;
+
+    @include media("<=desktop") {
+      flex-basis: auto;
+      width: 100%;
+    }
+  }
+
   &__body {
+    flex: 1 1 0%;
+    min-width: 0;
+
     p {
       font-size: 1.6rem;
       color: var(--color-text-muted);

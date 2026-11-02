@@ -39,6 +39,13 @@
   background: var(--color-surface);
   padding: 2.8rem 2.6rem;
 
+  // Third card (Data & Product Engineering) reads as an additional
+  // strength, not a third co-equal discipline alongside design and
+  // front-end — same recessed tone used elsewhere for secondary surfaces.
+  &:nth-child(3) {
+    background: $paper-dim;
+  }
+
   &__idx {
     font-size: 1.3rem;
     font-weight: 600;

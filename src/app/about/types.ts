@@ -12,12 +12,6 @@ type TimelineRow = {
   readonly description: string;
 };
 
-type CTALink = {
-  readonly href: string;
-  readonly text: string;
-  readonly variant: "primary" | "secondary";
-};
-
 export type AboutPage = {
   readonly pagehead: {
     readonly kicker: string;
@@ -43,6 +37,5 @@ export type AboutPage = {
   readonly cta: {
     readonly title: string;
     readonly description: string;
-    readonly links: readonly CTALink[];
   };
 };

@@ -1,0 +1,422 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+// Status-banner demo (src/app/work/overture/status-banner/), the right
+// column of the "Rules vs. a model, live" section. Two layers, same move
+// as .coverage-map-panel elsewhere on this case study: outer chrome
+// (.sb-widget, tags, buttons) styled for this page's dark background, the
+// component itself (.sb, prefixed classes below) styled as a white card
+// since it's meant to look like the real shipped product UI, ported from
+// nr-symfony's public/js/status-banner/status-banner.css with its design
+// tokens swapped for this project's (--sb-text -> rgba(11,13,18,*),
+// --sb-tray-bg/--sb-banner-bg kept as their own literal colors since they
+// matched product UI, not this site's palette).
+
+// State-preset picker (StatusBannerTabs.tsx), living in the left (prose)
+// column rather than inside the .sb-widget card on the right — see
+// StatusBannerContext.tsx for the state both share. Flat text + a left
+// rule on the active one, the same idiom .profile-showcase__tab uses
+// elsewhere on this site — not a pill/chip, which reads as a generic
+// "AI-generated UI" default rather than something that belongs to this
+// design. Styled directly for this page's dark background, same as the
+// prose around it.
+.sb-tabs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin-top: 2.4rem;
+
+  &__label {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  &__tab {
+    font: inherit;
+    font-size: 1.4rem;
+    line-height: 1.3;
+    padding: 0 0 0 1.1rem;
+    background: none;
+    border: none;
+    border-left: 2px solid var(--color-border);
+    text-align: left;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition:
+      color 120ms ease,
+      border-color 120ms ease;
+
+    &:hover {
+      color: var(--color-text);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+
+    &[aria-selected="true"] {
+      color: var(--color-text);
+      border-left-color: var(--color-accent);
+      font-weight: 600;
+    }
+  }
+}
+
+.sb-widget {
+  font-size: 1.4rem;
+
+  &__turnstile {
+    // Cloudflare only shows this when it decides an interactive check is
+    // actually needed (appearance: "interaction-only" in
+    // useTurnstileToken.ts), so it's pinned out of the document flow
+    // instead of reserving layout space for the common case where it
+    // never appears.
+    position: fixed;
+    right: 1.6rem;
+    bottom: 1.6rem;
+    z-index: 40;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+
+    .eyebrow {
+      font-size: 1.2rem;
+      color: var(--color-text-muted);
+    }
+  }
+
+  // Shipped-component stage: a white card, same move as
+  // .coverage-map-panel__preview elsewhere on this case study.
+  .case__stage {
+    padding: 2rem 1.8rem 2.2rem;
+    background: $white;
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+  }
+
+  // Everything from here down lives inside the white .case__stage card, so
+  // it's styled for a light background, the reverse of the rest of this
+  // page.
+
+  .banner-version {
+    margin-top: 0.6rem;
+  }
+
+  .banner-version--stale {
+    opacity: 0.4;
+    transition: opacity 150ms ease;
+  }
+
+  .v2-fallback-note {
+    margin: 0.6rem 0 0;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: rgba(11, 13, 18, 0.45);
+  }
+
+  .v2-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.8rem;
+  }
+
+  .v2-actions button {
+    font: inherit;
+    font-size: 1.3rem;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid rgba(11, 13, 18, 0.15);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: rgba(11, 13, 18, 0.8);
+    cursor: pointer;
+    transition:
+      background 150ms ease,
+      border-color 150ms ease;
+
+    &:hover {
+      background: rgba(11, 13, 18, 0.05);
+      border-color: rgba(11, 13, 18, 0.3);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+
+      &:hover {
+        background: transparent;
+        border-color: rgba(11, 13, 18, 0.15);
+      }
+    }
+  }
+
+  .v2-actions__note {
+    font-size: 1.2rem;
+    color: rgba(11, 13, 18, 0.45);
+  }
+}
+
+/* ==========================================================================
+   The component itself (.sb), ported from status-banner.css. Design tokens
+   point at the white card's own fixed palette, not this page's --color-*
+   custom properties, since this is meant to read as the real product UI
+   regardless of what page it's embedded in.
+   ========================================================================== */
+
+.sb {
+  --sb-text: #1f1f1f;
+  --sb-rule: #ebebeb;
+  --sb-tray-bg: #f6f6f6;
+  --sb-banner-bg: #fde7ba;
+  --sb-beacon: #f5a66c;
+
+  --sb-radius: 5px;
+  --sb-body-size: 15px;
+  --sb-icon-size: 20px;
+  --sb-icon-opacity: 0.65;
+
+  width: 100%;
+  max-width: 100%;
+  font-family: $sans;
+  color: var(--sb-text);
+  text-align: left;
+}
+
+.sb *,
+.sb *::before,
+.sb *::after {
+  box-sizing: border-box;
+}
+
+.sb:empty {
+  display: none;
+}
+
+.sb__icon {
+  height: var(--sb-icon-size);
+  width: var(--sb-icon-size);
+  flex: 0 0 auto;
+  opacity: var(--sb-icon-opacity);
+}
+
+/* ---- stats row ----------------------------------------------------------- */
+
+.sb__stats {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: var(--sb-tray-bg);
+  border-radius: var(--sb-radius);
+}
+
+.sb__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  color: var(--sb-text);
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.sb__stat__value {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  font-size: var(--sb-body-size);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.sb__stat__value b {
+  font-weight: 600;
+}
+
+.sb__date {
+  position: relative;
+  cursor: default;
+  font-weight: 600;
+  border-bottom: 1px dotted transparent;
+}
+
+.sb__date:hover {
+  border-bottom-color: currentColor;
+}
+
+.sb__date__tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 6px 9px;
+  border-radius: 4px;
+  background: #1f1f1f;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms ease;
+}
+
+.sb__date:hover .sb__date__tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---- banner ---------------------------------------------------------------- */
+
+.sb__banner {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  margin: 0;
+  background: var(--sb-banner-bg);
+  border-radius: var(--sb-radius);
+}
+
+.sb__banner__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.sb__banner--summary {
+  align-items: flex-start;
+}
+.sb__banner--summary .sb__banner__icon {
+  margin-top: 6px;
+}
+
+.sb__banner__text {
+  margin-left: 5px;
+  font-size: var(--sb-body-size);
+  line-height: 1.35;
+}
+
+.sb__banner__text span {
+  text-transform: unset;
+  font-weight: 600;
+}
+
+.sb__banner__text__matter {
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+/* ---- beacon ---------------------------------------------------------------- */
+
+.sb__beacon {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  margin-right: 7px;
+}
+
+.sb__beacon__dot,
+.sb__beacon__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--sb-beacon);
+}
+
+.sb__beacon__ring {
+  animation: sb-pulse 1.8s ease-out infinite;
+}
+
+@keyframes sb-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb__beacon__ring {
+    animation: none;
+  }
+}
+
+/* ---- v2: SummaryBanner states ----------------------------------------------- */
+
+.sb__banner--error {
+  background: #fbeaea;
+  color: #7a2e2e;
+}
+
+.sb__skeleton {
+  display: inline-block;
+  width: 180px;
+  height: 13px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0dba8 25%, #f7e6bc 37%, #f0dba8 63%);
+  background-size: 400% 100%;
+  animation: sb-skeleton 1.4s ease-in-out infinite;
+}
+
+@keyframes sb-skeleton {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.sb__banner__caret::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: currentColor;
+  animation: sb-cursor 1s step-end infinite;
+}
+
+@keyframes sb-cursor {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb__skeleton,
+  .sb__banner__caret::after {
+    animation: none;
+  }
+}

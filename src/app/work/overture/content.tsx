@@ -43,12 +43,12 @@ export const OverturePageContent: OverturePage = {
     title:
       "A nationwide lawyer-to-lawyer referral network I helped start in 2022.",
     description:
-      "I designed the brand from scratch, translating early whiteboard sessions into high-fidelity mockups, then crafted the entire frontend with React. I've owned every new UI feature, bugfix, and UX improvement since 2022",
+      "I designed the brand from scratch, translating early whiteboard sessions into high-fidelity mockups, then crafted the entire frontend with React. I've owned every new UI feature, bugfix, and UX improvement since 2022.",
   },
   metaRows: [
     {
       title: "Role",
-      description: "Founding Designer & Senior Frontend Developer",
+      description: "Founding Designer & Frontend Developer",
     },
     {
       title: "Timeline",
@@ -60,7 +60,7 @@ export const OverturePageContent: OverturePage = {
     },
     {
       title: "Stack",
-      description: "React, Django",
+      description: "React (with a Django backend)",
     },
   ],
   quickLinks: [
@@ -69,8 +69,8 @@ export const OverturePageContent: OverturePage = {
       href: "#coverage-map-showcase",
     },
     {
-      text: "Status banner: rules vs. a model",
-      href: "/work/overture/status-banner",
+      text: "Live AI suggestions",
+      href: "#status-banner-showcase",
     },
     {
       text: "Profile page",
@@ -121,63 +121,23 @@ export const OverturePageContent: OverturePage = {
         <>
           <h3>A peer referral platform for small firms and solo attorneys</h3>
           <p>
-            Overtue was built around giving attorneys the tools to legally refer
-            work outside of their wheelhouse to a network of vetted, qualified
-            attorneys, while collecting referral fees.
+            Overture lets attorneys refer work outside their practice to a
+            network of vetted colleagues and collect a referral fee. An
+            attorney posts a referral, chats with the colleagues who
+            respond, picks one or more to take the case, and Overture
+            handles the rest: a client introduction, status tracking so
+            everyone knows who acts next, e-signed engagement agreements
+            and invoicing that splits fees automatically.
           </p>
           <p>
-            The main workflow of the platform includes posting referrals,
-            viewing and chatting with candidates, selecting one (or several)
-            attorneys simultanously to engage the client, and sending out a
-            client-attorney introduction for the selected attorney(s) handling
-            the referral.
+            It started in early 2022 as a few Figma screens our parent
+            company’s CEO wanted to show investors. When interest took
+            off, I became the founding designer: I built the brand and
+            design system, turned our whiteboard sessions into mockups,
+            then built the React frontend on top of our backend team’s
+            Django APIs. At a bigger company those would be three jobs.
+            Here they were one, which is the work I like best.
           </p>
-          <p>
-            Overture also tracks the status of every referral so both sides know
-            who needs to take the next step, step-by-step engagement agreement
-            e-signature delivery to client, and simplified client invoicing that
-            automatically splits fees to all parties.
-          </p>
-          <p>
-            In early 2022 the CEO of our parent company asked me to put together
-            a few simple Figma screens to show colleagues and potential
-            investors. In a few short months thereafter, with some strong
-            initial interest, I was delighted to be the founding designer for
-            all things Overture. I worked with our small team to expand the
-            initial Figma mockup into a real platform, starting with the brand
-            and design system, and mapping our whiteboard UX sessions into
-            designed mockups.
-          </p>
-          <p>
-            In a larger company, branding, UI design, and frontend development
-            would've been handled by different actors.{" "}
-            <b>
-              In a small startup like Overture, I owned the full-breadth of all
-              of these deliverables. It was on this project that I really was
-              able to engage the work I love doing: solving a problem visually,
-              technically, and how it best suits the user.
-            </b>
-          </p>
-          <h3>My Contributions and Responsibilities:</h3>
-          <ul>
-            <li>
-              Branding: identity, design system, marketing website & email
-              templates
-            </li>
-            <li>
-              The React frontend, integrating API endpoints built by our backend
-              engineers on Django
-            </li>
-            <li>
-              Introducing new features starting as an idea from product owners,
-              developing them into Figma mockups, then building code around
-              them, and finally refining them as users interact with them.
-            </li>
-            <li>
-              The public marketing site, revised as the positioning evolved
-            </li>
-            <li>Keeping the codebase stable and manageable for over 4 years</li>
-          </ul>
         </>
       ),
     },
@@ -249,7 +209,7 @@ export const OverturePageContent: OverturePage = {
           attorneys.
         </p>
         <p>
-          Later we made these profiles publically available and indexed by
+          Later we made these profiles publicly available and indexed by
           search engines. Organic search clicks grew from about 50 a day to
           around 850, and the directory now brings in a steady flow of new
           signups on its own.

@@ -114,9 +114,5 @@ export const aboutContent: AboutPage = {
     title: "Hiring a design engineer?",
     description: `Happy to walk through the work above, or talk about what
     a team actually needs.`,
-    links: [
-      { href: "/contact", text: "Get in touch ›", variant: "primary" },
-      { href: "/work", text: "See the work", variant: "secondary" },
-    ],
   },
 };

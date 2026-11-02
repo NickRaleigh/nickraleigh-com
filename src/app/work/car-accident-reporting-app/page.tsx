@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/Mosaic/Card";
 import { WestwoodLawMosaic, WestwoodLawPageContent } from "./content";
 import { bem } from "@/utils/helpers";
 import { CTA } from "@/components/CTA";
+
+export const metadata: Metadata = {
+  title: "Law Firm Website with Local Car Accident Reporting App - Nick Raleigh",
+  description:
+    "An in-house Django platform for Westwood Law: a programmatic blog, a public-data accident-report tool, and the technical SEO that grew organic search from 260 clicks a month to over 2,000.",
+  alternates: { canonical: "/work/car-accident-reporting-app" },
+  openGraph: { images: ["/uploads/car-accident-reporting-app/lead.jpg"] },
+  twitter: { images: ["/uploads/car-accident-reporting-app/lead.jpg"] },
+};
 
 export default function WestwoodLawCaseStudy() {
   const {

@@ -16,16 +16,11 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-// No production equivalent: visitor-facing shortcuts. "Simulate" is
-// "someone just joined your network" without having to type a name into
-// the search bar first — reuses ADD_USER_TO_NETWORK, the exact action a
-// SearchBar selection dispatches, so both paths exercise the same reducer
-// case and the same map diffing effect below. "Reset demo" calls back up
-// to AutoplayDemo (onReset, threaded down through CoverageMapDemo and
-// CoverageMapPage) rather than dispatching something on this store: a
-// reset remounts the whole tree — a fresh store, a clean DOM for the
-// entrance animation to replay from, and "Play the entrance animation"
-// back too — the same remount AutoplayDemo already does for Play itself.
+// Dev-only shortcuts, nothing like this ships. Simulate just dispatches
+// ADD_USER_TO_NETWORK directly, the same action a real SearchBar pick
+// sends. Reset calls back up to AutoplayDemo instead of touching this
+// store, since a reset remounts the whole tree (fresh store, clean DOM,
+// entrance animation ready to replay).
 const DemoControls = ({ onReset }) => {
   const dispatch = useDispatch();
   const networkStates = useSelector(state => state.network.networkStates);
@@ -52,12 +47,10 @@ const DemoControls = ({ onReset }) => {
   );
 };
 
-// Ported from CoverageMap/index.js. The reducer only ever appends to
-// networkMembersAdded (see redux/reducers/network.js); it's this effect,
-// not the reducer, that diffs the latest addition against the previous
-// render's member list to decide which map states are genuinely new vs.
-// already covered by someone else — matching the original's own division
-// of labor between "data changed" and "what does that mean for the map".
+// The reducer only ever appends to networkMembersAdded (see
+// redux/reducers/network.js). This effect does the actual work of
+// deciding which of those states are new to the map vs. already covered
+// by someone else.
 const CoverageMap = ({ isMinimal, showPlayTrigger, onPlay, onReset }) => {
   const dispatch = useDispatch();
   const disableAnimation = useSelector(state => state.network.disableAnimation);
@@ -89,9 +82,8 @@ const CoverageMap = ({ isMinimal, showPlayTrigger, onPlay, onReset }) => {
           newStates = addedStates.filter(x => !prevStates.includes(x));
         }
 
-        // Not in the original: a visitor who prefers reduced motion gets
-        // the addition (counts, the member list below) without the map
-        // pulse.
+        // Reduced motion: still update the counts and member list,
+        // just skip the map pulse.
         if (!prefersReducedMotion()) {
           dispatch(setMemberStatesToUpdateOnMapAction({ new: newStates, existing: existingStates }));
         }
@@ -115,10 +107,8 @@ const CoverageMap = ({ isMinimal, showPlayTrigger, onPlay, onReset }) => {
       <Background />
       {!isMinimal && <StatCounter />}
       {!isMinimal && <DemoControls onReset={onReset} />}
-      {/* Rendered here, not by AutoplayDemo as a sibling of the whole demo,
-          so its position:50%/50% centers on just the globe (.coverage-map's
-          own position:relative) — centering against the full demo (map +
-          search card + member list) would put it well below the globe. */}
+      {/* Positioned here, not by AutoplayDemo, so it centers on the globe
+          alone instead of the full demo (map + search card + member list). */}
       {!isMinimal && showPlayTrigger && (
         <button type="button" className="coverage-map__play" onClick={onPlay}>
           <span className="coverage-map__play__icon" />
@@ -149,14 +139,11 @@ const CoverageMapPage = ({ variant, showPlayTrigger, onPlay, onReset }) => {
   );
 };
 
-// `disableAnimation` seeds the initial render: the autoplay wrapper mounts
-// this fresh (via a key bump) each time it wants the entrance sequence to
-// play — or a visitor hits "Reset demo" — and passes true instead when
-// prefers-reduced-motion applies. `variant` rides along in store state
-// (rather than being threaded through USA -> USState as a prop) so USState
-// can read it to slow its stagger for the hero without the full demo's
-// feel changing. `showPlayTrigger`/`onPlay`/`onReset` all come from
-// AutoplayDemo, which owns whether the entrance has been played yet.
+// disableAnimation seeds the initial render: AutoplayDemo remounts this
+// fresh (via a key bump) whenever it wants the entrance to replay, true
+// when prefers-reduced-motion applies. variant lives in store state
+// rather than a USA/USState prop, so USState can slow its stagger for
+// the hero without changing how the full demo feels.
 const CoverageMapDemo = ({ variant = "full", disableAnimation = false, showPlayTrigger = false, onPlay, onReset }) => {
   const storeRef = useRef(null);
   if (storeRef.current === null) {

@@ -14,11 +14,10 @@ const USState = ({ id, name }) => {
   // don't destructure the whole state.network, otherwise this rerenders every
   // time any property changes. We only need to react to the properties below.
   const disableAnimation = useSelector(state => state.network.disableAnimation);
-  // The hero is a slower, more deliberate reveal than the in-product demo:
-  // stretching the random delay's range (rather than the fill transition
-  // itself) spreads the same stagger out end to end instead of finishing
-  // within the first half second. No production equivalent — the real page
-  // only ever rendered the one variant.
+  // The hero reveal is slower than the in-product demo: stretching the
+  // random delay's range spreads the stagger out instead of finishing in
+  // the first half second. No production equivalent; the real page only
+  // ever rendered the one variant.
   const variant = useSelector(state => state.network.variant);
   const isMinimal = variant === "minimal";
   const staggerRange = isMinimal ? 1400 : 1800;
@@ -33,9 +32,8 @@ const USState = ({ id, name }) => {
   const [key, setKey] = useState(0);
   const [isAdded, setIsAdded] = useState(false);
   // Matches .coverage-map__globe's own entrance delay (2s full, 0.5s
-  // minimal — see _coverage-map.scss) so a state's first fill never lands
-  // before the globe itself has started fading/rising into view: states
-  // light up while that's happening, not before or after it.
+  // minimal, see _coverage-map.scss), so states light up while the globe
+  // itself is still fading/rising in, not before or after.
   const animationTimeout = isMinimal ? 500 : 2000;
 
   useEffect(() => {

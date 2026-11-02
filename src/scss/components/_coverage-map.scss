@@ -9,11 +9,11 @@
 // Local stand-ins for values that lived in the original app's design tokens
 // (Overture's own accent blue and a light neutral grey, and Jost, the
 // typeface the original product UI actually used instead of this site's own
-// Inter).
+// Inter). Jost loads via next/font (see RootLayout), exposed as --font-jost.
 $cm-blue: #1890ff;
 $cm-light-grey: #ececec;
 $cm-error: #d64545;
-$jost: "Jost", sans-serif;
+$jost: var(--font-jost), sans-serif;
 
 .coverage-map-panel {
   border: 1px solid var(--color-border);
@@ -219,24 +219,21 @@ $cm-height-phone: 46rem;
         }
       }
 
-      // The hero is a backdrop behind the intro, not a timed showcase — it
-      // should settle in sooner. Overriding just the delay (not the whole
-      // animation shorthand) is enough; duration/keyframes are unchanged.
+      // The hero is a backdrop, not a timed showcase, so it should settle
+      // in sooner. Just overriding the delay is enough.
       .coverage-map--minimal & {
         animation-delay: 0.5s;
       }
     }
-    // CANDIDATE 1 (testing): between roughly 1024px and 1920px, .coverage-map
-    // itself stays flat around 990px wide (.wrap caps out below this globe's
-    // fixed rem width), so .coverage-map__globe silently overflows and its
-    // overflow:hidden ancestor crops it — Canada/Mexico, toward the globe's
-    // left edge, is the first thing cropped away as the window narrows
-    // through here. transform:scale() shrinks width AND height together
-    // around the same centered point, so nothing inside (already correctly
-    // positioned at full size) gets re-tuned or distorted — it's the same
-    // picture, smaller. 0.791 is sized to just clear the container at the
-    // narrow (~1025px) edge of this range; it under-fills a bit at the wide
-    // (~1560px) edge rather than risk clipping again.
+    // CANDIDATE 1 (testing): between roughly 1024px and 1920px,
+    // .coverage-map stays flat around 990px wide (.wrap caps out below
+    // this globe's fixed rem width), so .coverage-map__globe silently
+    // overflows and gets cropped, Canada/Mexico first. transform:scale()
+    // shrinks width and height together around the same center, so
+    // nothing inside gets re-tuned, just the same picture, smaller. 0.791
+    // just clears the container at the narrow (~1025px) edge; it
+    // under-fills a bit at the wide (~1560px) edge rather than risk
+    // clipping again.
     @include media("<=1560px") {
       // translateY nudges the whole (already-shrunk) dome down slightly;
       // tell me the right number and I'll swap it in.
@@ -260,21 +257,19 @@ $cm-height-phone: 46rem;
       border-radius: 0;
       height: 100%;
       bottom: 0;
-      // The dome's own reveal keyframes only exist above tablet (see the
-      // >tablet block above); below it, nothing else sets opacity to 1, so
-      // without this the globe would stay invisible at this breakpoint
-      // whenever the animate-in (rather than animation-disabled) class is
-      // the one applied. Scoped to <=tablet only — doesn't touch the
-      // shipped full-demo look on desktop.
+      // The dome's reveal keyframes only exist above tablet; below it
+      // nothing else sets opacity to 1, so without this the globe stays
+      // invisible whenever animate-in (not animation-disabled) applies.
+      // Scoped to <=tablet only, doesn't touch the desktop look.
       opacity: 1;
     }
   }
 
   &--minimal .coverage-map__globe {
-    // The dome's mobile background (above) is a flat, edge-to-edge rectangle
-    // with no fade — on the hero it reads as a lighter panel sitting on the
-    // page rather than the states just floating on it. Dropping it entirely
-    // is simpler than trying to fade a shape with no room to fade into.
+    // The mobile background above is a flat rectangle with no fade; on
+    // the hero it reads as a panel sitting on the page rather than the
+    // states floating on it. Simpler to drop it than fade a shape with no
+    // room to.
     @include media("<=tablet") {
       background: none;
     }
@@ -367,9 +362,8 @@ $cm-height-phone: 46rem;
       position: relative;
       z-index: 10;
       // Nudges the states back down within the <=1560px scaled-down dome
-      // (see .coverage-map__globe's "CANDIDATE 1" comment above) — the
-      // scale() there shrinks the whole picture from its center, which
-      // left the map sitting higher than it should within the dome.
+      // (see "CANDIDATE 1" above). That scale() shrinks the whole picture
+      // from its center, which left the map sitting too high in the dome.
       @include media("<=1560px") {
         top: 8.5rem;
       }
@@ -640,9 +634,9 @@ $cm-height-phone: 46rem;
     filter: invert(1) brightness(0.55) opacity(0.6);
   }
 
-  // Alaska/Hawaii sit in their own inset, offset into the bottom-left —
-  // on mobile's narrow width that's space better spent letting the lower
-  // 48 (where every lit state actually is) fill it.
+  // Alaska/Hawaii sit in their own inset, offset into the bottom-left.
+  // On mobile's narrow width that space is better spent letting the
+  // lower 48, where every lit state actually is, fill it.
   @include media("<=tablet") {
     .coverage-map__USA__ak-hi {
       display: none;
@@ -679,12 +673,10 @@ $cm-height-phone: 46rem;
 // be further up the page.
 .coverage-map-autoplay {
   position: relative;
-  // Before React mounts anything inside it, this div is empty — zero
-  // height, zero area. It's also the element the hero's IntersectionObserver
-  // watches, and a zero-area target never reports isIntersecting: true (its
-  // intersection ratio is undefined), so autoplay would never fire.
-  // Inheriting the mount point's own reserved min-height keeps it non-empty
-  // from the start.
+  // Before React mounts, this div is empty (zero height/area). It's also
+  // what the hero's IntersectionObserver watches, and a zero-area target
+  // never reports isIntersecting: true, so autoplay would never fire.
+  // Inheriting the mount point's reserved min-height keeps it non-empty.
   min-height: inherit;
 }
 
@@ -695,8 +687,7 @@ $cm-height-phone: 46rem;
 // would cap the container short and let that card's content spill into the
 // code tabs below it once mounted.
 // The containing section is hidden below tablet (see .coverage-map's own
-// <=tablet display:none), so there's nothing to reserve space for there —
-// only the desktop reservation applies.
+// <=tablet display:none), so only the desktop reservation applies.
 #coverage-map-demo {
   display: block;
   min-height: $cm-height-desktop;
@@ -738,10 +729,10 @@ $cm-height-phone: 46rem;
 }
 
 // Prefixed with .coverage-map-panel below (not bare .coverage-map__intro)
-// so this beats .case-section__body h3's own color rule on specificity —
-// the demo sits inside a case-section's prose body on the Overture page,
-// and a bare class-only selector here would lose that fight since the
-// prose rule carries an extra element-selector (h3).
+// so this beats .case-section__body h3's own color rule on specificity.
+// The demo sits inside a case-section's prose body on the Overture page;
+// a bare class-only selector here would lose that fight to the prose
+// rule's extra element-selector (h3).
 .coverage-map-panel .coverage-map__intro {
   margin-bottom: 1.4rem;
 
@@ -933,7 +924,7 @@ $cm-height-phone: 46rem;
       font-weight: 600;
       color: $white;
     }
-    // White, same as the rest of the dropdown — only the "Invite
+    // White, same as the rest of the dropdown. Only the "Invite
     // {name}" row above stays on the blue field, so the blue doesn't
     // bleed down around the input and button.
     &__footer {
@@ -1194,24 +1185,17 @@ $cm-height-phone: 46rem;
   }
 
   // Prism's line-numbers plugin (wired up in mount.tsx) appends
-  // .line-numbers-rows into <code> once highlighting finishes — it has to
-  // run after Prism, since Prism rebuilds the code block's markup from
-  // its own text content and would wipe out any line markup added ahead
-  // of time (which is what briefly broke this). Styled here to match the
-  // Solarized Dark theme rather than pulling in the plugin's own CSS.
+  // .line-numbers-rows into <code> once highlighting finishes. Styled
+  // here to match the Solarized Dark theme instead of pulling in the
+  // plugin's own CSS.
   .line-numbers-rows {
     position: absolute;
-    // .line-numbers-rows is a sibling of <code>, not a descendant of it —
     // dangerouslySetInnerHTML owns <code>'s entire child list, so the
-    // numbers can't be nested inside it the way the real Prism plugin's
-    // comment above assumed. Its containing block is .code-showcase__panel
-    // (<pre>, position: relative above) instead, whose own 5.6rem
-    // padding-left is what actually reserves the gutter's space — so the
-    // offset has to be measured from <pre>'s edge, not <code>'s: flush
-    // against the left padding edge, with its right edge landing exactly
-    // where the code text starts (padding-left minus this element's own
-    // width), not a negative offset tuned for a containing block this
-    // isn't inside.
+    // numbers render as a sibling of <code>, not nested inside it like
+    // the real plugin assumes. Its containing block is
+    // .code-showcase__panel (<pre>, position: relative above), so
+    // left/width are measured from <pre>'s own 5.6rem padding-left, not
+    // <code>'s edge.
     top: 0;
     left: 2.8rem;
     width: 2.8rem;

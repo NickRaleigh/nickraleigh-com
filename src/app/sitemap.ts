@@ -1,27 +1,41 @@
 import type { MetadataRoute } from "next";
-import { workContent } from "./work/content";
+import { readdirSync, statSync } from "fs";
+import { join } from "path";
+import { config } from "@/config/site";
 
-const SITE_URL = "https://nickraleigh.com";
+const APP_DIR = join(process.cwd(), "src/app");
 
 // Required by `output: "export"` (next.config.ts): without it, Next.js
 // refuses to prerender this route at build time.
 export const dynamic = "force-static";
 
-// Mirrors nr-symfony's SitemapController: every work case study (currently
-// `work/content.tsx`'s own flagship list, the single source of truth the
-// work index page already renders from) plus the handful of other static
-// routes, home at priority 1.0 and everything else at 0.7 — same scheme the
-// original used, no per-page tuning. Adding a flagship entry there adds it
-// here too, with nothing to keep in sync by hand.
-export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = ["/", "/about", "/contact", "/work"];
-  const workPaths = workContent.flagship.map((item) => item.link);
-  const paths = Array.from(new Set([...staticPaths, ...workPaths])).sort();
+// Walks src/app for every directory that has a page.tsx, turning its path
+// into a URL. Assumes the flat, static-only route structure this site
+// actually has today (no dynamic segments, route groups, or parallel
+// routes) — adding a page.tsx anywhere under src/app shows up here with
+// nothing to keep in sync by hand.
+function findRoutes(dir: string, base = ""): string[] {
+  const entries = readdirSync(dir);
+  const routes = entries.includes("page.tsx") ? [base || "/"] : [];
 
+  for (const entry of entries) {
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) {
+      routes.push(...findRoutes(full, `${base}/${entry}`));
+    }
+  }
+
+  return routes;
+}
+
+// Mirrors nr-symfony's SitemapController scheme: home at priority 1.0,
+// everything else at 0.7, no per-page tuning.
+export default function sitemap(): MetadataRoute.Sitemap {
+  const paths = findRoutes(APP_DIR).sort();
   const lastModified = new Date();
 
   return paths.map((path) => ({
-    url: `${SITE_URL}${path}`,
+    url: `${config.global.url}${path}`,
     lastModified,
     priority: path === "/" ? 1.0 : 0.7,
   }));

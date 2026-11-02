@@ -26,18 +26,28 @@
     line-height: 1.5;
   }
 
-  &__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.6rem;
+  &__actions {
     margin-top: 4rem;
+  }
+
+  &__email {
+    display: inline-block;
+    font-family: $mono;
+    font-size: clamp(1.8rem, 2.4vw, 2.4rem);
+    color: var(--color-on-inverse);
+    border-bottom: 1px solid $line-dark;
+
+    &:hover {
+      color: var(--color-accent);
+      border-bottom-color: var(--color-accent);
+    }
   }
 
   // Homepage-only variant: same dark background as the rest of that page
   // (.position's border-bottom directly above already supplies the one
   // hairline separating the two sections) with the hero's display serif
   // on the title. Other pages reuse the base .cta on its original light
-  // treatment, paired with .btn--secondary, which this doesn't touch.
+  // treatment.
   &--dark {
     background: var(--color-surface);
     color: var(--color-text);
@@ -57,6 +67,11 @@
     .cta__text {
       color: var(--color-text-muted);
     }
+
+    .cta__email {
+      color: var(--color-text);
+      border-bottom-color: $line;
+    }
   }
 
   // Case-study variant: same dark background as the rest of that page, but
@@ -72,34 +87,10 @@
     .cta__text {
       color: var(--color-text-muted);
     }
-  }
-}
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 1.4rem 2.4rem;
-  font-size: 1.5rem;
-  font-weight: 600;
-  border-radius: 0.4rem;
-  transition: background 200ms, border-color 200ms;
-
-  &--primary {
-    background: var(--color-accent);
-    color: var(--color-text);
-
-    &:hover {
-      background: #f2b158;
-    }
-  }
-
-  &--secondary {
-    border: 1px solid $line-dark;
-    color: var(--color-on-inverse);
-
-    &:hover {
-      border-color: rgba(18, 21, 28, 0.4);
+    .cta__email {
+      color: var(--color-text);
+      border-bottom-color: $line;
     }
   }
 }

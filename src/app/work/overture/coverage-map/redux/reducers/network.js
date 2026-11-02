@@ -1,21 +1,14 @@
 /* ==========================================================================
    reducers/network.js
    --------------------------------------------------------------------------
-   Mock-data port of the original's redux/reducers/network.js. Keeps the
-   original's data shapes where a component downstream actually depends on
-   them (networkMembers and pendingInvites as { count, next, results } page
-   envelopes, matching InnerCircle/index.js's own rendering, even though
-   `next` is always null here: there's no second page to fetch) and drops
-   the shapes that only existed for machinery this demo doesn't have
-   (networks browsing/search, pagination, loading flags for requests that
-   never really go over the wire).
+   Mock-data port of the original reducer. Keeps the shapes components
+   downstream actually depend on (networkMembers/pendingInvites as
+   { count, next, results } pages, next always null here) and drops
+   what only existed for machinery this demo doesn't have (browsing,
+   pagination, loading flags).
 
-   One deliberate difference from the original: there, the network/member
-   diffing that decides which map states are "new" vs "existing" lives in
-   CoverageMap/index.js (a useEffect comparing this render's networkMembers
-   against the last one), not here — this reducer only appends to
-   networkMembersAdded and lets that effect do the diffing, exactly like
-   the original does. See index.jsx's own comment on that effect.
+   This reducer only appends to networkMembersAdded; index.jsx's effect
+   does the new-vs-existing diffing, same as the original.
    ========================================================================== */
 
 import {
@@ -27,8 +20,8 @@ import {
   RESET_NETWORK,
 } from "../actions/network";
 
-// `avatar` is a filename under /uploads/coverage-map/avatars/ — see
-// SearchBar/platformAttorneys.js's own comment on why.
+// avatar is a filename under /uploads/coverage-map/avatars/ (see
+// SearchBar/platformAttorneys.js).
 const SEED_ATTORNEYS = [
   { id: "seed-jalvarez", full_name: "J. Alvarez", state: "California", avatar: "avatar-01.jpg" },
   { id: "seed-rkim", full_name: "R. Kim", state: "California", avatar: "avatar-02.jpg" },
@@ -90,20 +83,17 @@ export function buildInitialState({ disableAnimation, variant, resetNonce = 0 })
     hovered: null,
     disableAnimation: !!disableAnimation,
     variant: variant,
-    // Bumped on every RESET_NETWORK. index.jsx keys SearchBar on this, so a
-    // reset also force-remounts it — clearing its own local state (the
-    // typed query, an in-progress invite) the same way the original
-    // SearchBar's handleOnClose did when "Reset demo" lived inside it,
-    // before it moved out to sit next to "Simulate" (see DemoControls).
+    // Bumped on every RESET_NETWORK. index.jsx keys SearchBar on this, so
+    // a reset force-remounts it too, clearing the typed query and any
+    // in-progress invite.
     resetNonce: resetNonce,
     memberStatesToUpdateOnMap: { new: [], existing: [] },
     networkStates: networkStates,
     networkStatesCount: countCoveredStates(networkStates),
     networkMembers: { count: seedMembers.length, next: null, results: seedMembers },
-    // Only ever grows via ADD_USER_TO_NETWORK, i.e. a real visitor action —
-    // the seed network above was never "added", so it starts empty. This is
-    // what index.jsx's map-diffing effect watches to know a fresh add just
-    // happened, same as the original.
+    // Only grows via ADD_USER_TO_NETWORK (a real visitor action). The seed
+    // network above was never "added," so this starts empty; index.jsx's
+    // map-diffing effect watches it to know a fresh add just happened.
     networkMembersAdded: [],
     pendingInvites: { count: 0, next: null, results: [] },
     networkSummary: {

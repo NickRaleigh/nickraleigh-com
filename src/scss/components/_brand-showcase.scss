@@ -60,7 +60,8 @@
     line-height: 1;
 
     &--serif {
-      font-family: "DM Serif Display", serif;
+      // Loads via next/font (see RootLayout), exposed as --font-dm-serif.
+      font-family: var(--font-dm-serif), serif;
       font-size: 9rem;
     }
 

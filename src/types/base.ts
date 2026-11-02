@@ -16,5 +16,5 @@ export type TextBlock = {
 };
 
 export type CTA = TextBlock & {
-  readonly link: Anchor;
+  readonly email: string;
 };

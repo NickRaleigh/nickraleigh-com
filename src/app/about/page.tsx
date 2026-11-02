@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { aboutContent } from "./content";
 import { CTA } from "@/components/CTA";
+
+export const metadata: Metadata = {
+  title: "About Nick Raleigh · Design Engineer, Longmont",
+  description:
+    "Senior design engineer in Longmont, CO with 11+ years of experience. Bridging brand, product, and code to ship fast, performant, and search-optimized web apps.",
+  alternates: { canonical: "/about" },
+};
 
 export default function About() {
   const { pagehead, intro, timeline, values, personal, cta } = aboutContent;
@@ -86,11 +94,7 @@ export default function About() {
         </div>
       </section>
 
-      <CTA
-        title={cta.title}
-        description={cta.description}
-        links={cta.links}
-      />
+      <CTA title={cta.title} description={cta.description} />
     </>
   );
 }

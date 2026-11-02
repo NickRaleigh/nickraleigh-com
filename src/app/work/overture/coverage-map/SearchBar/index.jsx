@@ -4,9 +4,8 @@ import { addUserToNetworkAction, addMyNetworkMemberInviteAction } from "../redux
 import { platformAttorneys } from "./platformAttorneys";
 import Toast from "./Toast";
 
-// Mock latency so adding a result or sending an invite still has the
-// original's brief "adding"/"inviting" disabled state — in production that
-// time was a real request; here it's a fixed delay.
+// Mock latency, standing in for a real request, so adding a result or
+// sending an invite still shows the brief "adding"/"inviting" state.
 const MOCK_LATENCY_MS = 450;
 
 function isValidEmail(value) {
@@ -30,26 +29,19 @@ const EnvelopeIcon = () => (
 /* ==========================================================================
    SearchBar/index.jsx
    --------------------------------------------------------------------------
-   Ported from the original InnerCircle/SearchBar/index.js. The real one
-   searched a live directory of profiles (searchProfilesForNetworksAction)
-   and showed an invite form pinned above the results the whole time you're
-   typing, not just when nothing matched — "Invite {name}" was always the
-   first option, so finding someone and inviting someone shared one box
-   rather than the invite being a fallback. This rebuild keeps that: the
-   invite row sits above the results list for as long as there's a query,
-   expands into a real email field once selected, and submits through
-   addMyNetworkMemberInviteAction, exactly like a real second-step form.
+   Ported from the original InnerCircle/SearchBar. The real one pinned an
+   invite option above the results the whole time you're typing, not just
+   when nothing matched, so "Invite {name}" was always the first option.
+   Kept that here: the invite row sits above results for as long as
+   there's a query, expands into an email field once selected, and
+   submits through addMyNetworkMemberInviteAction.
 
-   Dropped from the original: the live profilesForNetworks API search
-   (platformAttorneys.js is the mock stand-in), the email/name field swap
-   when the query itself looks like an email, and the promo/redeem-funds
-   column next to the search field (a separate incentive feature, not part
-   of search or the map).
+   Dropped: the live profile search API (platformAttorneys.js stands in),
+   the email/name field swap, and the promo/redeem-funds column (a
+   separate feature, unrelated to search or the map).
 
-   Added beyond the original: ARIA combobox semantics (role, aria-expanded/
-   -controls/-activedescendant, listbox/option roles) and keyboard nav over
-   the results list — the original's results were mouse-only
-   (onMouseEnter/onClick, no roles). "Reset demo" (../index.jsx's
+   Added: ARIA combobox semantics and keyboard nav over the results list.
+   The original's results were mouse-only. "Reset demo" (../index.jsx's
    DemoControls) has no production equivalent either.
    ========================================================================== */
 

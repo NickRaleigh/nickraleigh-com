@@ -1,4 +1,5 @@
 import { Fragment, type CSSProperties } from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/Mosaic/Card";
@@ -9,6 +10,19 @@ import AutoplayDemo from "./coverage-map/AutoplayDemo";
 import { CodeShowcase } from "./coverage-map/CodeShowcase";
 import { ProfileShowcase } from "./ProfileShowcase";
 import { PreloaderDemo } from "./PreloaderDemo";
+import { StatusBannerDemo } from "./status-banner/StatusBannerDemo";
+import { StatusBannerTabs } from "./status-banner/StatusBannerTabs";
+import { StatusBannerProvider } from "./status-banner/StatusBannerContext";
+import { MediaGallery } from "./MediaGallery";
+
+export const metadata: Metadata = {
+  title: "Overture · Design and Frontend for a Lawyer Referral Network · Nick Raleigh",
+  description:
+    "How I helped start Overture in 2022: the brand, the product design, and the React frontend for a nationwide lawyer-to-lawyer referral network, owned since.",
+  alternates: { canonical: "/work/overture" },
+  openGraph: { images: ["/uploads/overture/marketing-laptop.jpg"] },
+  twitter: { images: ["/uploads/overture/marketing-laptop.jpg"] },
+};
 
 export default function OvertureCaseStudy() {
   const {
@@ -151,6 +165,48 @@ export default function OvertureCaseStudy() {
               </p>
             </div>
             <CodeShowcase />
+          </div>
+        </div>
+      </section>
+
+      <section className="case-section" id="status-banner-showcase">
+        <div className="wrap">
+          <div className="case-section__grid">
+            <span className="case-section__label eyebrow">Status banner</span>
+            <StatusBannerProvider>
+              <div className="case-section__row">
+                <div className="case-section__body">
+                  <h3>Live AI suggestions for busy attorneys</h3>
+                  <p>
+                    We recently started surfacing more data on every referral to
+                    help attorneys decide whether to apply: whether it’s
+                    trending, whether it matches their practice areas, and
+                    whether the poster is engaging with responses.
+                  </p>
+                  <p>
+                    The page was already dense, so rather than adding more
+                    numbers, I wanted to turn that data into one
+                    plain-language suggestion. My first version was a
+                    rules-based banner. It was accurate, but every attorney
+                    saw the same message. So I built this prototype, which
+                    reads the attorney’s profile along with the referral’s
+                    performance and tells them, in a sentence or two,
+                    whether it’s worth their time.
+                  </p>
+                  <p>
+                    The demo calls Claude’s API and streams the response as it’s
+                    generated. It starts on a cached example; hit Regenerate for
+                    a live call, and pick a referral state to see how the
+                    message changes. If the endpoint fails, the banner falls
+                    back to a rules-based version.
+                  </p>
+                </div>
+                <aside className="case-section__aside">
+                  <StatusBannerDemo />
+                  <StatusBannerTabs />
+                </aside>
+              </div>
+            </StatusBannerProvider>
           </div>
         </div>
       </section>
@@ -332,34 +388,7 @@ export default function OvertureCaseStudy() {
       <section className="case-gallery">
         <div className="wrap">
           <span className="case-gallery__label eyebrow">{screens.label}</span>
-          <div className="case-gallery__items">
-            {screens.items.map((item) => (
-              <figure
-                className="case-gallery__item"
-                key={item.picture?.src ?? item.video?.src}
-              >
-                {item.video ? (
-                  <video
-                    src={item.video.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
-                ) : (
-                  item.picture && (
-                    <Image
-                      src={item.picture.src}
-                      alt={item.picture.alt}
-                      width={item.picture.width}
-                      height={item.picture.height}
-                    />
-                  )
-                )}
-                <figcaption>{item.caption}</figcaption>
-              </figure>
-            ))}
-          </div>
+          <MediaGallery items={screens.items} />
         </div>
       </section>
 
@@ -381,8 +410,11 @@ export default function OvertureCaseStudy() {
               </p>
               <ul>
                 <li>
-                  Work close to the user, early. Every app has its own audience
-                  with their own preferences and workflows.
+                  Work close to the user, early. The profile page’s V1
+                  shipped as little more than a contact card, because we
+                  hadn’t yet learned what actually makes an attorney trust
+                  someone with a referral. It took three more rounds,
+                  working closer with the people using it, to get there.
                 </li>
                 <li>
                   Build rougher things first and see if they get traction. The

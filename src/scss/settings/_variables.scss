@@ -6,11 +6,11 @@ $sans: "Switzer", "Switzer Fallback", system-ui, sans-serif;
 $display: "Boska", "Boska Fallback", Georgia, serif;
 $mono: "Fira Code", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-// The homepage hero's own type pair. Hanken Grotesk still loads via Google
-// Fonts in base.html.twig; Instrument Serif is self-hosted below (it's the
-// hero <h1>, so it gets the same size-adjusted "* Fallback" treatment as
-// Switzer/Boska to avoid a flash on load).
-$hero-sans: "Hanken Grotesk", $sans;
+// The homepage hero's own type pair. Hanken Grotesk loads via next/font
+// (see RootLayout), which exposes it as --font-hanken; Instrument Serif is
+// self-hosted below (it's the hero <h1>, so it gets the same size-adjusted
+// "* Fallback" treatment as Switzer/Boska to avoid a flash on load).
+$hero-sans: var(--font-hanken), $sans;
 $hero-serif: "Instrument Serif", "Instrument Serif Fallback", Georgia, serif;
 
 // colors

@@ -5,19 +5,17 @@ import { classify } from "../helpers";
 /* ==========================================================================
    NetworkMembers/index.jsx
    --------------------------------------------------------------------------
-   The piece the earlier version of this demo was missing: a visible list of
-   who's actually in the network, growing as you add people through
-   SearchBar or "Simulate a new referral connection". Ported from
-   InnerCircle/index.js's own member-listing sections (Pending Invites,
-   then the member list itself) — the original used real profile photos and
-   InfiniteScroll pagination for both; this demo has neither. Network
-   members (platform attorneys, with a mock avatar) get a real photo, same
-   as SearchBar's results; a pending invite doesn't have one (nobody's
-   signed up yet to have a photo of), so it keeps the initials circle. Both
-   render the full mock list at once rather than paging, since there's
-   never more than a few dozen entries.
-   Dropped entirely: the "Suggested" section below these two in the
-   original, which needs its own suggestion data this demo doesn't model.
+   A visible list of who's in the network, growing as you add people
+   through SearchBar or "Simulate a new referral connection". Ported from
+   InnerCircle/index.js's member-listing sections (Pending Invites, then
+   the member list), minus real profile photos and InfiniteScroll
+   pagination. Network members get a mock avatar photo; a pending invite
+   keeps the initials circle, since nobody's signed up yet to have a
+   photo of. Both render the full mock list at once, no paging, since
+   there's never more than a few dozen entries.
+
+   Dropped: the "Suggested" section from the original, which needs
+   suggestion data this demo doesn't model.
    ========================================================================== */
 
 const InitialsCircle = ({ fullName, added }) => {
@@ -58,13 +56,9 @@ const NetworkMembers = () => {
   return (
     <div className="inner-circle__section-wrapper">
       {pendingInvites.count > 0 && (
-        // Always "animation-disabled" (full opacity, no delay) rather than
-        // `cls`: unlike "Your Network" below (mounted once, at page load,
-        // when the 2800ms-delayed fade-in is tuned to fire after the map
-        // settles), this section only enters the DOM the first time a
-        // visitor sends an invite — whenever that happens to be. Inheriting
-        // the same page-load-tuned delay made it look stalled for ~3s after
-        // every first invite.
+        // Always "animation-disabled", not `cls`: this section only enters
+        // the DOM on a visitor's first invite, not at page load, so the
+        // page-load-tuned 2800ms fade-in made it look stalled for ~3s.
         <div className={`${classify("inner-circle__section", { "members": true })} animation-disabled`}>
           <div className="inner-circle__section__title-wrapper">
             <h2 className="inner-circle__section__title">

@@ -2,9 +2,9 @@
 @use "../helpers/include-media" as *;
 
 .footer {
-  background: var(--color-surface-inverse);
-  color: rgba(18, 21, 28, 0.55);
-  border-top: 1px solid $line-dark;
+  background: $paper-dim;
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
   padding: 3rem 0;
   font-size: 1.3rem;
 

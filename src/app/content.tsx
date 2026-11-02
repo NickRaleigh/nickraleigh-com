@@ -16,7 +16,7 @@ export const homeContent: HomepageContent = {
       "11 years building for the web",
       "Longmont, Colorado",
     ],
-    tagLine: "I design the product, then build it.",
+    tagLine: "I design software and build it myself.",
   },
   mosaics: [
     OvertureMosaic,
@@ -26,11 +26,11 @@ export const homeContent: HomepageContent = {
   whatIDo: {
     missionStatement: {
       title: "Software should get out of the way.",
-      description: ` 
+      description: `
 	I design and build interfaces for people with something more
 	important on their minds, turning complicated, multi-step
-	processes into ones they can finish without a second thought. Then
-	I write the front end myself, from first sketch to production.`,
+	processes into ones they can finish without a second thought. I
+	own both the design and the code, from first sketch to production.`,
     },
     competencies: [
       {
@@ -47,7 +47,7 @@ export const homeContent: HomepageContent = {
 	for the full range of real content, not just the typical case.`,
       },
       {
-        title: "Data & Growth Engineering",
+        title: "Data & Product Engineering",
         description: `
 	Data pipelines and programmatic pages that turn public data into
         tools people actually find, plus the technical SEO behind them.`,

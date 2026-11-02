@@ -5,6 +5,7 @@ export type SiteConfig = {
   readonly global: {
     readonly name: string;
     readonly location: string;
+    readonly url: string;
   };
   readonly nav: {
     readonly logo: Picture;
@@ -17,6 +18,7 @@ export const config: SiteConfig = {
   global: {
     name: "Nick Raleigh",
     location: "Longmont, CO",
+    url: "https://nickraleigh.com",
   },
   nav: {
     logo: {
@@ -31,7 +33,7 @@ export const config: SiteConfig = {
         text: "About",
       },
       {
-        href: "/contact",
+        href: "#contact",
         text: "Contact",
       },
     ],
@@ -39,9 +41,6 @@ export const config: SiteConfig = {
   CTA: {
     title: "Let's talk.",
     description: `I like working with teams that care as much about how something feels to use as how it's built. If that sounds like yours, let's talk.`,
-    link: {
-      href: "/contact",
-      text: "Get in touch",
-    },
+    email: "hello@nickraleigh.com",
   },
 };
