@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# nickraleigh.com
 
-## Getting Started
+Source for an in-progress rebuild of [nickraleigh.com](https://nickraleigh.com) — my portfolio site — moving from a Symfony/Twig CMS to a static Next.js build. Preview: https://nr-nextjs.vercel.app
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js 16 (App Router), static export (`output: "export"`)
+- React 19, TypeScript
+- Sass, no CSS framework — a small hand-rolled design-token system (`src/scss/generic/_tokens.scss`, `_palette.scss`)
+- Content lives as typed TS objects per route (`content.tsx` + `types.ts` next to each `page.tsx`), not a CMS
+
+## Structure
+
+```
+src/app/              routes (home, about, two case studies)
+src/components/       shared components (Nav, Footer, CTA, Mosaic)
+src/config/site.ts    nav, global site config
+src/types/base.ts     shared content types
+src/scss/             design tokens, settings, per-component styles
+public/               images, fonts, static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Each route's `content.tsx` is the single source of truth for that page's copy — `page.tsx` just renders it. `sitemap.ts` walks `src/app` for `page.tsx` files at build time, so it can't go stale as routes are added or removed.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Notable bits
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Metadata (title/description/canonical/OpenGraph/Twitter) is set per-page via Next's Metadata API, ported over from the original site's per-page SEO config
+- Homepage carries Person JSON-LD structured data
+- Fonts: Boska/Switzer/Instrument Serif are self-hosted; Hanken Grotesk, Jost, and DM Serif Display load via `next/font/google`
+- The `work/overture` case study embeds several standalone interactive demos (a coverage-map visualization, a status-banner rules-vs-model comparison) rebuilt from a real product feature
 
-## Learn More
+## Development
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build   # static export to /out
+```

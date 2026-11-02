@@ -1,0 +1,15 @@
+# Nick Raleigh
+
+> Nick Raleigh is a Colorado design engineer who designs product interfaces and builds them in React. Eleven years of front-end engineering and product design, currently Founding Designer at Overture.
+
+Personal portfolio site. Nick designs and builds interfaces himself, end to end: product design, React front-end implementation, and the technical SEO behind getting the result found.
+
+## Pages
+
+- [About](https://nickraleigh.com/about): Background, a timeline of relevant work, and how he works.
+- [Overture case study](https://nickraleigh.com/work/overture): Founding design and frontend work for a nationwide lawyer-to-lawyer referral network — brand, product design, and the React frontend, owned since 2022.
+- [Westwood Law case study](https://nickraleigh.com/work/car-accident-reporting-app): An in-house Django platform for a law firm — a programmatic blog, a public-data accident-report tool, and the technical SEO that grew organic search from 260 clicks a month to over 2,000.
+
+## Contact
+
+- Email: hello@nickraleigh.com
