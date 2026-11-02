@@ -372,7 +372,7 @@ export const OverturePageContent: OverturePage = {
       serifSample: "Overture",
       serifCaption: "DM Serif Display, for headings",
       sansSample: "Overture",
-      sansCaption: "Gilroy, for body copy and UI",
+      sansCaption: "Jost, for body copy and UI",
     },
     swatches: [
       { label: "Black", color: "#0b0d12", textColor: "#f4f2ec" },
@@ -380,13 +380,36 @@ export const OverturePageContent: OverturePage = {
       { label: "Grey 2", color: "#6b7078" },
       { label: "Grey 3", color: "#9aa3b2" },
       { label: "Grey 4", color: "#d7dade" },
+      { label: "Link Blue", color: "#1890ff", textColor: "#f4f2ec" },
+      { label: "Orange", color: "#e66b0e", textColor: "#f4f2ec" },
     ],
-    colorNote: `Color was deliberately left out of the UI system. It was
-    reserved for photography, not chrome.`,
+    colorNote: `Grayscale carried the UI; color was reserved for meaning.
+    Blue marked primary actions and links, orange was kept for upgrade and
+    premium CTAs, and photography supplied everything else.`,
+    system: {
+      note: `The same restraint became the interface: paper surfaces,
+      black text, a hairline grey border, one muted grey for secondary
+      text. Blue and orange were the only colors let in beyond that: blue
+      for messaging, orange for the primary call to action, and a neutral
+      grey outline for everything else.`,
+      tokens: [
+        { role: "Surface", label: "Paper", color: "#f4f2ec" },
+        { role: "Text", label: "Black", color: "#0b0d12" },
+        { role: "Border", label: "Grey 4", color: "#d7dade" },
+        { role: "Muted text", label: "Grey 2", color: "#6b7078" },
+        { role: "Accent", label: "Link blue", color: "#1890ff" },
+        { role: "CTA", label: "Orange", color: "#e66b0e" },
+      ],
+      buttons: [
+        { label: "Send Message", variant: "solid", accent: "#1890ff" },
+        { label: "Send Direct Referral", variant: "solid", accent: "#e66b0e" },
+        { label: "Back", variant: "secondary" },
+      ],
+    },
     studies: [
       {
         num: "Study 01",
-        title: "The preloader, shipped and still live in production",
+        title: "The branded preloader",
         caption: `A motion aesthetic built from the same geometric
         lockup as the logo mark, still running in production today.`,
         kind: "preloader",

@@ -8,6 +8,7 @@
   &__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    align-items: start;
     gap: 2rem;
     margin: 3rem 0 5rem;
 
@@ -23,7 +24,6 @@
 
     &--right {
       > .brand-tile--study {
-        flex: 1 1 auto;
         display: flex;
         flex-direction: column;
       }
@@ -61,7 +61,7 @@
 
     &--serif {
       font-family: "DM Serif Display", serif;
-      font-size: 4.4rem;
+      font-size: 9rem;
     }
 
     &--sans {
@@ -104,6 +104,71 @@
     max-width: 40rem;
   }
 
+  &__system-note {
+    font-size: 1.35rem;
+    color: var(--color-text-muted);
+    margin: 0 0 1.8rem;
+    max-width: 40rem;
+  }
+
+  &__tokens {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  &__token {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-size: 1.3rem;
+  }
+
+  &__token-swatch {
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 0.3rem;
+    border: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  &__token-role {
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    min-width: 9rem;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    border-radius: 999px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border: 2px solid transparent;
+
+    &--solid {
+      background: var(--button-accent, var(--color-text));
+      color: #fff;
+    }
+
+    &--secondary {
+      border-color: var(--color-border);
+      color: var(--color-text-muted);
+    }
+  }
+
 }
 
 .brand-tile {
@@ -119,7 +184,8 @@
   }
 
   &--sketches,
-  &--type {
+  &--type,
+  &--system {
     padding: 2.2rem 2rem;
   }
 
@@ -171,7 +237,9 @@
     justify-content: center;
 
     &--globe {
-      min-height: 20rem;
+      flex: 0 0 auto;
+      height: 30rem;
+      min-height: 0;
       background: #f5f4f0;
       padding: 0;
     }

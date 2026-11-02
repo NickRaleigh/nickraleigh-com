@@ -88,6 +88,19 @@ export type OverturePage = {
     readonly swatches: readonly BrandSwatch[];
     readonly colorNote: string;
     readonly studies: readonly MotionStudy[];
+    readonly system: {
+      readonly note: string;
+      readonly tokens: readonly {
+        readonly role: string;
+        readonly label: string;
+        readonly color: string;
+      }[];
+      readonly buttons: readonly {
+        readonly label: string;
+        readonly variant: "solid" | "secondary";
+        readonly accent?: string;
+      }[];
+    };
   };
   readonly screens: {
     readonly label: string;

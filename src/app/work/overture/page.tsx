@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/Mosaic/Card";
@@ -183,10 +183,7 @@ export default function OvertureCaseStudy() {
                 maintain them. A referral network lives or dies on trust, so the
                 frontend has to feel dependable first and clever second.
               </p>
-              <p>
-                A referral network lives or dies on trust, so the frontend has
-                to feel dependable first and clever second.
-              </p>
+
               <p>
                 In hindsight, here are the biggest things I'd do differently:
               </p>
@@ -284,6 +281,51 @@ export default function OvertureCaseStudy() {
                       <p className="brand-showcase__color-note">
                         {brand.colorNote}
                       </p>
+                    </div>
+
+                    <div className="brand-tile brand-tile--system">
+                      <div className="brand-showcase__spec-label eyebrow">
+                        Brand to UI system
+                      </div>
+                      <p className="brand-showcase__system-note">
+                        {brand.system.note}
+                      </p>
+                      <div className="brand-showcase__tokens">
+                        {brand.system.tokens.map((token) => (
+                          <div
+                            className="brand-showcase__token"
+                            key={token.role}
+                          >
+                            <span
+                              className="brand-showcase__token-swatch"
+                              style={{ background: token.color }}
+                            />
+                            <span className="brand-showcase__token-role">
+                              {token.role}
+                            </span>
+                            <span className="brand-showcase__token-label">
+                              {token.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="brand-showcase__buttons">
+                        {brand.system.buttons.map((button) => (
+                          <span
+                            className={`brand-showcase__button brand-showcase__button--${button.variant}`}
+                            key={button.label}
+                            style={
+                              button.accent
+                                ? ({
+                                    "--button-accent": button.accent,
+                                  } as CSSProperties)
+                                : undefined
+                            }
+                          >
+                            {button.label}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
