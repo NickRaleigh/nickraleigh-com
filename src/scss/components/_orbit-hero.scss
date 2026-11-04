@@ -1,0 +1,248 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+// Pinned scrollytelling wrapper: a tall spacer so the page has room to
+// scroll through the orbit-to-grid transition while the stage inside it
+// stays stuck to the viewport. Only rendered when motion isn't reduced —
+// reduced motion gets a completely separate static layout further down.
+.orbit-hero__pin {
+  position: relative;
+  height: 280vh;
+}
+
+.orbit-hero__stage {
+  // Sticks right below the nav (6.8rem tall, also position:sticky;top:0)
+  // instead of top:0, so the two don't fight for the same sticky slot.
+  position: sticky;
+  top: 6.8rem;
+  height: clamp(480px, 82vh, 860px);
+  overflow: hidden;
+
+  // Set per-frame by useScrollOrbit; CSS only ever reads these.
+  --lift: 0;
+  --label-opacity: 0;
+
+  @include media("<=new-referral-bp") {
+    height: clamp(560px, 110vw, 760px);
+  }
+}
+
+.orbit-hero__chips {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.orbit-hero__chip {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  will-change: left, top, width, height, opacity;
+}
+
+// The name is an absolutely-positioned overlay — at its full original size
+// it's taller than the stage has room for, so it's free to overflow (the
+// stage clips it) without pushing the infobar/tagline down into the grid.
+.orbit-hero__name-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.orbit-hero__name {
+  transform: translateY(calc(var(--lift) * -70vh));
+}
+
+// Infobar/tagline sit at their own fixed, modest position near the top of
+// the stage — independent of the name's actual rendered height — so they
+// never collide with the grids below. They're invisible until the chips
+// have settled (the same --label-opacity the two project labels use), by
+// which point the name has already lifted well clear.
+.orbit-hero__text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  pointer-events: none;
+  padding-top: 3rem;
+
+  @include media("<=tablet") {
+    padding-top: 2rem;
+  }
+}
+
+.orbit-hero__reveal {
+  opacity: var(--label-opacity);
+  pointer-events: auto;
+}
+
+// The tagline is sized for a full hero statement row; shrink it to match
+// the compact space reserved for it here.
+.orbit-hero__text .hero__statement-row {
+  padding: 1.2rem 0 0;
+}
+
+.orbit-hero__text .hero__statement {
+  font-size: clamp(1.8rem, 2.2vw, 2.6rem);
+  white-space: normal;
+}
+
+// Each project's title/stat/CTA sits in the lower portion of its half of
+// the stage — the same region its chips settle into above it.
+.orbit-hero__project {
+  position: absolute;
+  z-index: 60;
+  bottom: 4%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 42%;
+  color: inherit;
+  font-family: $hero-sans;
+
+  &--a {
+    left: 7%;
+  }
+
+  &--b {
+    right: 7%;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  @include media("<=new-referral-bp") {
+    width: 86%;
+
+    &--a {
+      left: 7%;
+    }
+
+    &--b {
+      left: 7%;
+      right: auto;
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 4px;
+  }
+}
+
+.orbit-hero__project-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.orbit-hero__project-title {
+  font-family: $display;
+  font-weight: 500;
+  font-size: clamp(1.8rem, 2.4vw, 2.6rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.12em;
+  transition:
+    color 0.25s ease,
+    text-decoration-color 0.25s ease;
+}
+
+.orbit-hero__project:hover .orbit-hero__project-title,
+.orbit-hero__project:focus-visible .orbit-hero__project-title {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
+}
+
+.orbit-hero__project-stat-value {
+  display: block;
+  font-family: $hero-serif;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.orbit-hero__project-stat-label {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin-top: 0.1rem;
+}
+
+.orbit-hero__project-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .orbit-hero__project-arrow {
+    display: inline-block;
+    transition: transform 0.25s ease;
+  }
+
+  .orbit-hero__project:hover .orbit-hero__project-arrow,
+  .orbit-hero__project:focus-visible .orbit-hero__project-arrow {
+    transform: translateX(4px);
+  }
+}
+
+// Pure-CSS safety net for the brief pre-hydration window (this is a static
+// export: the server can't know the visitor's motion preference, so the
+// pinned/animated markup renders first and JS swaps to the layout below
+// once it detects prefers-reduced-motion) — collapse the scroll-jacking
+// pin immediately even before that swap happens.
+@media (prefers-reduced-motion: reduce) {
+  .orbit-hero__pin {
+    height: auto;
+  }
+
+  .orbit-hero__stage {
+    position: static;
+    height: auto;
+  }
+}
+
+// Reduced-motion static layout: the classic 4-pane Card per project, in a
+// plain responsive grid, no pinning or measured/animated positioning.
+.orbit-hero__static {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: stretch;
+  gap: 5.6rem 4rem;
+  margin-top: 4rem;
+
+  @include media("<=new-referral-bp") {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}
+
+.orbit-hero__static-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  color: inherit;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 4px;
+  }
+
+  &:hover .mosaic__pane img,
+  &:focus-visible .mosaic__pane img {
+    filter: brightness(1);
+  }
+}

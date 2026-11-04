@@ -23,7 +23,7 @@ export type HomepageContent = {
     readonly infoBar: [one: string, two: string, three: string, four: string];
     readonly tagLine: string;
   };
-  readonly mosaics: Mosaic[];
+  readonly mosaics: readonly [Mosaic, Mosaic];
   readonly whatIDo: {
     readonly missionStatement: TextBlock;
     readonly competencies: TextBlock[];
