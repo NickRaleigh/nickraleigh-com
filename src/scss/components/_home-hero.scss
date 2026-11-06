@@ -163,8 +163,8 @@
 }
 
 // Reduced-motion's whole-hero stand-in for the full entrance sequence: one
-// short fade, no movement. Only applied (via the JS session gate) on the
-// first mount of a session — later visits render already-settled, no class.
+// short fade, no movement. Applied via useHeroIntroGate (currently: every
+// mount — see that hook for why the once-per-session gate is on hold).
 .hero--intro-fade {
   animation: hero-intro-fade 0.4s ease-out both;
 }
