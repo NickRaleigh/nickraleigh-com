@@ -50,9 +50,9 @@
   &__statement-row {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1.6rem 4.8rem;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.6rem 2.4rem;
     padding: clamp(2rem, 2.4vw, 3.2rem) 0 clamp(2.4rem, 2.8vw, 4rem);
   }
 
@@ -66,6 +66,55 @@
 
     @include media("<=tablet") {
       white-space: normal;
+    }
+  }
+
+  // Jumps past the pinned/animated stage straight to the revealed project
+  // grid (see OrbitHero's scrollToWork) — sits inline with the statement
+  // on desktop; flex-wrap on the row drops it to its own line once the two
+  // no longer fit side by side.
+  &__see-work {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 4.6rem;
+    border: 1px solid var(--color-accent-blue);
+    border-radius: 999px;
+    font-family: $hero-sans;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--color-accent-blue);
+    background: transparent;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+
+    &:hover {
+      background: var(--color-accent-blue);
+      color: var(--color-on-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 3px;
+    }
+  }
+
+  &__see-work-arrow {
+    display: inline-block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &__see-work-arrow {
+      transition: transform 0.25s ease;
+    }
+
+    &__see-work:hover &__see-work-arrow {
+      transform: translateX(3px);
     }
   }
 

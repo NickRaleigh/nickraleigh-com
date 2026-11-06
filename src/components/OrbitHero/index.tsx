@@ -66,6 +66,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   const pinRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const chipRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const staticWorkRef = useRef<HTMLDivElement>(null);
 
   const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const stacked = useMediaQuery(STACK_QUERY);
@@ -83,6 +84,21 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   }, []);
 
   const chips = useMemo(() => buildChips(overture, westwoodLaw), [overture, westwoodLaw]);
+
+  // The reduced-motion layout has the project cards sitting in normal flow
+  // right below, so that target just scrolls into view. The animated stage
+  // instead pins/sticks for 280vh — p=1 (chips fully settled into the
+  // project grid, see chipLayout's computeLabelOpacity) lands exactly when
+  // the pin's own bottom edge reaches the viewport's bottom edge, which is
+  // what scrollIntoView's block:"end" aligns to.
+  const scrollToWork = () => {
+    const behavior = reducedMotion ? "auto" : "smooth";
+    if (reducedMotion) {
+      staticWorkRef.current?.scrollIntoView({ behavior, block: "start" });
+    } else {
+      pinRef.current?.scrollIntoView({ behavior, block: "end" });
+    }
+  };
 
   useScrollOrbit(pinRef, reducedMotion, ({ p, t }) => {
     const stage = stageRef.current;
@@ -134,6 +150,15 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
       <header className="hero">
         <div className="wrap">
           {nameHeading}
+          <div className="hero__statement-row">
+            <p className="hero__statement">{hero.tagLine}</p>
+            <button type="button" className="hero__see-work" onClick={scrollToWork}>
+              See the work
+              <span aria-hidden="true" className="hero__see-work-arrow">
+                ⟶
+              </span>
+            </button>
+          </div>
           <div className="hero__infobar">
             {hero.infoBar.map((item) => (
               <div className="hero__infobar-item" key={`infobar-${toLowerHyphenCase(item)}`}>
@@ -141,15 +166,12 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
               </div>
             ))}
           </div>
-          <div className="hero__statement-row">
-            <p className="hero__statement">{hero.tagLine}</p>
-          </div>
           <div className="orbit-hero__illustration" aria-hidden="true">
             <Illustration />
           </div>
         </div>
 
-        <div className="wrap orbit-hero__static">
+        <div ref={staticWorkRef} className="wrap orbit-hero__static">
           {projects.map(([project, index]) => (
             <Link key={project.link} href={project.link} className="orbit-hero__static-card">
               <Card imgs={project.imgs} flip={index === 1} />
@@ -184,6 +206,15 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
           <div className="wrap orbit-hero__name-wrap">{nameHeading}</div>
 
           <div className="wrap orbit-hero__text orbit-hero__intro">
+            <div className="hero__statement-row">
+              <p className="hero__statement">{hero.tagLine}</p>
+              <button type="button" className="hero__see-work" onClick={scrollToWork}>
+                See the work
+                <span aria-hidden="true" className="hero__see-work-arrow">
+                  ⟶
+                </span>
+              </button>
+            </div>
             <div className="hero__infobar">
               {hero.infoBar.map((item) => (
                 <div className="hero__infobar-item" key={`infobar-${toLowerHyphenCase(item)}`}>
@@ -193,9 +224,6 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
               <div className="orbit-hero__illustration" aria-hidden="true">
                 <Illustration />
               </div>
-            </div>
-            <div className="hero__statement-row">
-              <p className="hero__statement">{hero.tagLine}</p>
             </div>
           </div>
 

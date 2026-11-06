@@ -93,7 +93,7 @@
 
 // Inside the pinned stage it's nested in the infobar instead, seated on
 // its top rule (see .orbit-hero__illustration below) with the rest of it
-// hanging down over the infobar row and the statement row beneath. The
+// hanging down over the infobar row and the space below it. The
 // infobar becomes the positioning anchor only in this context (not
 // generally — .hero__infobar is shared with other hero layouts). Items
 // are spread edge-to-edge by justify-content (not flex-grow — same-length
@@ -143,14 +143,24 @@
   height: auto;
 }
 
-// The tagline is sized for a full hero statement row; shrink it to match
-// the compact space reserved for it here.
+// The tagline now leads (above the infobar), so its spacing is a gap down
+// to the infobar's top rule rather than up from it. The button is pushed
+// out to the far edge (not left tight against the tagline) using the same
+// right-edge reservation as the infobar just below it, so the two rows'
+// right edges line up and the button never runs under the figure either.
 .orbit-hero__text .hero__statement-row {
-  padding: 1.2rem 0 0;
+  padding: 0 clamp(190px, 21vw, 290px) 1.2rem 0;
+  justify-content: space-between;
+  gap: 1.6rem 1.6rem;
 }
 
+// Capped a hair under the general hero statement's own max (3.6rem) —
+// barely visible on its own, but it's what buys the "See the work" button
+// enough width to grow without wrapping under it: this row's tagline, gap,
+// and button all have to fit ahead of the reserved illustration column
+// above, and the tagline is the biggest of the three.
 .orbit-hero__text .hero__statement {
-  font-size: clamp(1.8rem, 2.2vw, 2.6rem);
+  font-size: clamp(2.2rem, 3vw, 3.4rem);
   white-space: normal;
 }
 

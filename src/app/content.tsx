@@ -16,7 +16,7 @@ export const homeContent: HomepageContent = {
       "11 years building for the web",
       "Longmont, Colorado",
     ],
-    tagLine: "I design software and build it myself.",
+    tagLine: "I make complicated software feel simple.",
   },
   mosaics: [
     OvertureMosaic,
