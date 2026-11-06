@@ -24,20 +24,44 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
 
     const ctx = gsap.context(() => {
       const chipEls = refs.chips.current.filter((el): el is HTMLImageElement => el !== null);
+      const rules = [refs.topRule.current, refs.bottomRule.current];
+
+      // Every target's hidden starting state, applied synchronously right
+      // here — before the timeline below is even built, let alone played.
+      // A .from() tween nested at a non-zero timeline position doesn't
+      // reliably apply its starting values until the playhead reaches that
+      // position (immediateRender can get overridden by the timeline's own
+      // self-render pass), so anything after 0s would otherwise sit fully
+      // visible in its plain CSS/DOM state and only *pop* to hidden once
+      // its turn came. Setting the starting state explicitly up front and
+      // animating everything *to* its resting state below sidesteps that
+      // entirely: nothing is ever ambiguous about what it looks like before
+      // its tween starts.
+      gsap.set(refs.firstName.current, { opacity: 0, y: 12 });
+      gsap.set(refs.lastName.current, { opacity: 0, y: 12 });
+      gsap.set(refs.intro.current, { opacity: 0, y: 10 });
+      gsap.set(rules, { scaleX: 0 });
+      gsap.set(chipEls, {
+        x: () => gsap.utils.random(28, 52),
+        y: () => gsap.utils.random(-52, -28),
+        rotate: () => (Math.random() < 0.5 ? -1 : 1) * gsap.utils.random(5, 12),
+        scale: 0.72,
+        filter: "blur(6px)",
+      });
 
       gsap
         .timeline()
-        .from(refs.firstName.current, {
-          opacity: 0,
-          y: 12,
+        .to(refs.firstName.current, {
+          opacity: 1,
+          y: 0,
           duration: 0.48,
           ease: "power2.out",
         })
-        .from(
+        .to(
           refs.lastName.current,
           {
-            opacity: 0,
-            y: 12,
+            opacity: 1,
+            y: 0,
             duration: 0.48,
             ease: "power2.out",
           },
@@ -47,22 +71,22 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
         // none of its own opacity/transform otherwise, unlike the name
         // spans' parent — so this tween's inline styles are never fighting
         // a CSS-driven value, no cleanup needed after it finishes).
-        .from(
+        .to(
           refs.intro.current,
           {
-            opacity: 0,
-            y: 10,
+            opacity: 1,
+            y: 0,
             duration: 0.5,
             ease: "power2.out",
           },
           0.4,
         )
-        // The infobar's rules, scaleX from 0 with a left transform-origin
+        // The infobar's rules, scaleX back to 1 with a left transform-origin
         // (set in CSS) so they draw left to right alongside the meta text.
-        .from(
-          [refs.topRule.current, refs.bottomRule.current],
+        .to(
+          rules,
           {
-            scaleX: 0,
+            scaleX: 1,
             duration: 0.5,
             ease: "power2.out",
           },
@@ -82,14 +106,14 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
         // stay in sync.) Once this finishes, transform/filter are left at
         // their resolved identity values and the element is purely under
         // the orbit loop's control.
-        .from(
+        .to(
           chipEls,
           {
-            x: () => gsap.utils.random(28, 52),
-            y: () => gsap.utils.random(-52, -28),
-            rotate: () => (Math.random() < 0.5 ? -1 : 1) * gsap.utils.random(5, 12),
-            scale: 0.72,
-            filter: "blur(6px)",
+            x: 0,
+            y: 0,
+            rotate: 0,
+            scale: 1,
+            filter: "blur(0px)",
             duration: 0.5,
             ease: "power2.out",
             stagger: TILE_ENTRANCE_STAGGER,
