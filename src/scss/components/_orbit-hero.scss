@@ -66,6 +66,20 @@
   transform: translateY(calc(var(--lift) * -70vh));
 }
 
+// Entrance-hidden by default, not just via JS: this is a static export, so
+// the full HTML paints immediately on arrival, before the browser has even
+// fetched the JS bundle — a useLayoutEffect (see useHeroEntrance) runs
+// before React's own paint, but that's still well after this first,
+// JS-less paint. Defaulting to hidden here means that first paint already
+// matches the entrance's starting state, instead of flashing fully visible
+// and then popping hidden once hydration catches up. The <noscript>
+// override further down restores visibility for a visitor with JS fully
+// disabled, who'd otherwise never see this at all.
+.orbit-hero__name-wrap span[aria-hidden] {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
 // Infobar/tagline sit lower in the stage, clear of the orbiting chips —
 // independent of the name's actual rendered height, so they never collide
 // with it either. Visible immediately (while the chips are still
@@ -82,6 +96,16 @@
 .orbit-hero__intro {
   opacity: var(--intro-opacity);
   pointer-events: auto;
+}
+
+// Entrance-hidden by default for the same reason as .orbit-hero__name-wrap
+// span[aria-hidden] above — see that rule's comment. Nested one level
+// inside .orbit-hero__intro (not on it directly) so this default and the
+// scroll-driven --intro-opacity above never fight over the same opacity
+// property; their effects just multiply together once both are active.
+.orbit-hero__intro-entrance {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 .orbit-hero__reveal {
@@ -125,14 +149,16 @@
 
 // Stand-ins for the infobar's top/bottom border, drawn in left to right by
 // the entrance timeline (scaleX from 0, transform-origin left). Default
-// state is fully drawn (scaleX(1)) so the bars read correctly even if JS
-// never runs or the entrance has already played this session.
+// state is undrawn (scaleX(0)) for the same reason as .orbit-hero__name-wrap
+// span[aria-hidden] above — see that rule's comment; the <noscript>
+// override further down restores the full bar for a JS-disabled visitor.
 .orbit-hero__infobar-rule {
   position: absolute;
   left: 0;
   right: 0;
   height: 1px;
   background: var(--color-border);
+  transform: scaleX(0);
   transform-origin: left center;
   pointer-events: none;
 }

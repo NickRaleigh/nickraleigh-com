@@ -219,6 +219,18 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
 
   return (
     <header className="hero">
+      {/* The name/intro/rules default to entrance-hidden in CSS (see
+          _orbit-hero.scss) so the static-exported HTML never flashes fully
+          visible before JS hides it. This restores them for the rare
+          visitor with JS fully disabled, who'd otherwise never see this
+          content at all — nothing else on the page ever removes it. */}
+      <noscript>
+        <style>{`
+          .orbit-hero__name-wrap span[aria-hidden] { opacity: 1 !important; transform: none !important; }
+          .orbit-hero__intro-entrance { opacity: 1 !important; transform: none !important; }
+          .orbit-hero__infobar-rule { transform: scaleX(1) !important; }
+        `}</style>
+      </noscript>
       <div ref={pinRef} className="orbit-hero__pin">
         <div ref={stageRef} className="orbit-hero__stage">
           <div className="orbit-hero__chips" aria-hidden="true">
