@@ -162,6 +162,22 @@
   }
 }
 
+// Reduced-motion's whole-hero stand-in for the full entrance sequence: one
+// short fade, no movement. Only applied (via the JS session gate) on the
+// first mount of a session — later visits render already-settled, no class.
+.hero--intro-fade {
+  animation: hero-intro-fade 0.4s ease-out both;
+}
+
+@keyframes hero-intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 // A loose, hand-redrawn wiggle rather than a mechanical spin/scale — tiny
 // rotation paired with an off-axis scale so the two don't cancel out into
 // something that reads as a single smooth pulse.

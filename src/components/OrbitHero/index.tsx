@@ -15,6 +15,7 @@ import {
 } from "./chipLayout";
 import { HandDrawnButtonOutline } from "./HandDrawnButtonOutline";
 import { Illustration } from "./Illustration";
+import { useHeroIntroGate } from "./useHeroIntro";
 import { useMediaQuery } from "./useMediaQuery";
 import { useScrollOrbit } from "./useScrollOrbit";
 
@@ -71,6 +72,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
 
   const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const stacked = useMediaQuery(STACK_QUERY);
+  const playIntro = useHeroIntroGate();
   const [metrics, setMetrics] = useState<StageMetrics>({ width: 0, height: 0 });
 
   useEffect(() => {
@@ -148,7 +150,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   // mechanics driving it.
   if (reducedMotion) {
     return (
-      <header className="hero">
+      <header className={`hero${playIntro ? " hero--intro-fade" : ""}`}>
         <div className="wrap">
           {nameHeading}
           <div className="hero__statement-row">
