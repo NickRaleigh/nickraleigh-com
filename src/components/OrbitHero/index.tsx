@@ -15,6 +15,7 @@ import {
 } from "./chipLayout";
 import { HandDrawnButtonOutline } from "./HandDrawnButtonOutline";
 import { Illustration } from "./Illustration";
+import { useHeroEntrance } from "./useHeroEntrance";
 import { useHeroIntroGate } from "./useHeroIntro";
 import { useMediaQuery } from "./useMediaQuery";
 import { useScrollOrbit } from "./useScrollOrbit";
@@ -69,10 +70,17 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const chipRefs = useRef<(HTMLImageElement | null)[]>([]);
   const staticWorkRef = useRef<HTMLDivElement>(null);
+  const firstNameRef = useRef<HTMLSpanElement>(null);
+  const lastNameRef = useRef<HTMLSpanElement>(null);
 
   const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const stacked = useMediaQuery(STACK_QUERY);
   const playIntro = useHeroIntroGate();
+
+  useHeroEntrance(playIntro && !reducedMotion, {
+    firstName: firstNameRef,
+    lastName: lastNameRef,
+  });
   const [metrics, setMetrics] = useState<StageMetrics>({ width: 0, height: 0 });
 
   useEffect(() => {
@@ -134,11 +142,11 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   const nameHeading = (
     <h1 className="hero__name orbit-hero__name">
       <span className="sr-only">{hero.firstName}</span>
-      <span aria-hidden="true">
+      <span ref={firstNameRef} aria-hidden="true">
         <ItalicName text={hero.firstName} lettersIndex={hero.italics.firstName} />
       </span>{" "}
       <span className="sr-only">{hero.lastName}</span>
-      <span aria-hidden="true">
+      <span ref={lastNameRef} aria-hidden="true">
         <ItalicName text={hero.lastName} lettersIndex={hero.italics.lastName} />
       </span>
     </h1>
