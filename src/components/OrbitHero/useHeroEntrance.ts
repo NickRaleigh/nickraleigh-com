@@ -1,5 +1,6 @@
 import { useEffect, type RefObject } from "react";
 import gsap from "gsap";
+import { TILE_ENTRANCE_START, TILE_ENTRANCE_STAGGER } from "./chipLayout";
 import type { IllustrationHandle } from "./Illustration";
 
 type HeroEntranceRefs = {
@@ -9,6 +10,7 @@ type HeroEntranceRefs = {
   readonly topRule: RefObject<HTMLElement | null>;
   readonly bottomRule: RefObject<HTMLElement | null>;
   readonly illustration: RefObject<IllustrationHandle | null>;
+  readonly chips: RefObject<(HTMLImageElement | null)[]>;
 };
 
 // The hero's one-shot entrance timeline — gated by useHeroIntroGate (play is
@@ -21,6 +23,8 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
     if (!play) return;
 
     const ctx = gsap.context(() => {
+      const chipEls = refs.chips.current.filter((el): el is HTMLImageElement => el !== null);
+
       gsap
         .timeline()
         .from(refs.firstName.current, {
@@ -66,7 +70,32 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
         )
         // Payoff: one deterministic blink once the entrance has settled,
         // distinct from the doodle's own randomized idle blinking.
-        .call(() => refs.illustration.current?.playPayoffBlink(), [], 1.8);
+        .call(() => refs.illustration.current?.playPayoffBlink(), [], 1.8)
+        // Chips: this owns only transform/filter — left/top/width/height/
+        // opacity are already being written every frame by the orbit rAF
+        // loop (useScrollOrbit) from the instant the component mounts, so
+        // this can't touch those without the two fighting over the same
+        // inline styles. (The matching opacity fade-in is a multiplier
+        // baked into that loop's own output instead — see chipLayout's
+        // computeEntranceOpacity, which reads the same
+        // TILE_ENTRANCE_START/STAGGER constants as this tween so the two
+        // stay in sync.) Once this finishes, transform/filter are left at
+        // their resolved identity values and the element is purely under
+        // the orbit loop's control.
+        .from(
+          chipEls,
+          {
+            x: () => gsap.utils.random(28, 52),
+            y: () => gsap.utils.random(-52, -28),
+            rotate: () => (Math.random() < 0.5 ? -1 : 1) * gsap.utils.random(5, 12),
+            scale: 0.72,
+            filter: "blur(6px)",
+            duration: 0.5,
+            ease: "power2.out",
+            stagger: TILE_ENTRANCE_STAGGER,
+          },
+          TILE_ENTRANCE_START,
+        );
     });
 
     return () => ctx.revert();

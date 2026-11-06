@@ -187,3 +187,29 @@ const INTRO_FADE_END = 0.3;
 export function computeIntroOpacity(p: number): number {
   return 1 - clamp01(p / INTRO_FADE_END);
 }
+
+// Real seconds, not scroll progress — the chips' entrance is a one-shot
+// reveal timed against the page load, independent of whether the visitor
+// has scrolled at all yet. TILE_ENTRANCE_START/STAGGER are also read by
+// useHeroEntrance's GSAP transform/filter tween on the same chip elements
+// (same two numbers, so the two mechanisms — this opacity multiplier and
+// that tween — stay in lockstep instead of drifting apart as separate
+// hand-tuned constants.
+export const TILE_ENTRANCE_START = 0.8;
+export const TILE_ENTRANCE_STAGGER = 0.02;
+const TILE_ENTRANCE_FADE_DURATION = 0.45;
+
+// Multiplied into computeChipFrame's own opacity during the entrance only
+// (computeChipFrame can't own this itself — it's a pure function of scroll
+// progress `p`, with no notion of wall-clock time). Always 1 once a chip's
+// fade has finished, or when the entrance isn't playing at all (reduced
+// motion, or it already played earlier this session).
+export function computeEntranceOpacity(
+  chip: ChipStatic,
+  elapsedSeconds: number,
+  playIntro: boolean,
+): number {
+  if (!playIntro) return 1;
+  const delay = TILE_ENTRANCE_START + chip.index * TILE_ENTRANCE_STAGGER;
+  return ease(clamp01((elapsedSeconds - delay) / TILE_ENTRANCE_FADE_DURATION));
+}

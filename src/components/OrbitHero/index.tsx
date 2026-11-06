@@ -8,6 +8,7 @@ import { Card } from "@/components/Mosaic/Card";
 import {
   buildChips,
   computeChipFrame,
+  computeEntranceOpacity,
   computeIntroOpacity,
   computeLabelOpacity,
   computeNameLift,
@@ -76,6 +77,15 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   const topRuleRef = useRef<HTMLSpanElement>(null);
   const bottomRuleRef = useRef<HTMLSpanElement>(null);
   const illustrationRef = useRef<IllustrationHandle>(null);
+  // Set in an effect (declared before useScrollOrbit below, so it commits
+  // first) rather than during render, since reading the clock is an impure
+  // call — the chip entrance fade further down measures real elapsed time
+  // against this, not scroll progress. Null for the brief window before
+  // this effect runs just means that fade treats elapsed time as zero.
+  const introStartRef = useRef<number | null>(null);
+  useEffect(() => {
+    introStartRef.current = performance.now();
+  }, []);
 
   const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const stacked = useMediaQuery(STACK_QUERY);
@@ -88,6 +98,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
     topRule: topRuleRef,
     bottomRule: bottomRuleRef,
     illustration: illustrationRef,
+    chips: chipRefs,
   });
   const [metrics, setMetrics] = useState<StageMetrics>({ width: 0, height: 0 });
 
@@ -129,15 +140,19 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
 
     if (!metrics.width || !metrics.height) return;
 
+    const elapsedSeconds =
+      introStartRef.current === null ? 0 : (performance.now() - introStartRef.current) / 1000;
+
     for (const chip of chips) {
       const el = chipRefs.current[chip.index];
       if (!el) continue;
       const frame = computeChipFrame(chip, p, t, metrics, stacked);
+      const entranceOpacity = computeEntranceOpacity(chip, elapsedSeconds, playIntro && !reducedMotion);
       el.style.left = `${frame.left}px`;
       el.style.top = `${frame.top}px`;
       el.style.width = `${frame.width}px`;
       el.style.height = `${frame.height}px`;
-      el.style.opacity = String(frame.opacity);
+      el.style.opacity = String(frame.opacity * entranceOpacity);
       el.style.zIndex = String(frame.zIndex);
     }
   });
