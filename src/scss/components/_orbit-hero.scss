@@ -21,6 +21,7 @@
   // Set per-frame by useScrollOrbit; CSS only ever reads these.
   --lift: 0;
   --label-opacity: 0;
+  --intro-opacity: 1;
 
   @include media("<=new-referral-bp") {
     height: clamp(560px, 110vw, 760px);
@@ -59,28 +60,63 @@
   transform: translateY(calc(var(--lift) * -70vh));
 }
 
-// Infobar/tagline sit at their own fixed, modest position near the top of
-// the stage — independent of the name's actual rendered height — so they
-// never collide with the grids below. They're invisible until the chips
-// have settled (the same --label-opacity the two project labels use), by
-// which point the name has already lifted well clear.
+// Infobar/tagline sit lower in the stage, clear of the orbiting chips —
+// independent of the name's actual rendered height, so they never collide
+// with it either. Visible immediately (while the chips are still
+// orbiting) and fade away early in the scroll — see --intro-opacity.
 .orbit-hero__text {
   position: absolute;
-  top: 0;
+  top: 42%;
   left: 0;
   right: 0;
   z-index: 60;
   pointer-events: none;
-  padding-top: 3rem;
 
-  @include media("<=tablet") {
-    padding-top: 2rem;
+  @include media("<=new-referral-bp") {
+    top: 46%;
   }
+}
+
+.orbit-hero__intro {
+  opacity: var(--intro-opacity);
+  pointer-events: auto;
 }
 
 .orbit-hero__reveal {
   opacity: var(--label-opacity);
   pointer-events: auto;
+}
+
+// The illustration sits in normal flow next to the tagline by default (the
+// reduced-motion static layout). Inside the pinned stage it's repositioned
+// absolute and fades with the rest of the intro content — see the override
+// below — so it's gone before the project labels reveal over the same
+// corner of the stage.
+.orbit-hero__illustration {
+  width: clamp(110px, 11vw, 170px);
+  margin: 2rem 0 0 auto;
+  pointer-events: none;
+}
+
+.orbit-hero__stage .orbit-hero__illustration {
+  position: absolute;
+  right: 9%;
+  bottom: 6%;
+  z-index: 55;
+  margin: 0;
+  opacity: var(--intro-opacity, 1);
+
+  @include media("<=new-referral-bp") {
+    width: clamp(90px, 18vw, 140px);
+    right: 6%;
+    bottom: 3%;
+  }
+}
+
+.illustration {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 // The tagline is sized for a full hero statement row; shrink it to match

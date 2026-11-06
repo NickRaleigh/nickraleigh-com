@@ -34,7 +34,7 @@ const GRID_ROWS = 4;
 // size (not fixed pixels), so the same math holds at any viewport width.
 const ORBIT_CENTER_X = 0.5;
 const ORBIT_CENTER_Y = 0.26;
-const ORBIT_RADIUS_X = 0.44;
+const ORBIT_RADIUS_X = 0.3;
 const ORBIT_RADIUS_Y = 0.12;
 const ORBIT_RY_SPREAD = 0.1;
 const ORBIT_LIFT = 0.22;
@@ -177,4 +177,13 @@ export function computeNameLift(p: number): number {
 
 export function computeLabelOpacity(p: number): number {
   return clamp01((p - LABEL_START) / (1 - LABEL_START));
+}
+
+const INTRO_FADE_END = 0.3;
+
+// The infobar/tagline are visible immediately (while the chips are still
+// orbiting) and fade away early in the scroll, clearing out before the
+// grids form — the opposite timing from the project labels above.
+export function computeIntroOpacity(p: number): number {
+  return 1 - clamp01(p / INTRO_FADE_END);
 }

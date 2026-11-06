@@ -8,10 +8,12 @@ import { Card } from "@/components/Mosaic/Card";
 import {
   buildChips,
   computeChipFrame,
+  computeIntroOpacity,
   computeLabelOpacity,
   computeNameLift,
   type StageMetrics,
 } from "./chipLayout";
+import { Illustration } from "./Illustration";
 import { useMediaQuery } from "./useMediaQuery";
 import { useScrollOrbit } from "./useScrollOrbit";
 
@@ -87,6 +89,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
     if (stage) {
       stage.style.setProperty("--lift", String(computeNameLift(p)));
       stage.style.setProperty("--label-opacity", String(computeLabelOpacity(p)));
+      stage.style.setProperty("--intro-opacity", String(computeIntroOpacity(p)));
     }
 
     if (!metrics.width || !metrics.height) return;
@@ -141,6 +144,9 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
           <div className="hero__statement-row">
             <p className="hero__statement">{hero.tagLine}</p>
           </div>
+          <div className="orbit-hero__illustration" aria-hidden="true">
+            <Illustration />
+          </div>
         </div>
 
         <div className="wrap orbit-hero__static">
@@ -177,17 +183,21 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
 
           <div className="wrap orbit-hero__name-wrap">{nameHeading}</div>
 
-          <div className="wrap orbit-hero__text">
-            <div className="hero__infobar orbit-hero__reveal">
+          <div className="wrap orbit-hero__text orbit-hero__intro">
+            <div className="hero__infobar">
               {hero.infoBar.map((item) => (
                 <div className="hero__infobar-item" key={`infobar-${toLowerHyphenCase(item)}`}>
                   {item}
                 </div>
               ))}
             </div>
-            <div className="hero__statement-row orbit-hero__reveal">
+            <div className="hero__statement-row">
               <p className="hero__statement">{hero.tagLine}</p>
             </div>
+          </div>
+
+          <div className="orbit-hero__illustration" aria-hidden="true">
+            <Illustration />
           </div>
 
           {projects.map(([project, index]) => (
