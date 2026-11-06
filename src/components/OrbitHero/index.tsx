@@ -247,30 +247,32 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
             ))}
           </div>
 
-          <div className="wrap orbit-hero__name-wrap">{nameHeading}</div>
+          <div className="orbit-hero__lockup">
+            <div className="wrap orbit-hero__name-wrap">{nameHeading}</div>
 
-          <div className="wrap orbit-hero__text orbit-hero__intro">
-            <div ref={introRef} className="orbit-hero__intro-entrance">
-              <div className="hero__statement-row">
-                <p className="hero__statement">{hero.tagLine}</p>
-                <button type="button" className="hero__see-work" onClick={scrollToWork}>
-                  <HandDrawnButtonOutline />
-                  <span className="hero__see-work-label">See the work</span>
-                </button>
-              </div>
-              <div className="hero__infobar">
-                <span ref={topRuleRef} className="orbit-hero__infobar-rule orbit-hero__infobar-rule--top" />
-                <span
-                  ref={bottomRuleRef}
-                  className="orbit-hero__infobar-rule orbit-hero__infobar-rule--bottom"
-                />
-                {hero.infoBar.map((item) => (
-                  <div className="hero__infobar-item" key={`infobar-${toLowerHyphenCase(item)}`}>
-                    {item}
+            <div className="wrap orbit-hero__text orbit-hero__intro">
+              <div ref={introRef} className="orbit-hero__intro-entrance">
+                <div className="hero__statement-row">
+                  <p className="hero__statement">{hero.tagLine}</p>
+                  <button type="button" className="hero__see-work" onClick={scrollToWork}>
+                    <HandDrawnButtonOutline />
+                    <span className="hero__see-work-label">See the work</span>
+                  </button>
+                </div>
+                <div className="hero__infobar">
+                  <span ref={topRuleRef} className="orbit-hero__infobar-rule orbit-hero__infobar-rule--top" />
+                  <span
+                    ref={bottomRuleRef}
+                    className="orbit-hero__infobar-rule orbit-hero__infobar-rule--bottom"
+                  />
+                  {hero.infoBar.map((item) => (
+                    <div className="hero__infobar-item" key={`infobar-${toLowerHyphenCase(item)}`}>
+                      {item}
+                    </div>
+                  ))}
+                  <div className="orbit-hero__illustration" aria-hidden="true">
+                    <Illustration ref={illustrationRef} />
                   </div>
-                ))}
-                <div className="orbit-hero__illustration" aria-hidden="true">
-                  <Illustration ref={illustrationRef} />
                 </div>
               </div>
             </div>

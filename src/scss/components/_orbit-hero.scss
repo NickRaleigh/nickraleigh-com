@@ -55,15 +55,34 @@
   opacity: 0;
 }
 
+// Groups the name and text as one block, vertically centered within the
+// stage as a unit — name-wrap (top: 0) and text (bottom: 0) below are
+// positioned relative to THIS, not the full stage, so their own gap is
+// whatever this element's height allows rather than spanning the stage's
+// full top-to-bottom. Needs an explicit height for that centering and for
+// its children's percentage offsets to mean anything — both children stay
+// absolutely positioned (not normal flow) so the name is still free to
+// overflow this box at very large sizes without pushing the text; only the
+// anchor they're measured against has changed.
+.orbit-hero__lockup {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 70%;
+  transform: translateY(-50%);
+  z-index: 60;
+  pointer-events: none;
+}
+
 // The name is an absolutely-positioned overlay — at its full original size
-// it's taller than the stage has room for, so it's free to overflow (the
-// stage clips it) without pushing the infobar/tagline down into the grid.
+// it's taller than .orbit-hero__lockup has room for, so it's free to
+// overflow (the stage clips it) without pushing the infobar/tagline down.
 .orbit-hero__name-wrap {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 60;
   pointer-events: none;
 }
 
@@ -85,16 +104,16 @@
   transform: translateY(12px);
 }
 
-// Infobar/tagline sit lower in the stage, clear of the orbiting chips —
-// independent of the name's actual rendered height, so they never collide
-// with it either. Visible immediately (while the chips are still
-// orbiting) and fade away early in the scroll — see --intro-opacity.
+// Infobar/tagline sit at the bottom of .orbit-hero__lockup, clear of the
+// orbiting chips — independent of the name's actual rendered height, so
+// they never collide with it either. Visible immediately (while the chips
+// are still orbiting) and fade away early in the scroll — see
+// --intro-opacity.
 .orbit-hero__text {
   position: absolute;
-  bottom: 8%;
+  bottom: 0;
   left: 0;
   right: 0;
-  z-index: 60;
   pointer-events: none;
 }
 
