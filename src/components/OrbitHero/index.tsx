@@ -190,14 +190,13 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
                   {item}
                 </div>
               ))}
+              <div className="orbit-hero__illustration" aria-hidden="true">
+                <Illustration />
+              </div>
             </div>
             <div className="hero__statement-row">
               <p className="hero__statement">{hero.tagLine}</p>
             </div>
-          </div>
-
-          <div className="orbit-hero__illustration" aria-hidden="true">
-            <Illustration />
           </div>
 
           {projects.map(([project, index]) => (

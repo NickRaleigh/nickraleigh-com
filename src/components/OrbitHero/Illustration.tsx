@@ -114,7 +114,12 @@ export function Illustration() {
   return (
     <svg
       className="illustration"
-      viewBox="-304 83 61 93"
+      // Trimmed tight to the feet at the bottom (y 83 to 173.21 — the
+      // figure's own measured bbox bottom) so position: absolute; bottom:
+      // 0 on the wrapper lands exactly at the feet, with no built-in gap
+      // to compensate for. The top keeps ~3 units of headroom above the
+      // hair.
+      viewBox="-304 83 61 90.21"
       aria-hidden="true"
       focusable="false"
     >

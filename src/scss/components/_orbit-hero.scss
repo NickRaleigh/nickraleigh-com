@@ -66,15 +66,11 @@
 // orbiting) and fade away early in the scroll — see --intro-opacity.
 .orbit-hero__text {
   position: absolute;
-  top: 42%;
+  bottom: 8%;
   left: 0;
   right: 0;
   z-index: 60;
   pointer-events: none;
-
-  @include media("<=new-referral-bp") {
-    top: 46%;
-  }
 }
 
 .orbit-hero__intro {
@@ -88,28 +84,56 @@
 }
 
 // The illustration sits in normal flow next to the tagline by default (the
-// reduced-motion static layout). Inside the pinned stage it's repositioned
-// absolute and fades with the rest of the intro content — see the override
-// below — so it's gone before the project labels reveal over the same
-// corner of the stage.
+// reduced-motion static layout).
 .orbit-hero__illustration {
   width: clamp(110px, 11vw, 170px);
   margin: 2rem 0 0 auto;
   pointer-events: none;
 }
 
-.orbit-hero__stage .orbit-hero__illustration {
+// Inside the pinned stage it's nested in the infobar instead, seated on
+// its top rule (see .orbit-hero__illustration below) with the rest of it
+// hanging down over the infobar row and the statement row beneath. The
+// infobar becomes the positioning anchor only in this context (not
+// generally — .hero__infobar is shared with other hero layouts). Items
+// are spread edge-to-edge by justify-content (not flex-grow — same-length
+// gaps read as more evenly spaced than same-width boxes when the items'
+// own text lengths differ), and the right edge reserves clear space so
+// the last item doesn't run underneath the figure. It still fades with
+// --intro-opacity, gone before the project labels reveal over the same
+// corner of the stage.
+.orbit-hero__text .hero__infobar {
+  position: relative;
+  justify-content: space-between;
+  padding-right: clamp(190px, 21vw, 290px);
+}
+
+.orbit-hero__text .hero__infobar-item {
+  flex: 0 1 auto;
+}
+
+// Seated on the infobar's TOP rule specifically (.hero__infobar has both
+// a border-top and a border-bottom) — top:0 anchors the SVG's own top
+// edge there, then translateY pulls it back up by a percentage of the
+// SVG's OWN rendered height (unlike `top`, which is a percentage of the
+// containing block) so the waist — not the head — lands on the rule: 65%
+// is the waist's distance from the top of the drawing (the top of the
+// pants shape sits at y≈141.6 out of the trimmed viewBox's y 83–173.21
+// span), nudged up another 10px on top of that to sit right. Legs/feet
+// hang down through the infobar row and past its bottom rule into the
+// open space reserved below.
+.orbit-hero__text .hero__infobar .orbit-hero__illustration {
   position: absolute;
+  top: 0;
   right: 9%;
-  bottom: 6%;
   z-index: 55;
   margin: 0;
   opacity: var(--intro-opacity, 1);
+  transform: translateY(calc(-65% - 10px));
 
   @include media("<=new-referral-bp") {
     width: clamp(90px, 18vw, 140px);
     right: 6%;
-    bottom: 3%;
   }
 }
 
