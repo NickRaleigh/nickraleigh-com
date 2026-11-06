@@ -1,4 +1,4 @@
-import { useEffect, type RefObject } from "react";
+import { useLayoutEffect, type RefObject } from "react";
 import gsap from "gsap";
 import { TILE_ENTRANCE_START, TILE_ENTRANCE_STAGGER } from "./chipLayout";
 import type { IllustrationHandle } from "./Illustration";
@@ -19,7 +19,10 @@ type HeroEntranceRefs = {
 // lands in its own commit; this timeline grows to match, all on one shared
 // clock so later pieces can overlap earlier ones by position.
 export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
-  useEffect(() => {
+  // Layout effect, not a regular effect — see useHeroIntroGate's comment.
+  // The hidden gsap.set() state below needs to land before the browser's
+  // first paint, not after it.
+  useLayoutEffect(() => {
     if (!play) return;
 
     const ctx = gsap.context(() => {
