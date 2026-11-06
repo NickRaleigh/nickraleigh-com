@@ -13,6 +13,7 @@ import {
   computeNameLift,
   type StageMetrics,
 } from "./chipLayout";
+import { HandDrawnButtonOutline } from "./HandDrawnButtonOutline";
 import { Illustration } from "./Illustration";
 import { useMediaQuery } from "./useMediaQuery";
 import { useScrollOrbit } from "./useScrollOrbit";
@@ -153,10 +154,8 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
           <div className="hero__statement-row">
             <p className="hero__statement">{hero.tagLine}</p>
             <button type="button" className="hero__see-work" onClick={scrollToWork}>
-              See the work
-              <span aria-hidden="true" className="hero__see-work-arrow">
-                ⟶
-              </span>
+              <HandDrawnButtonOutline />
+              <span className="hero__see-work-label">See the work</span>
             </button>
           </div>
           <div className="hero__infobar">
@@ -209,10 +208,8 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
             <div className="hero__statement-row">
               <p className="hero__statement">{hero.tagLine}</p>
               <button type="button" className="hero__see-work" onClick={scrollToWork}>
-                See the work
-                <span aria-hidden="true" className="hero__see-work-arrow">
-                  ⟶
-                </span>
+                <HandDrawnButtonOutline />
+                <span className="hero__see-work-label">See the work</span>
               </button>
             </div>
             <div className="hero__infobar">
