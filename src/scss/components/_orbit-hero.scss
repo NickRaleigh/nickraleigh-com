@@ -15,7 +15,12 @@
   // instead of top:0, so the two don't fight for the same sticky slot.
   position: sticky;
   top: 6.8rem;
-  height: clamp(480px, 82vh, 860px);
+  // Tighter than before (was up to 860px) — the name/orbit/text cluster
+  // reads as one deliberate group rather than two blocks anchored to
+  // opposite edges of a tall, mostly-empty box. The chip orbit/grid math
+  // in chipLayout.ts is all stage-height-relative, so it scales down with
+  // this for free.
+  height: clamp(460px, 68vh, 680px);
   overflow: hidden;
 
   // Set per-frame by useScrollOrbit; CSS only ever reads these.
@@ -24,7 +29,7 @@
   --intro-opacity: 1;
 
   @include media("<=new-referral-bp") {
-    height: clamp(560px, 110vw, 760px);
+    height: clamp(540px, 100vw, 680px);
   }
 }
 
