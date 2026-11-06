@@ -106,10 +106,37 @@
   position: relative;
   justify-content: space-between;
   padding-right: clamp(190px, 21vw, 290px);
+  // The real border is replaced by the two .orbit-hero__infobar-rule spans
+  // below so the entrance timeline can draw them in — only here (not the
+  // reduced-motion static layout, which keeps the plain CSS border).
+  border-top-color: transparent;
+  border-bottom-color: transparent;
 }
 
 .orbit-hero__text .hero__infobar-item {
   flex: 0 1 auto;
+}
+
+// Stand-ins for the infobar's top/bottom border, drawn in left to right by
+// the entrance timeline (scaleX from 0, transform-origin left). Default
+// state is fully drawn (scaleX(1)) so the bars read correctly even if JS
+// never runs or the entrance has already played this session.
+.orbit-hero__infobar-rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-border);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.orbit-hero__infobar-rule--top {
+  top: 0;
+}
+
+.orbit-hero__infobar-rule--bottom {
+  bottom: 0;
 }
 
 // Seated on the infobar's TOP rule specifically (.hero__infobar has both

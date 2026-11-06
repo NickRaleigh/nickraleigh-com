@@ -4,6 +4,9 @@ import gsap from "gsap";
 type HeroEntranceRefs = {
   readonly firstName: RefObject<HTMLElement | null>;
   readonly lastName: RefObject<HTMLElement | null>;
+  readonly intro: RefObject<HTMLElement | null>;
+  readonly topRule: RefObject<HTMLElement | null>;
+  readonly bottomRule: RefObject<HTMLElement | null>;
 };
 
 // The hero's one-shot entrance timeline — gated by useHeroIntroGate (play is
@@ -33,6 +36,31 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
             ease: "power2.out",
           },
           0.12,
+        )
+        // Byline/CTA/meta bar/doodle, as one group (the intro wrapper owns
+        // none of its own opacity/transform otherwise, unlike the name
+        // spans' parent — so this tween's inline styles are never fighting
+        // a CSS-driven value, no cleanup needed after it finishes).
+        .from(
+          refs.intro.current,
+          {
+            opacity: 0,
+            y: 10,
+            duration: 0.5,
+            ease: "power2.out",
+          },
+          0.4,
+        )
+        // The infobar's rules, scaleX from 0 with a left transform-origin
+        // (set in CSS) so they draw left to right alongside the meta text.
+        .from(
+          [refs.topRule.current, refs.bottomRule.current],
+          {
+            scaleX: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          },
+          0.4,
         );
     });
 
