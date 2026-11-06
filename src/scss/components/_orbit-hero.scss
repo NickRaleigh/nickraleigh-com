@@ -42,6 +42,12 @@
   object-fit: cover;
   border-radius: 4px;
   will-change: left, top, width, height, opacity;
+  // No top/left/size is set until useScrollOrbit's first rAF tick — without
+  // this, that one frame renders every chip at full stage size stacked on
+  // top of each other (width/height: 100%, no offset) before JS positions
+  // them, a brief full-screen flash. The inline opacity that tick sets
+  // overrides this immediately after.
+  opacity: 0;
 }
 
 // The name is an absolutely-positioned overlay — at its full original size
