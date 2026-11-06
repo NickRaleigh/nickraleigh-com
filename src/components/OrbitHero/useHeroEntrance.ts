@@ -1,5 +1,6 @@
 import { useEffect, type RefObject } from "react";
 import gsap from "gsap";
+import type { IllustrationHandle } from "./Illustration";
 
 type HeroEntranceRefs = {
   readonly firstName: RefObject<HTMLElement | null>;
@@ -7,6 +8,7 @@ type HeroEntranceRefs = {
   readonly intro: RefObject<HTMLElement | null>;
   readonly topRule: RefObject<HTMLElement | null>;
   readonly bottomRule: RefObject<HTMLElement | null>;
+  readonly illustration: RefObject<IllustrationHandle | null>;
 };
 
 // The hero's one-shot entrance timeline — gated by useHeroIntroGate (play is
@@ -61,7 +63,10 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
             ease: "power2.out",
           },
           0.4,
-        );
+        )
+        // Payoff: one deterministic blink once the entrance has settled,
+        // distinct from the doodle's own randomized idle blinking.
+        .call(() => refs.illustration.current?.playPayoffBlink(), [], 1.8);
     });
 
     return () => ctx.revert();

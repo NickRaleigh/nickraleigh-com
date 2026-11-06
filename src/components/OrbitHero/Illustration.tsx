@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import gsap from "gsap";
 
 // Reduced-motion check lives here (not passed as a prop) so this component
@@ -29,12 +29,25 @@ const HEAD_ORIGIN = "-270.5 128.3"; // roughly the neck
 const LEFT_EYE_ORIGIN = "-279.07 95.54";
 const RIGHT_EYE_ORIGIN = "-268.76 97.66";
 
+export type IllustrationHandle = {
+  // Plays one deterministic blink immediately — used for the hero entrance's
+  // payoff beat, distinct from the randomized idle blinking below. A no-op
+  // under reduced motion (the idle effect that defines the real blink never
+  // runs, so this stays the default below).
+  readonly playPayoffBlink: () => void;
+};
+
 // Hand-drawn figure beside the hero, idling via GSAP: a slow head turn plus
 // occasional blinks.
-export function Illustration() {
+export const Illustration = forwardRef<IllustrationHandle>(function Illustration(_props, ref) {
   const headRef = useRef<SVGGElement>(null);
   const leftEyeRef = useRef<SVGEllipseElement>(null);
   const rightEyeRef = useRef<SVGEllipseElement>(null);
+  const blinkRef = useRef<() => void>(() => {});
+
+  useImperativeHandle(ref, () => ({
+    playPayoffBlink: () => blinkRef.current(),
+  }));
 
   useEffect(() => {
     if (
@@ -61,13 +74,12 @@ export function Illustration() {
         },
       );
 
-      // Blink: a quick close-and-reopen, rescheduled with a randomized
-      // delay each time so it doesn't read as a metronome.
+      // Blink: a quick close-and-reopen. blinkRef exposes this directly (for
+      // the entrance payoff); the idle loop below just calls the same
+      // function on a randomized delay so it doesn't read as a metronome.
       const blink = () => {
         gsap
-          .timeline({
-            onComplete: () => gsap.delayedCall(gsap.utils.random(2, 6), blink),
-          })
+          .timeline()
           .to(
             leftEyeRef.current,
             {
@@ -105,10 +117,21 @@ export function Illustration() {
             "<",
           );
       };
-      gsap.delayedCall(gsap.utils.random(2, 6), blink);
+      blinkRef.current = blink;
+
+      const scheduleIdleBlink = () => {
+        gsap.delayedCall(gsap.utils.random(2, 6), () => {
+          blink();
+          scheduleIdleBlink();
+        });
+      };
+      scheduleIdleBlink();
     });
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      blinkRef.current = () => {};
+    };
   }, []);
 
   return (
@@ -409,4 +432,4 @@ export function Illustration() {
       />
     </svg>
   );
-}
+});

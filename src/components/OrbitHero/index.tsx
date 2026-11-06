@@ -14,7 +14,7 @@ import {
   type StageMetrics,
 } from "./chipLayout";
 import { HandDrawnButtonOutline } from "./HandDrawnButtonOutline";
-import { Illustration } from "./Illustration";
+import { Illustration, type IllustrationHandle } from "./Illustration";
 import { useHeroEntrance } from "./useHeroEntrance";
 import { useHeroIntroGate } from "./useHeroIntro";
 import { useMediaQuery } from "./useMediaQuery";
@@ -75,6 +75,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   const introRef = useRef<HTMLDivElement>(null);
   const topRuleRef = useRef<HTMLSpanElement>(null);
   const bottomRuleRef = useRef<HTMLSpanElement>(null);
+  const illustrationRef = useRef<IllustrationHandle>(null);
 
   const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const stacked = useMediaQuery(STACK_QUERY);
@@ -86,6 +87,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
     intro: introRef,
     topRule: topRuleRef,
     bottomRule: bottomRuleRef,
+    illustration: illustrationRef,
   });
   const [metrics, setMetrics] = useState<StageMetrics>({ width: 0, height: 0 });
 
@@ -241,7 +243,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
                   </div>
                 ))}
                 <div className="orbit-hero__illustration" aria-hidden="true">
-                  <Illustration />
+                  <Illustration ref={illustrationRef} />
                 </div>
               </div>
             </div>
