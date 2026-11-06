@@ -33,7 +33,13 @@ const GRID_ROWS = 4;
 // All orbit/grid geometry is expressed as fractions of the stage's measured
 // size (not fixed pixels), so the same math holds at any viewport width.
 const ORBIT_CENTER_X = 0.5;
-const ORBIT_CENTER_Y = 0.26;
+// 0.26 below the stage's own top, back when .orbit-hero__name-wrap's top
+// also sat at the stage's top (0%). .orbit-hero__lockup now holds the name
+// instead, centered at 85% of the stage's height, so its top edge sits at
+// (100% - 85%) / 2 = 7.5% of the stage — this is that same 0.26 offset
+// re-based from there (0.075 + 0.26) so the orbit still clusters around
+// the name's actual position instead of where it used to be.
+const ORBIT_CENTER_Y = 0.335;
 const ORBIT_RADIUS_X = 0.3;
 const ORBIT_RADIUS_Y = 0.12;
 const ORBIT_RY_SPREAD = 0.1;

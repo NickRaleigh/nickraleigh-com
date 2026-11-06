@@ -69,7 +69,14 @@
   top: 50%;
   left: 0;
   right: 0;
-  height: 70%;
+  // 70% collided the doodle's head (which deliberately extends above the
+  // infobar's top rule — see .orbit-hero__text .hero__infobar
+  // .orbit-hero__illustration below) with the name's descenders. 85% keeps
+  // the tightened lockup but restores enough of the name-to-text gap to
+  // clear it. chipLayout's ORBIT_CENTER_Y is tuned to match this element's
+  // top edge, now at (100%-85%)/2 = 7.5% of the stage instead of 0% — see
+  // its own comment.
+  height: 85%;
   transform: translateY(-50%);
   z-index: 60;
   pointer-events: none;
