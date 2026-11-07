@@ -185,6 +185,15 @@ export function computeLabelOpacity(p: number): number {
   return clamp01((p - LABEL_START) / (1 - LABEL_START));
 }
 
+// The project links share this opacity, but CSS opacity alone doesn't stop
+// hit-testing — without this, their hit area (sized by layout, not by what's
+// actually painted) is clickable well before LABEL_START, when nothing is
+// visible there yet. Same threshold as computeLabelOpacity so pointer-events
+// turns on exactly when opacity starts rising off zero.
+export function computeLabelPointerEvents(p: number): "auto" | "none" {
+  return p > LABEL_START ? "auto" : "none";
+}
+
 const INTRO_FADE_END = 0.3;
 
 // The infobar/tagline are visible immediately (while the chips are still

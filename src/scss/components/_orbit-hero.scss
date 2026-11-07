@@ -26,6 +26,7 @@
   // Set per-frame by useScrollOrbit; CSS only ever reads these.
   --lift: 0;
   --label-opacity: 0;
+  --label-pointer-events: none;
   --intro-opacity: 1;
 
   @include media("<=new-referral-bp") {
@@ -141,7 +142,6 @@
 
 .orbit-hero__reveal {
   opacity: var(--label-opacity);
-  pointer-events: auto;
 }
 
 // The illustration sits in normal flow next to the tagline by default (the
@@ -266,6 +266,11 @@
   width: 42%;
   color: inherit;
   font-family: $hero-sans;
+  // The link itself is sized by its (fading-in) text, not just the text
+  // node — without this, the anchor stays hit-testable under the text's own
+  // pointer-events:none and catches hover/clicks before anything is visible
+  // there. Gated on the same threshold as .orbit-hero__reveal's opacity.
+  pointer-events: var(--label-pointer-events);
 
   &--a {
     left: 7%;

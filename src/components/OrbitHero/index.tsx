@@ -11,6 +11,7 @@ import {
   computeEntranceOpacity,
   computeIntroOpacity,
   computeLabelOpacity,
+  computeLabelPointerEvents,
   computeNameLift,
   type StageMetrics,
 } from "./chipLayout";
@@ -58,6 +59,32 @@ function ItalicName({ text, lettersIndex }: ItalicProps) {
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const STACK_QUERY = "(max-width: 920px)";
+
+// Slower than the browser's native smooth scroll (and driven frame-by-frame
+// with behavior:"instant" so the page's CSS scroll-behavior:smooth doesn't
+// layer its own easing on top) so the orbit's scroll-tied settle animation
+// — see useScrollOrbit's p — is actually visible as the page scrolls past it,
+// instead of being rushed through.
+const SEE_WORK_SCROLL_MS = 1600;
+
+function easeInOutQuad(x: number): number {
+  return x < 0.5 ? 2 * x * x : 1 - (-2 * x + 2) ** 2 / 2;
+}
+
+function animateScrollTo(targetY: number, duration: number) {
+  const startY = window.scrollY;
+  const delta = targetY - startY;
+  if (delta === 0) return;
+  const startTime = performance.now();
+
+  const step = (now: number) => {
+    const progress = Math.min(1, (now - startTime) / duration);
+    window.scrollTo({ top: startY + delta * easeInOutQuad(progress), behavior: "instant" });
+    if (progress < 1) requestAnimationFrame(step);
+  };
+
+  requestAnimationFrame(step);
+}
 
 type OrbitHeroProps = {
   readonly hero: HomepageContent["hero"];
@@ -122,12 +149,16 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   // the pin's own bottom edge reaches the viewport's bottom edge, which is
   // what scrollIntoView's block:"end" aligns to.
   const scrollToWork = () => {
-    const behavior = reducedMotion ? "auto" : "smooth";
     if (reducedMotion) {
-      staticWorkRef.current?.scrollIntoView({ behavior, block: "start" });
-    } else {
-      pinRef.current?.scrollIntoView({ behavior, block: "end" });
+      staticWorkRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
+      return;
     }
+    const pin = pinRef.current;
+    if (!pin) return;
+    // Same target as scrollIntoView(block:"end"): align the pin's bottom
+    // edge with the viewport's bottom edge.
+    const targetY = window.scrollY + pin.getBoundingClientRect().bottom - window.innerHeight;
+    animateScrollTo(targetY, SEE_WORK_SCROLL_MS);
   };
 
   useScrollOrbit(pinRef, reducedMotion, ({ p, t }) => {
@@ -135,6 +166,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
     if (stage) {
       stage.style.setProperty("--lift", String(computeNameLift(p)));
       stage.style.setProperty("--label-opacity", String(computeLabelOpacity(p)));
+      stage.style.setProperty("--label-pointer-events", computeLabelPointerEvents(p));
       stage.style.setProperty("--intro-opacity", String(computeIntroOpacity(p)));
     }
 
