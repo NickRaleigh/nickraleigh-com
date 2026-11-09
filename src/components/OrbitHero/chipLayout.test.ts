@@ -19,36 +19,33 @@ function mosaic(title: string, link: string): Mosaic {
 const overture = mosaic("Overture", "/work/overture");
 const westwoodLaw = mosaic("Westwood Law", "/work/car-accident-reporting-app");
 
-test("buildChips returns 16 chips per project, 32 total", () => {
+test("buildChips returns 8 chips per project (two bento groups), 16 total", () => {
   const chips = buildChips(overture, westwoodLaw);
-  expect(chips).toHaveLength(32);
-  expect(chips.filter((c) => c.project === 0)).toHaveLength(16);
-  expect(chips.filter((c) => c.project === 1)).toHaveLength(16);
+  expect(chips).toHaveLength(16);
+  expect(chips.filter((c) => c.project === 0)).toHaveLength(8);
+  expect(chips.filter((c) => c.project === 1)).toHaveLength(8);
 });
 
-test("cycles the 4 source images to fill 16 chips per project", () => {
+test("cycles each project's 4 source images to fill its two bento groups", () => {
   const chips = buildChips(overture, westwoodLaw);
   const project0Srcs = chips.filter((c) => c.project === 0).map((c) => c.img.src);
-  const uniqueSrcs = new Set(project0Srcs);
-  expect(uniqueSrcs.size).toBe(4);
-  expect(project0Srcs[0]).toBe(overture.imgs[0].src);
-  expect(project0Srcs[4]).toBe(overture.imgs[0].src);
+  expect(new Set(project0Srcs).size).toBe(4);
+  expect(project0Srcs.slice(0, 4)).toEqual(overture.imgs.map((img) => img.src));
+  expect(project0Srcs.slice(4, 8)).toEqual(overture.imgs.map((img) => img.src));
 });
 
-test("lays out each project as a clean 4x4 column/row grid", () => {
-  const chips = buildChips(overture, westwoodLaw);
-  const cols = new Set(chips.map((c) => c.col));
-  const rows = new Set(chips.map((c) => c.row));
-  expect(cols).toEqual(new Set([0, 1, 2, 3]));
-  expect(rows).toEqual(new Set([0, 1, 2, 3]));
+test("assigns each chip a unique cell across both bento groups (0-7)", () => {
+  const chips = buildChips(overture, westwoodLaw).filter((c) => c.project === 1);
+  const cells = new Set(chips.map((c) => c.cell));
+  expect(cells).toEqual(new Set([0, 1, 2, 3, 4, 5, 6, 7]));
 });
 
 test("each chip has a unique, stable index across both projects", () => {
   const chips = buildChips(overture, westwoodLaw);
   const indexes = chips.map((c) => c.index);
-  expect(new Set(indexes).size).toBe(32);
+  expect(new Set(indexes).size).toBe(16);
   expect(Math.min(...indexes)).toBe(0);
-  expect(Math.max(...indexes)).toBe(31);
+  expect(Math.max(...indexes)).toBe(15);
 });
 
 test("ease is a cubic in-out curve anchored at its endpoints and midpoint", () => {
