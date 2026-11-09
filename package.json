@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@vercel/config": "^0.14.1",
-    "next": "16.4.0",
+    "next": "16.4.5",
     "prismjs": "^1.30.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"
