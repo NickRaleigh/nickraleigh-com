@@ -13,6 +13,8 @@ import {
   computeLabelOpacity,
   computeLabelPointerEvents,
   computeNameLift,
+  computeProjectGridBox,
+  PROJECT_TEXT_GAP_RATIO,
   type StageMetrics,
 } from "./chipLayout";
 import { HandDrawnButtonOutline } from "./HandDrawnButtonOutline";
@@ -141,6 +143,16 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   }, []);
 
   const chips = useMemo(() => buildChips(overture, westwoodLaw), [overture, westwoodLaw]);
+
+  // The project link's hit area and text are anchored to this same box (left
+  // edge, top edge) so the whole mosaic — not just the text below it — sits
+  // inside the clickable link, and the text's left edge lines up exactly
+  // with where the images land instead of a fixed, independently-guessed
+  // percentage.
+  const projectBoxes = useMemo(
+    () => [computeProjectGridBox(0, metrics, stacked), computeProjectGridBox(1, metrics, stacked)],
+    [metrics, stacked],
+  );
 
   // The reduced-motion layout has the project cards sitting in normal flow
   // right below, so that target just scrolls into view. The animated stage
@@ -315,8 +327,21 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
               key={project.link}
               href={project.link}
               className={`orbit-hero__project orbit-hero__project--${index === 0 ? "a" : "b"}`}
+              style={{
+                left: projectBoxes[index].left,
+                top: projectBoxes[index].top,
+                width: projectBoxes[index].width,
+              }}
             >
-              <div className="orbit-hero__project-text orbit-hero__reveal">
+              <div
+                className="orbit-hero__project-text orbit-hero__reveal"
+                // Pushes the text below the mosaic by its actual measured
+                // height (projectBoxes[index].height) plus a deliberate gap —
+                // the link's box starts at the mosaic's own top edge (see
+                // `top` above, which keeps the whole mosaic clickable), so
+                // without this the text would render flush against it.
+                style={{ paddingTop: projectBoxes[index].height + metrics.height * PROJECT_TEXT_GAP_RATIO }}
+              >
                 <ProjectText project={project} />
               </div>
             </Link>

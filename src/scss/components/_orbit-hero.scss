@@ -254,16 +254,18 @@
   white-space: normal;
 }
 
-// Each project's title/stat/CTA sits in the lower portion of its half of
-// the stage — the same region its chips settle into above it.
+// Each project's link spans the same box its chips settle into (left/top/
+// width set inline from computeProjectGridBox — see OrbitHero/index.tsx) so
+// the whole mosaic is clickable, down through its title/stat/CTA sitting in
+// the lower portion below it. Height is content-driven (no `bottom` anchor):
+// the text div's own inline padding-top reserves exactly the mosaic's
+// measured height plus a deliberate gap, so the text always renders right
+// below the mosaic regardless of how tall the mosaic or the text ends up.
 .orbit-hero__project {
   position: absolute;
   z-index: 60;
-  bottom: 4%;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  width: 42%;
   color: inherit;
   font-family: $hero-sans;
   // The link itself is sized by its (fading-in) text, not just the text
@@ -272,26 +274,13 @@
   // there. Gated on the same threshold as .orbit-hero__reveal's opacity.
   pointer-events: var(--label-pointer-events);
 
-  &--a {
-    left: 7%;
-  }
-
   &--b {
-    right: 7%;
     align-items: flex-end;
     text-align: right;
   }
 
   @include media("<=new-referral-bp") {
-    width: 86%;
-
-    &--a {
-      left: 7%;
-    }
-
     &--b {
-      left: 7%;
-      right: auto;
       align-items: flex-start;
       text-align: left;
     }
@@ -312,7 +301,7 @@
 .orbit-hero__project-title {
   font-family: $display;
   font-weight: 500;
-  font-size: clamp(1.8rem, 2.4vw, 2.6rem);
+  font-size: clamp(2.6rem, 3.6vw, 4.2rem);
   line-height: 1;
   letter-spacing: -0.01em;
   text-decoration-line: underline;
@@ -332,14 +321,14 @@
 .orbit-hero__project-stat-value {
   display: block;
   font-family: $hero-serif;
-  font-size: 1.7rem;
+  font-size: 2.2rem;
   line-height: 1;
   color: var(--color-text);
 }
 
 .orbit-hero__project-stat-label {
   display: block;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   color: var(--color-text-muted);
   margin-top: 0.1rem;
 }
@@ -348,7 +337,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 600;
 }
 

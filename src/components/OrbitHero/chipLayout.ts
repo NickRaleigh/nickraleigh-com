@@ -145,6 +145,14 @@ const GRID_LEFT = 0.07;
 const GRID_RIGHT = 0.07;
 const GRID_TOP = 0.26;
 const GRID_BOTTOM = 0.24;
+// A fraction of the stage's own height (like everything else here) rather
+// than a fixed px/rem value — OrbitHero/index.tsx adds this, scaled by
+// metrics.height, on top of the grid's own measured height as the text's
+// padding-top. A fixed value would eat a bigger bite of GRID_BOTTOM's
+// margin at short stage heights than at tall ones, risking the text
+// clipping against the stage's overflow:hidden; this way the gap shrinks
+// and grows in lockstep with the margin that has to contain it.
+export const PROJECT_TEXT_GAP_RATIO = 0.07;
 // A fraction of the whole grid box (not of each cell, like production's
 // fixed-px CSS `gap`) so the seam reads the same width next to the big
 // "large" pane as it does next to the small "square" one.
@@ -214,6 +222,39 @@ function getHalf(metrics: StageMetrics, stacked: boolean, project: 0 | 1): HalfB
   return { offsetX: project * width, offsetY: 0, width, height: metrics.height };
 }
 
+type ProjectGridBox = {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+};
+
+// The bounding box each project's 8 chips settle into — same box the project
+// link's hit area and text are anchored to (see OrbitHero/index.tsx), so the
+// clickable area and the text's left edge always line up with where the
+// images actually land, instead of drifting apart at stage sizes where
+// fitBentoBox's own centering (see below) shifts the grid off a fixed
+// percentage.
+export function computeProjectGridBox(
+  project: 0 | 1,
+  metrics: StageMetrics,
+  stacked: boolean,
+): ProjectGridBox {
+  const half = getHalf(metrics, stacked, project);
+  const marginWidth = half.width * (1 - GRID_LEFT - GRID_RIGHT);
+  const marginHeight = half.height * (1 - GRID_TOP - GRID_BOTTOM);
+  // Both projects fit a fixed-aspect box inside the available margin (see
+  // fitBentoBox) rather than stretching to fill it, so every pane keeps the
+  // proportions its source image was actually cropped for.
+  const fitted = fitBentoBox(marginWidth, marginHeight);
+  return {
+    left: half.offsetX + half.width * GRID_LEFT + fitted.offsetX,
+    top: half.offsetY + half.height * GRID_TOP + fitted.offsetY,
+    width: fitted.width,
+    height: fitted.height,
+  };
+}
+
 export function computeChipFrame(
   chip: ChipStatic,
   p: number,
@@ -221,8 +262,6 @@ export function computeChipFrame(
   metrics: StageMetrics,
   stacked: boolean,
 ): ChipFrame {
-  const half = getHalf(metrics, stacked, chip.project);
-
   const a = chip.angle + t;
   const z = Math.sin(a);
   const depthScale = 0.65 + 0.35 * ((z + 1) / 2);
@@ -236,14 +275,9 @@ export function computeChipFrame(
     chip.ry * metrics.height * ORBIT_RY_SPREAD -
     lift * metrics.height * ORBIT_LIFT;
 
-  const marginWidth = half.width * (1 - GRID_LEFT - GRID_RIGHT);
-  const marginHeight = half.height * (1 - GRID_TOP - GRID_BOTTOM);
-  // Both projects fit a fixed-aspect box inside the available margin (see
-  // fitBentoBox) rather than stretching to fill it, so every pane keeps the
-  // proportions its source image was actually cropped for.
-  const fitted = fitBentoBox(marginWidth, marginHeight);
-  const gridWidth = fitted.width;
-  const gridHeight = fitted.height;
+  const grid = computeProjectGridBox(chip.project, metrics, stacked);
+  const gridWidth = grid.width;
+  const gridHeight = grid.height;
   const targetCell = targetCellFor(chip.project, chip.cell);
   const cellWidth = gridWidth * targetCell.w;
   const cellHeight = gridHeight * targetCell.h;
@@ -258,13 +292,11 @@ export function computeChipFrame(
   const targetWidth = cellWidth - gridWidth * BENTO_GAP;
   const targetHeight = cellHeight - gridHeight * BENTO_GAP;
   // Chips render in one stage-wide container (not nested per project), so
-  // the grid target stays in stage-relative coordinates: the shared orbit
-  // center offset by this chip's half, plus its pane's position across the
-  // two bento groups within that half.
-  const targetCenterX =
-    half.offsetX + half.width * GRID_LEFT + fitted.offsetX + gridWidth * targetCell.x + cellWidth / 2;
-  const targetCenterY =
-    half.offsetY + half.height * GRID_TOP + fitted.offsetY + gridHeight * targetCell.y + cellHeight / 2;
+  // the grid target stays in stage-relative coordinates: the project's grid
+  // box, offset by its pane's position across the two bento groups within
+  // that box.
+  const targetCenterX = grid.left + gridWidth * targetCell.x + cellWidth / 2;
+  const targetCenterY = grid.top + gridHeight * targetCell.y + cellHeight / 2;
 
   const q = ease(clamp01((p - chip.stagger) / SETTLE_SPAN));
 
