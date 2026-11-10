@@ -27,9 +27,21 @@ $jost: var(--font-jost), sans-serif;
     // collapses through a plain block and escapes this background entirely,
     // exposing the page's dark background in the gap instead of white.
     padding-bottom: 4rem;
+
+    // That clearance is sized for the full desktop map demo beneath it.
+    // Below tablet the demo is hidden (zero height), so the padding was
+    // just leaving a tall dead gap above the mobile video.
+    @include media("<=tablet") {
+      padding-bottom: 0;
+    }
   }
 
   &__preview-label {
+    // It's a <span> (see page.tsx), so this needs to be explicit: an inline
+    // box only gets its left/right padding on the first/last line fragment,
+    // so a wrapped second line would otherwise sit flush against the edge
+    // instead of matching the first line's indent.
+    display: block;
     padding: 1.2rem 2rem;
     font-family: $mono;
     font-size: 1.2rem;
@@ -44,7 +56,10 @@ $jost: var(--font-jost), sans-serif;
 
     @include media("<=tablet") {
       display: block;
-      padding: 0 2rem 2.4rem;
+      // Top clearance from the preview label's own border-bottom above it:
+      // without it the video (specifically its baked-in button chip) sits
+      // flush against that border line.
+      padding: 2rem 2rem 2.4rem;
     }
 
     video {
