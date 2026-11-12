@@ -121,8 +121,17 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const stacked = useMediaQuery(STACK_QUERY);
   const playIntro = useHeroIntroGate();
+  // Stacked (narrow) viewports get the same static layout as reduced
+  // motion, not just a stacked arrangement of the animated one. The
+  // animated stage crams both projects' full mosaic+text blocks into one
+  // shared, fixed-height pinned box (see _orbit-hero.scss's
+  // .orbit-hero__stage) — halving that already-tight budget for a second
+  // project on top of it doesn't leave room for a real title/description/
+  // tags block, and scroll-jacking is a poor fit for touch scrolling
+  // anyway. The static layout's normal document flow has no such ceiling.
+  const useStaticLayout = reducedMotion || stacked;
 
-  useHeroEntrance(playIntro && !reducedMotion, {
+  useHeroEntrance(playIntro && !useStaticLayout, {
     firstName: firstNameRef,
     lastName: lastNameRef,
     intro: introRef,
@@ -163,7 +172,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
   // the pin's own bottom edge reaches the viewport's bottom edge, which is
   // what scrollIntoView's block:"end" aligns to.
   const scrollToWork = () => {
-    if (reducedMotion) {
+    if (useStaticLayout) {
       staticWorkRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
       return;
     }
@@ -175,7 +184,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
     animateScrollTo(targetY, SEE_WORK_SCROLL_MS);
   };
 
-  useScrollOrbit(pinRef, reducedMotion, ({ p, t }) => {
+  useScrollOrbit(pinRef, useStaticLayout, ({ p, t }) => {
     const stage = stageRef.current;
     if (stage) {
       stage.style.setProperty("--lift", String(computeNameLift(p)));
@@ -193,7 +202,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
       const el = chipRefs.current[chip.index];
       if (!el) continue;
       const frame = computeChipFrame(chip, p, t, metrics, stacked);
-      const entranceOpacity = computeEntranceOpacity(chip, elapsedSeconds, playIntro && !reducedMotion);
+      const entranceOpacity = computeEntranceOpacity(chip, elapsedSeconds, playIntro && !useStaticLayout);
       el.style.left = `${frame.left}px`;
       el.style.top = `${frame.top}px`;
       el.style.width = `${frame.width}px`;
@@ -221,11 +230,11 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
     </h1>
   );
 
-  // Reduced motion gets a genuinely separate, simple static layout — not
-  // the animated stage frozen mid-state, since its absolute-positioned,
-  // measured-stage layout has no meaningful size without the pin/sticky
-  // mechanics driving it.
-  if (reducedMotion) {
+  // Reduced motion (and stacked/mobile — see useStaticLayout above) gets a
+  // genuinely separate, simple static layout — not the animated stage
+  // frozen mid-state, since its absolute-positioned, measured-stage layout
+  // has no meaningful size without the pin/sticky mechanics driving it.
+  if (useStaticLayout) {
     return (
       <header className={`hero${playIntro ? " hero--intro-fade" : ""}`}>
         <div className="wrap">

@@ -121,8 +121,8 @@ const ORBIT_LIFT = 0.22;
 // their original size while still landing at the bigger final size.
 const ORBIT_SIZE_FACTOR = 0.32;
 
-const GRID_LEFT = 0.07;
-const GRID_RIGHT = 0.07;
+const GRID_LEFT = 0.02;
+const GRID_RIGHT = 0.02;
 const GRID_TOP = 0.16;
 // Must stay large enough to hold the title/description/tags block that
 // renders below the grid (see PROJECT_TEXT_GAP_RATIO) without it clipping
@@ -274,8 +274,14 @@ export function computeChipFrame(
   const orbitWidth = cellWidth * ORBIT_SIZE_FACTOR * depthScale;
   const orbitHeight = cellHeight * ORBIT_SIZE_FACTOR * depthScale;
 
-  const targetWidth = cellWidth - gridWidth * BENTO_GAP;
-  const targetHeight = cellHeight - gridHeight * BENTO_GAP;
+  // Both axes subtract the same absolute pixel gap (based on the grid's
+  // height, the smaller of its two dimensions given BENTO_ASPECT) — basing
+  // each axis on its own dimension instead made the horizontal seams ~2x
+  // wider than the vertical ones, since the grid is much wider than it is
+  // tall.
+  const gapPx = gridHeight * BENTO_GAP;
+  const targetWidth = cellWidth - gapPx;
+  const targetHeight = cellHeight - gapPx;
   // Chips render in one stage-wide container (not nested per project), so
   // the grid target stays in stage-relative coordinates: the project's grid
   // box, offset by its pane's position across the two bento groups within

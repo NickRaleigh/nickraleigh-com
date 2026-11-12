@@ -20,7 +20,13 @@
   // opposite edges of a tall, mostly-empty box. The chip orbit/grid math
   // in chipLayout.ts is all stage-height-relative, so it scales down with
   // this for free.
-  height: clamp(460px, 68vh, 680px);
+  // Raised from 460/68vh/680 — the bento grid's own size is driven by
+  // GRID_LEFT/RIGHT (width), not this height, so the extra room here goes
+  // straight to the slack after the grid, which is what the project title/
+  // description/tags block actually needed once it got bigger. Without
+  // this, the heavier text pushed past the stage's own overflow:hidden and
+  // the tags row got clipped.
+  height: clamp(480px, 72vh, 720px);
   overflow: hidden;
 
   // Set per-frame by useScrollOrbit; CSS only ever reads these.
@@ -283,7 +289,7 @@
 .orbit-hero__project-text {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 1rem;
 }
 
 .orbit-hero__project-title-row {
@@ -295,7 +301,7 @@
 .orbit-hero__project-title {
   font-family: $display;
   font-weight: 500;
-  font-size: clamp(2.6rem, 3.6vw, 4.2rem);
+  font-size: clamp(3.2rem, 4.6vw, 5.4rem);
   line-height: 1;
   letter-spacing: -0.01em;
   text-decoration-line: underline;
@@ -318,7 +324,7 @@
 }
 
 .orbit-hero__project-arrow-art {
-  width: clamp(1.8rem, 2.4vw, 2.8rem);
+  width: clamp(2.1rem, 3vw, 3.4rem);
   height: auto;
 }
 
@@ -335,25 +341,29 @@
 
 .orbit-hero__project-description {
   white-space: nowrap;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   color: var(--color-text-muted);
 }
 
 .orbit-hero__project-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.7rem;
+  // A deliberate extra beat beyond the column's own 1rem gap, so the tags
+  // read as a distinct row rather than just another evenly-spaced line of
+  // text under the description.
+  margin-top: 0.3rem;
 }
 
 .orbit-hero__project-tag {
-  padding: 0.4rem 0.9rem;
+  padding: 0.5rem 1rem;
   // Design file's tag rectangle: cornerRadius 4.68 on a 23.2-tall pill —
   // ~20% of its own height, a subtly rounded rectangle, not a full pill.
   // (A percentage radius here would scale off the pill's much wider width
   // instead, so this is a fixed px value scaled to roughly the same ratio.)
   border-radius: 6px;
   background: var(--color-pill-bg, rgb(147 147 147 / 9.85%));
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--color-text-muted);
   white-space: nowrap;
 }
@@ -393,6 +403,15 @@
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+
+  // Unlike the animated stage's fixed, measured-width columns (where
+  // nowrap keeps the description a single tidy line — see
+  // .orbit-hero__project-description), this card's width is just a grid
+  // column that can get narrow (down to the full viewport width on
+  // mobile), so the description needs to wrap instead of overflowing it.
+  .orbit-hero__project-description {
+    white-space: normal;
+  }
   color: inherit;
 
   &:focus-visible {
