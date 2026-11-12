@@ -10,14 +10,16 @@ afterEach(cleanup);
 function mosaic(title: string, link: string): Mosaic {
   return {
     title,
+    description: "test description",
+    tags: ["one", "two"],
     link,
     imgs: [
-      { src: `${link}/large.webp`, alt: "large", width: 542, height: 312 },
-      { src: `${link}/tall.webp`, alt: "tall", width: 176, height: 313 },
-      { src: `${link}/wide.webp`, alt: "wide", width: 542, height: 151 },
-      { src: `${link}/square.webp`, alt: "square", width: 177, height: 148 },
+      { src: `${link}/full.webp`, alt: "full", width: 362, height: 609 },
+      { src: `${link}/colB-top.webp`, alt: "colB-top", width: 679, height: 390 },
+      { src: `${link}/colB-bottom.webp`, alt: "colB-bottom", width: 679, height: 204 },
+      { src: `${link}/colC-top.webp`, alt: "colC-top", width: 202, height: 390 },
+      { src: `${link}/colC-bottom.webp`, alt: "colC-bottom", width: 202, height: 204 },
     ],
-    stat: { title: ["1,000+"], description: "test stat" },
   };
 }
 

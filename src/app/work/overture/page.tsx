@@ -62,7 +62,7 @@ export default function OvertureCaseStudy() {
               </dl>
             </div>
             <div className="case-head__media">
-              <Card imgs={OvertureMosaic.imgs} />
+              <Card imgs={OvertureMosaic.imgs} glow="amber" />
             </div>
           </div>
         </div>

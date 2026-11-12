@@ -1,25 +1,65 @@
 @use "../settings/variables" as *;
 
-// Four-pane image mosaic: a wide+tall "large" pane, a narrow+tall pane, a
-// wide+short pane, and a small square — 3:1 columns, 2:1 rows, ~3:2 overall.
-// `mirror` swaps the column order (narrow column moves to the left) via
+// The full-height pane's share of the card's total width (1.79 / (1.79 +
+// 3.35 + 1), see .mosaic below) — reused to position the ambient glow at
+// the same column boundary it sits behind in the design file.
+$mosaic-full-col-share: 29.15%;
+
+.mosaic-wrap {
+  position: relative;
+}
+
+// A soft blurred color wash behind the split-column half of the card (not
+// part of any pane's own image — see Card/index.tsx) — rect67/rect436 in
+// the design file: #E8A33D at 27% behind Overture's map/invoice columns,
+// #1872BB at 27% behind Westwood's roads/map columns. Lives outside
+// .mosaic's own overflow:hidden so it can bleed past the pane edges and
+// through the grid gaps the way it does in the design.
+.mosaic-wrap__glow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: $mosaic-full-col-share;
+  right: 0;
+  filter: blur(60px);
+  opacity: 0.27;
+  pointer-events: none;
+}
+
+.mosaic-wrap--mirror .mosaic-wrap__glow {
+  left: 0;
+  right: $mosaic-full-col-share;
+}
+
+.mosaic-wrap--amber .mosaic-wrap__glow {
+  background: #e8a33d;
+}
+
+.mosaic-wrap--blue .mosaic-wrap__glow {
+  background: #1872bb;
+}
+
+// Five-pane image mosaic: a full-height pane, then a wider middle column and
+// a narrower outer column, each split top/bottom (2:1 rows) — column/row
+// ratios taken from the design file's own measurements. `mirror` swaps the
+// column order (full-height pane moves to the other side) via
 // grid-template-areas, so the DOM/pane order never has to change.
 .mosaic {
+  position: relative;
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 2fr 1fr;
+  grid-template-columns: 1.79fr 3.35fr 1fr;
+  grid-template-rows: 1.91fr 1fr;
   grid-template-areas:
-    "large tall"
-    "wide square";
+    "full colB-top colC-top"
+    "full colB-bottom colC-bottom";
   gap: 10px;
-  aspect-ratio: 3 / 2;
-  overflow: hidden;
+  aspect-ratio: 722 / 334;
 
   &--mirror {
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 3.35fr 1.79fr;
     grid-template-areas:
-      "tall large"
-      "square wide";
+      "colC-top colB-top full"
+      "colC-bottom colB-bottom full";
   }
 }
 
@@ -41,27 +81,10 @@
     transition: filter 0.25s ease;
   }
 
-  &--large { grid-area: large; }
-  &--tall { grid-area: tall; }
-  &--wide { grid-area: wide; }
-  &--square { grid-area: square; }
-
-  // Fades the pane's cropped edge into its own background color instead of
-  // ending on a hard crop line.
-  &--fadeRight::after,
-  &--fade-bottom::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  &--fadeRight::after {
-    background: linear-gradient(to right, transparent calc(100% - 24px), var(--pane-bg, $tan));
-  }
-
-  &--fade-bottom::after {
-    background: linear-gradient(to bottom, transparent calc(100% - 24px), var(--pane-bg, $tan));
-  }
+  &--full { grid-area: full; }
+  &--colB-top { grid-area: colB-top; }
+  &--colB-bottom { grid-area: colB-bottom; }
+  &--colC-top { grid-area: colC-top; }
+  &--colC-bottom { grid-area: colC-bottom; }
 }
 

@@ -25,17 +25,12 @@ export type ChipFrame = {
   readonly zIndex: number;
 };
 
-// Each project lands as the same 4-pane bento mosaic used on production
-// (see .mosaic in _mosaic.scss: a 3fr/1fr column split and a 2fr/1fr row
-// split, "large tall / wide square") plus a flanking column of 4 simpler,
-// uniform tiles bolted onto its outer edge — the bento alone was narrower
-// than the available width (a 3:2 block is just a slimmer shape than the
-// space around it), and stretching it to fill that space instead cropped
-// every pane far more aggressively than its source image was meant for.
-// The flanking column spans the same width honestly, with real content
-// instead of a wider box, and — unlike a second full bento — only needs
-// 4 more ordinary screenshots, not 4 more specifically large/tall/wide/
-// square crops.
+// Each project lands as the same 5-pane bento mosaic used on production
+// (see .mosaic in _mosaic.scss: a full-height pane plus a wider and a
+// narrower column, each split top/bottom). Unlike the old 4-pane bento, this
+// shape is already wide enough to fill the available landing space on its
+// own (its own aspect ratio is close to the space around it), so there's no
+// flanking column of extra tiles bolted onto the side.
 type GridCell = {
   readonly x: number;
   readonly y: number;
@@ -43,71 +38,48 @@ type GridCell = {
   readonly h: number;
 };
 
-const BENTO_COL_WIDE = 3 / 4;
-const BENTO_COL_NARROW = 1 / 4;
-const BENTO_ROW_TALL = 2 / 3;
-const BENTO_ROW_SHORT = 1 / 3;
+// Same ratios as _mosaic.scss's grid-template-columns/-rows (1.79fr/3.35fr/
+// 1fr and 1.91fr/1fr).
+const BENTO_COL_FULL = 1.79 / (1.79 + 3.35 + 1);
+const BENTO_COL_B = 3.35 / (1.79 + 3.35 + 1);
+const BENTO_ROW_TOP = 1.91 / (1.91 + 1);
+const BENTO_ROW_BOTTOM = 1 - BENTO_ROW_TOP;
 
-// Order matches each project's imgs array: [large, tall, wide, square].
+// Order matches each project's imgs array: [full, colB-top, colB-bottom,
+// colC-top, colC-bottom].
 const BENTO_CELLS: readonly GridCell[] = [
-  { x: 0, y: 0, w: BENTO_COL_WIDE, h: BENTO_ROW_TALL }, // large
-  { x: BENTO_COL_WIDE, y: 0, w: BENTO_COL_NARROW, h: BENTO_ROW_TALL }, // tall
-  { x: 0, y: BENTO_ROW_TALL, w: BENTO_COL_WIDE, h: BENTO_ROW_SHORT }, // wide
-  { x: BENTO_COL_WIDE, y: BENTO_ROW_TALL, w: BENTO_COL_NARROW, h: BENTO_ROW_SHORT }, // square
+  { x: 0, y: 0, w: BENTO_COL_FULL, h: 1 }, // full
+  { x: BENTO_COL_FULL, y: 0, w: BENTO_COL_B, h: BENTO_ROW_TOP }, // colB-top
+  { x: BENTO_COL_FULL, y: BENTO_ROW_TOP, w: BENTO_COL_B, h: BENTO_ROW_BOTTOM }, // colB-bottom
+  { x: BENTO_COL_FULL + BENTO_COL_B, y: 0, w: 1 - BENTO_COL_FULL - BENTO_COL_B, h: BENTO_ROW_TOP }, // colC-top
+  {
+    x: BENTO_COL_FULL + BENTO_COL_B,
+    y: BENTO_ROW_TOP,
+    w: 1 - BENTO_COL_FULL - BENTO_COL_B,
+    h: BENTO_ROW_BOTTOM,
+  }, // colC-bottom
 ];
 
-const FLANK_COUNT = 4;
-// The bento's share of the total composite width — the flanking column
-// takes the rest. Cell indices [0, BENTO_CELLS.length) are the bento's
-// panes; [BENTO_CELLS.length, BENTO_CELLS.length + FLANK_COUNT) are the
-// flanking column's tiles, top to bottom.
-const BENTO_SHARE = 0.7;
-const FLANK_SHARE = 1 - BENTO_SHARE;
-
 const CHIP_COUNT: Readonly<Record<0 | 1, number>> = {
-  0: BENTO_CELLS.length + FLANK_COUNT, // 8
-  1: BENTO_CELLS.length + FLANK_COUNT, // 8
+  0: BENTO_CELLS.length, // 5
+  1: BENTO_CELLS.length, // 5
 };
 
 // Westwood Law's static mosaic card mirrors its columns (see Card's
 // `flip={index === 1}`) so the two project cards face each other. The
 // orbit hero's landing mirrors the same way for the same project: its
-// bento sits on the left with the "tall"/"square" column leading (instead
-// of trailing), and its flanking column moves to the outer right edge to
-// match — the two projects' bentos end up adjacent near the stage's
-// center, with both flanking columns bookending the whole composition.
+// full-height pane leads on the left instead of trailing on the right.
 function targetCellFor(project: 0 | 1, cellIndex: number): GridCell {
   const mirror = project === 1;
-  const bentoOffsetX = mirror ? 0 : FLANK_SHARE;
-  const flankOffsetX = mirror ? BENTO_SHARE : 0;
-
-  if (cellIndex < BENTO_CELLS.length) {
-    const cell = BENTO_CELLS[cellIndex];
-    const local = mirror ? { x: 1 - cell.x - cell.w, y: cell.y, w: cell.w, h: cell.h } : cell;
-    return {
-      x: bentoOffsetX + local.x * BENTO_SHARE,
-      y: local.y,
-      w: local.w * BENTO_SHARE,
-      h: local.h,
-    };
-  }
-
-  const flankIndex = cellIndex - BENTO_CELLS.length;
-  return {
-    x: flankOffsetX,
-    y: flankIndex / FLANK_COUNT,
-    w: FLANK_SHARE,
-    h: 1 / FLANK_COUNT,
-  };
+  const cell = BENTO_CELLS[cellIndex];
+  return mirror ? { x: 1 - cell.x - cell.w, y: cell.y, w: cell.w, h: cell.h } : cell;
 }
 
-// Matches `.mosaic { aspect-ratio: 3/2 }` in _mosaic.scss, widened by
-// BENTO_SHARE to account for the flanking column sitting alongside it. The
-// bento panes were cropped against that fixed 3:2 ratio, so the overall
-// landing box has to keep it too (fit, not stretch) or object-fit:cover
-// crops every pane far more aggressively than its source image was meant
-// for.
-const BENTO_ASPECT = 3 / 2 / BENTO_SHARE;
+// Matches `.mosaic { aspect-ratio: 722/334 }` in _mosaic.scss — the bento
+// panes were cropped against that fixed ratio, so the overall landing box
+// has to keep it too (fit, not stretch) or object-fit:cover crops every
+// pane far more aggressively than its source image was meant for.
+const BENTO_ASPECT = 722 / 334;
 
 type FittedBox = {
   readonly width: number;
@@ -139,12 +111,25 @@ const ORBIT_RADIUS_X = 0.3;
 const ORBIT_RADIUS_Y = 0.12;
 const ORBIT_RY_SPREAD = 0.1;
 const ORBIT_LIFT = 0.22;
-const ORBIT_SIZE_FACTOR = 0.42;
+// Orbiting chip size is a fraction of its *landed* cell size (see
+// computeChipFrame's cellWidth/cellHeight below), so enlarging the landed
+// grid (GRID_TOP/GRID_BOTTOM above) enlarges the orbiting chips too, even
+// though the orbit's own path (ORBIT_RADIUS_X/Y) didn't change — bigger
+// chips crossing the same orbit paths collide and overlap each other (and
+// the name) far more visibly. Scaled down from the original 0.42 by
+// roughly the grid's own size increase to keep the orbiting chips close to
+// their original size while still landing at the bigger final size.
+const ORBIT_SIZE_FACTOR = 0.32;
 
 const GRID_LEFT = 0.07;
 const GRID_RIGHT = 0.07;
-const GRID_TOP = 0.26;
-const GRID_BOTTOM = 0.24;
+const GRID_TOP = 0.16;
+// Must stay large enough to hold the title/description/tags block that
+// renders below the grid (see PROJECT_TEXT_GAP_RATIO) without it clipping
+// against the stage's own overflow:hidden — the grid is height-bound here
+// (see fitBentoBox), so its height is exactly stageHeight*(1-TOP-BOTTOM),
+// leaving stageHeight*BOTTOM below it for the gap plus that text block.
+const GRID_BOTTOM = 0.25;
 // A fraction of the stage's own height (like everything else here) rather
 // than a fixed px/rem value — OrbitHero/index.tsx adds this, scaled by
 // metrics.height, on top of the grid's own measured height as the text's
@@ -229,7 +214,7 @@ type ProjectGridBox = {
   readonly height: number;
 };
 
-// The bounding box each project's 8 chips settle into — same box the project
+// The bounding box each project's 5 chips settle into — same box the project
 // link's hit area and text are anchored to (see OrbitHero/index.tsx), so the
 // clickable area and the text's left edge always line up with where the
 // images actually land, instead of drifting apart at stage sizes where

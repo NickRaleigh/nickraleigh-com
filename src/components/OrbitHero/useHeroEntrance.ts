@@ -23,7 +23,30 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
   // The hidden gsap.set() state below needs to land before the browser's
   // first paint, not after it.
   useLayoutEffect(() => {
-    if (!play) return;
+    if (!play) {
+      // No entrance this mount (reduced motion, or already played earlier
+      // this session) — but firstName/lastName/intro/the infobar rules all
+      // default to hidden in CSS specifically so the entrance has
+      // something to reveal (see those rules' own comments). With no
+      // entrance running, nothing else ever un-hides them, so they'd stay
+      // invisible for the rest of the session. Land everything at its
+      // normal resting state immediately instead.
+      const ctx = gsap.context(() => {
+        gsap.set([refs.firstName.current, refs.lastName.current], { opacity: 1, y: 0 });
+        gsap.set(refs.intro.current, { opacity: 1, y: 0 });
+        gsap.set([refs.topRule.current, refs.bottomRule.current], { scaleX: 1 });
+        gsap.set(refs.chips.current.filter((el): el is HTMLImageElement => el !== null), {
+          x: 0,
+          y: 0,
+          rotate: 0,
+          scale: 1,
+          filter: "blur(0px)",
+        });
+      });
+      return () => ctx.revert();
+    }
+
+    let timeline: gsap.core.Timeline | null = null;
 
     const ctx = gsap.context(() => {
       const chipEls = refs.chips.current.filter((el): el is HTMLImageElement => el !== null);
@@ -52,7 +75,7 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
         filter: "blur(6px)",
       });
 
-      gsap
+      timeline = gsap
         .timeline()
         .to(refs.firstName.current, {
           opacity: 1,
@@ -125,7 +148,25 @@ export function useHeroEntrance(play: boolean, refs: HeroEntranceRefs): void {
         );
     });
 
-    return () => ctx.revert();
+    // GSAP's default ticker runs on requestAnimationFrame, which browsers
+    // throttle (often to a near-stop) for a backgrounded/hidden tab — a
+    // visitor who switches away mid-entrance and comes back later would
+    // otherwise find it frozen partway through (chips still scattered, name
+    // still invisible) for however long it takes the ticker to catch up,
+    // which can be a very long time. Jumping straight to the end the moment
+    // the tab goes hidden means there's nothing left to catch up on: the
+    // next time it's visible, the entrance has already resolved.
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        timeline?.progress(1);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      ctx.revert();
+    };
     // refs are stable RefObjects whose .current is read only once the
     // timeline is built; only `play` flipping should rebuild it.
     // eslint-disable-next-line react-hooks/exhaustive-deps

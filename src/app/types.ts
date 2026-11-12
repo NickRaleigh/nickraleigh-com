@@ -1,15 +1,16 @@
 import type { Picture } from "@/types/base";
-import type { ReactElement } from "react";
 import type { TextBlock } from "@/types/base";
 
+// Five images, in a fixed grid position order (see Mosaic/Card): a
+// full-height pane, then the top/bottom pair of the middle column, then the
+// top/bottom pair of the outer column. `flip` mirrors which side the
+// full-height pane lands on without changing this order.
 export type Mosaic = {
   readonly title: string;
-  readonly imgs: Picture[];
+  readonly description: string;
+  readonly tags: readonly string[];
+  readonly imgs: [Picture, Picture, Picture, Picture, Picture];
   readonly link: string;
-  readonly stat: {
-    readonly title: (string | ReactElement)[];
-    readonly description: string;
-  };
 };
 
 export type HomepageContent = {

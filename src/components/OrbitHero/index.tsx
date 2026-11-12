@@ -19,6 +19,7 @@ import {
 } from "./chipLayout";
 import { HandDrawnButtonOutline } from "./HandDrawnButtonOutline";
 import { Illustration, type IllustrationHandle } from "./Illustration";
+import { ProjectArrow } from "./ProjectArrow";
 import { useHeroEntrance } from "./useHeroEntrance";
 import { useHeroIntroGate } from "./useHeroIntro";
 import { useMediaQuery } from "./useMediaQuery";
@@ -27,18 +28,19 @@ import { useScrollOrbit } from "./useScrollOrbit";
 function ProjectText({ project }: { readonly project: Mosaic }) {
   return (
     <>
-      <span className="orbit-hero__project-title">{project.title}</span>
-      <span className="orbit-hero__project-stat">
-        <span className="orbit-hero__project-stat-value">
-          {project.stat.title.map((g) => g)}
-        </span>
-        <span className="orbit-hero__project-stat-label">
-          {project.stat.description}
+      <span className="orbit-hero__project-title-row">
+        <span className="orbit-hero__project-title">{project.title}</span>
+        <span className="orbit-hero__project-arrow">
+          <ProjectArrow />
         </span>
       </span>
-      <span className="orbit-hero__project-cta">
-        Read the case study{" "}
-        <span className="orbit-hero__project-arrow">&rsaquo;</span>
+      <span className="orbit-hero__project-description">{project.description}</span>
+      <span className="orbit-hero__project-tags">
+        {project.tags.map((tag) => (
+          <span className="orbit-hero__project-tag" key={tag}>
+            {tag}
+          </span>
+        ))}
       </span>
     </>
   );
@@ -250,7 +252,7 @@ export function OrbitHero({ hero, mosaics }: OrbitHeroProps) {
         <div ref={staticWorkRef} className="wrap orbit-hero__static">
           {projects.map(([project, index]) => (
             <Link key={project.link} href={project.link} className="orbit-hero__static-card">
-              <Card imgs={project.imgs} flip={index === 1} />
+              <Card imgs={project.imgs} flip={index === 1} glow={index === 1 ? "blue" : "amber"} />
               <div className="orbit-hero__project-text">
                 <ProjectText project={project} />
               </div>
