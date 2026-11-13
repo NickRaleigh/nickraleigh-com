@@ -50,9 +50,9 @@
   &__statement-row {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1.6rem 4.8rem;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.6rem 2.4rem;
     padding: clamp(2rem, 2.4vw, 3.2rem) 0 clamp(2.4rem, 2.8vw, 4rem);
   }
 
@@ -67,6 +67,77 @@
     @include media("<=tablet") {
       white-space: normal;
     }
+  }
+
+  // Jumps past the pinned/animated stage straight to the revealed project
+  // grid (see OrbitHero's scrollToWork) — sits inline with the statement
+  // on desktop; flex-wrap on the row drops it to its own line once the two
+  // no longer fit side by side. The outline + arrow are one traced,
+  // hand-drawn pen stroke (HandDrawnButtonOutline) stretched to fill the
+  // button rather than a CSS border-radius pill, so it reads as sketched
+  // rather than templated. The SVG is absolutely positioned and paints
+  // above the (statically-flowed, so painted first) label automatically —
+  // no z-index needed.
+  &__see-work {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    // Right padding is wider than left: the artwork's arrow is traced in
+    // at roughly 69%–82% of its own width, so the label needs to stay
+    // clear of that zone rather than centering under it.
+    padding: 1.2rem 6.4rem 1.2rem 2.4rem;
+    border: none;
+    appearance: none;
+    font-family: $hero-sans;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--color-accent);
+    background: transparent;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 4px;
+    }
+  }
+
+  // The hover wash lives on the filled copy of the oval path (see
+  // HandDrawnButtonOutline) instead of a background-color on the button —
+  // a rectangular fill would show past the wobbly line at the corners.
+  &__see-work-fill {
+    transition: fill-opacity 0.2s ease;
+  }
+
+  &__see-work:hover &__see-work-fill,
+  &__see-work:focus-visible &__see-work-fill {
+    fill-opacity: 0.14;
+  }
+
+  // Idle, the pen stroke just sits there; on hover/focus it redraws itself
+  // slightly, as if re-traced by hand rather than snapping to a pixel grid.
+  @media (prefers-reduced-motion: no-preference) {
+    &__see-work:hover &__see-work-art,
+    &__see-work:focus-visible &__see-work-art {
+      animation: hero-see-work-wobble 1.1s ease-in-out infinite;
+    }
+  }
+
+  &__see-work-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    pointer-events: none;
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+  }
+
+  &__see-work-label {
+    position: relative;
   }
 
   &__more {
@@ -88,5 +159,34 @@
         color: var(--color-text);
       }
     }
+  }
+}
+
+// Reduced-motion's whole-hero stand-in for the full entrance sequence: one
+// short fade, no movement. Applied via useHeroIntroGate (currently: every
+// mount — see that hook for why the once-per-session gate is on hold).
+.hero--intro-fade {
+  animation: hero-intro-fade 0.4s ease-out both;
+}
+
+@keyframes hero-intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// A loose, hand-redrawn wiggle rather than a mechanical spin/scale — tiny
+// rotation paired with an off-axis scale so the two don't cancel out into
+// something that reads as a single smooth pulse.
+@keyframes hero-see-work-wobble {
+  0%,
+  100% {
+    transform: rotate(-0.8deg) scale(1, 0.99);
+  }
+  50% {
+    transform: rotate(0.9deg) scale(0.99, 1);
   }
 }

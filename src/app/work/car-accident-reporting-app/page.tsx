@@ -47,7 +47,7 @@ export default function WestwoodLawCaseStudy() {
               </dl>
             </div>
             <div className="case-head__media">
-              <Card imgs={WestwoodLawMosaic.imgs} />
+              <Card imgs={WestwoodLawMosaic.imgs} glow="blue" />
             </div>
           </div>
         </div>

@@ -16,7 +16,7 @@ export const homeContent: HomepageContent = {
       "11 years building for the web",
       "Longmont, Colorado",
     ],
-    tagLine: "I design software and build it myself.",
+    tagLine: "I make complicated software feel simple.",
   },
   mosaics: [
     OvertureMosaic,
@@ -27,10 +27,12 @@ export const homeContent: HomepageContent = {
     missionStatement: {
       title: "Software should get out of the way.",
       description: `
-	I design and build interfaces for people with something more
-	important on their minds, turning complicated, multi-step
-	processes into ones they can finish without a second thought. I
-	own both the design and the code, from first sketch to production.`,
+	I got tired of handing off designs and hoping they\'d
+	survive engineering. So in 2015, long before AI made
+	it easier, I pushed myself to become an engineer too.
+	Now I take products from concept to production, owning
+	both the design and the code. A decade of craft is what
+	lets me get tasteful results from AI, not just fast ones.`,
     },
     competencies: [
       {

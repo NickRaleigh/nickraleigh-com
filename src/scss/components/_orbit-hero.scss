@@ -1,0 +1,426 @@
+@use "../settings/variables" as *;
+@use "../helpers/include-media" as *;
+
+// Pinned scrollytelling wrapper: a tall spacer so the page has room to
+// scroll through the orbit-to-grid transition while the stage inside it
+// stays stuck to the viewport. Only rendered when motion isn't reduced —
+// reduced motion gets a completely separate static layout further down.
+.orbit-hero__pin {
+  position: relative;
+  height: 280vh;
+}
+
+.orbit-hero__stage {
+  // Sticks right below the nav (6.8rem tall, also position:sticky;top:0)
+  // instead of top:0, so the two don't fight for the same sticky slot.
+  position: sticky;
+  top: 6.8rem;
+  // Tighter than before (was up to 860px) — the name/orbit/text cluster
+  // reads as one deliberate group rather than two blocks anchored to
+  // opposite edges of a tall, mostly-empty box. The chip orbit/grid math
+  // in chipLayout.ts is all stage-height-relative, so it scales down with
+  // this for free.
+  // Raised from 460/68vh/680 — the bento grid's own size is driven by
+  // GRID_LEFT/RIGHT (width), not this height, so the extra room here goes
+  // straight to the slack after the grid, which is what the project title/
+  // description/tags block actually needed once it got bigger. Without
+  // this, the heavier text pushed past the stage's own overflow:hidden and
+  // the tags row got clipped.
+  height: clamp(480px, 72vh, 720px);
+  overflow: hidden;
+
+  // Set per-frame by useScrollOrbit; CSS only ever reads these.
+  --lift: 0;
+  --label-opacity: 0;
+  --label-pointer-events: none;
+  --intro-opacity: 1;
+
+  @include media("<=new-referral-bp") {
+    height: clamp(540px, 100vw, 680px);
+  }
+}
+
+.orbit-hero__chips {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.orbit-hero__chip {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  will-change: left, top, width, height, opacity;
+  // No top/left/size is set until useScrollOrbit's first rAF tick — without
+  // this, that one frame renders every chip at full stage size stacked on
+  // top of each other (width/height: 100%, no offset) before JS positions
+  // them, a brief full-screen flash. The inline opacity that tick sets
+  // overrides this immediately after.
+  opacity: 0;
+}
+
+// Groups the name and text as one block, vertically centered within the
+// stage as a unit — name-wrap (top: 0) and text (bottom: 0) below are
+// positioned relative to THIS, not the full stage, so their own gap is
+// whatever this element's height allows rather than spanning the stage's
+// full top-to-bottom. Needs an explicit height for that centering and for
+// its children's percentage offsets to mean anything — both children stay
+// absolutely positioned (not normal flow) so the name is still free to
+// overflow this box at very large sizes without pushing the text; only the
+// anchor they're measured against has changed.
+.orbit-hero__lockup {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  // 70% collided the doodle's head (which deliberately extends above the
+  // infobar's top rule — see .orbit-hero__text .hero__infobar
+  // .orbit-hero__illustration below) with the name's descenders. 85% keeps
+  // the tightened lockup but restores enough of the name-to-text gap to
+  // clear it. chipLayout's ORBIT_CENTER_Y is tuned to match this element's
+  // top edge, now at (100%-85%)/2 = 7.5% of the stage instead of 0% — see
+  // its own comment.
+  height: 85%;
+  transform: translateY(-50%);
+  z-index: 60;
+  pointer-events: none;
+}
+
+// The name is an absolutely-positioned overlay — at its full original size
+// it's taller than .orbit-hero__lockup has room for, so it's free to
+// overflow (the stage clips it) without pushing the infobar/tagline down.
+.orbit-hero__name-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.orbit-hero__name {
+  transform: translateY(calc(var(--lift) * -70vh));
+}
+
+// Entrance-hidden by default, not just via JS: this is a static export, so
+// the full HTML paints immediately on arrival, before the browser has even
+// fetched the JS bundle — a useLayoutEffect (see useHeroEntrance) runs
+// before React's own paint, but that's still well after this first,
+// JS-less paint. Defaulting to hidden here means that first paint already
+// matches the entrance's starting state, instead of flashing fully visible
+// and then popping hidden once hydration catches up. The <noscript>
+// override further down restores visibility for a visitor with JS fully
+// disabled, who'd otherwise never see this at all.
+.orbit-hero__name-wrap span[aria-hidden] {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+// Infobar/tagline sit at the bottom of .orbit-hero__lockup, clear of the
+// orbiting chips — independent of the name's actual rendered height, so
+// they never collide with it either. Visible immediately (while the chips
+// are still orbiting) and fade away early in the scroll — see
+// --intro-opacity.
+.orbit-hero__text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.orbit-hero__intro {
+  opacity: var(--intro-opacity);
+  pointer-events: auto;
+}
+
+// Entrance-hidden by default for the same reason as .orbit-hero__name-wrap
+// span[aria-hidden] above — see that rule's comment. Nested one level
+// inside .orbit-hero__intro (not on it directly) so this default and the
+// scroll-driven --intro-opacity above never fight over the same opacity
+// property; their effects just multiply together once both are active.
+.orbit-hero__intro-entrance {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.orbit-hero__reveal {
+  opacity: var(--label-opacity);
+}
+
+// The illustration sits in normal flow next to the tagline by default (the
+// reduced-motion static layout).
+.orbit-hero__illustration {
+  width: clamp(110px, 11vw, 170px);
+  margin: 2rem 0 0 auto;
+  pointer-events: none;
+}
+
+// Inside the pinned stage it's nested in the infobar instead, seated on
+// its top rule (see .orbit-hero__illustration below) with the rest of it
+// hanging down over the infobar row and the space below it. The
+// infobar becomes the positioning anchor only in this context (not
+// generally — .hero__infobar is shared with other hero layouts). Items
+// are spread edge-to-edge by justify-content (not flex-grow — same-length
+// gaps read as more evenly spaced than same-width boxes when the items'
+// own text lengths differ), and the right edge reserves clear space so
+// the last item doesn't run underneath the figure. It still fades with
+// --intro-opacity, gone before the project labels reveal over the same
+// corner of the stage.
+.orbit-hero__text .hero__infobar {
+  position: relative;
+  justify-content: space-between;
+  padding-right: clamp(190px, 21vw, 290px);
+  // The real border is replaced by the two .orbit-hero__infobar-rule spans
+  // below so the entrance timeline can draw them in — only here (not the
+  // reduced-motion static layout, which keeps the plain CSS border).
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.orbit-hero__text .hero__infobar-item {
+  flex: 0 1 auto;
+}
+
+// Stand-ins for the infobar's top/bottom border, drawn in left to right by
+// the entrance timeline (scaleX from 0, transform-origin left). Default
+// state is undrawn (scaleX(0)) for the same reason as .orbit-hero__name-wrap
+// span[aria-hidden] above — see that rule's comment; the <noscript>
+// override further down restores the full bar for a JS-disabled visitor.
+.orbit-hero__infobar-rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-border);
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.orbit-hero__infobar-rule--top {
+  top: 0;
+}
+
+.orbit-hero__infobar-rule--bottom {
+  bottom: 0;
+}
+
+// Seated on the infobar's TOP rule specifically (.hero__infobar has both
+// a border-top and a border-bottom) — top:0 anchors the SVG's own top
+// edge there, then translateY pulls it back up by a percentage of the
+// SVG's OWN rendered height (unlike `top`, which is a percentage of the
+// containing block) so the waist — not the head — lands on the rule: 65%
+// is the waist's distance from the top of the drawing (the top of the
+// pants shape sits at y≈141.6 out of the trimmed viewBox's y 83–173.21
+// span), nudged up another 10px on top of that to sit right. Legs/feet
+// hang down through the infobar row and past its bottom rule into the
+// open space reserved below.
+.orbit-hero__text .hero__infobar .orbit-hero__illustration {
+  position: absolute;
+  top: 0;
+  right: 9%;
+  z-index: 55;
+  margin: 0;
+  opacity: var(--intro-opacity, 1);
+  transform: translateY(calc(-65% - 10px));
+
+  @include media("<=new-referral-bp") {
+    width: clamp(90px, 18vw, 140px);
+    right: 6%;
+  }
+}
+
+.illustration {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+// The tagline now leads (above the infobar), so its spacing is a gap down
+// to the infobar's top rule rather than up from it. The button is pushed
+// out to the far edge (not left tight against the tagline) using the same
+// right-edge reservation as the infobar just below it, so the two rows'
+// right edges line up and the button never runs under the figure either.
+.orbit-hero__text .hero__statement-row {
+  padding: 0 clamp(190px, 21vw, 290px) 1.2rem 0;
+  justify-content: space-between;
+  gap: 1.6rem 1.6rem;
+}
+
+// Capped a hair under the general hero statement's own max (3.6rem) —
+// barely visible on its own, but it's what buys the "See the work" button
+// enough width to grow without wrapping under it: this row's tagline, gap,
+// and button all have to fit ahead of the reserved illustration column
+// above, and the tagline is the biggest of the three.
+.orbit-hero__text .hero__statement {
+  font-size: clamp(2.2rem, 3vw, 3.4rem);
+  white-space: normal;
+}
+
+// Each project's link spans the same box its chips settle into (left/top/
+// width set inline from computeProjectGridBox — see OrbitHero/index.tsx) so
+// the whole mosaic is clickable, down through its title/stat/CTA sitting in
+// the lower portion below it. Height is content-driven (no `bottom` anchor):
+// the text div's own inline padding-top reserves exactly the mosaic's
+// measured height plus a deliberate gap, so the text always renders right
+// below the mosaic regardless of how tall the mosaic or the text ends up.
+.orbit-hero__project {
+  position: absolute;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  font-family: $hero-sans;
+  // The link itself is sized by its (fading-in) text, not just the text
+  // node — without this, the anchor stays hit-testable under the text's own
+  // pointer-events:none and catches hover/clicks before anything is visible
+  // there. Gated on the same threshold as .orbit-hero__reveal's opacity.
+  pointer-events: var(--label-pointer-events);
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 4px;
+  }
+}
+
+.orbit-hero__project-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.orbit-hero__project-title-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.orbit-hero__project-title {
+  font-family: $display;
+  font-weight: 500;
+  font-size: clamp(3.2rem, 4.6vw, 5.4rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.12em;
+  transition:
+    color 0.25s ease,
+    text-decoration-color 0.25s ease;
+}
+
+.orbit-hero__project:hover .orbit-hero__project-title,
+.orbit-hero__project:focus-visible .orbit-hero__project-title {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
+}
+
+.orbit-hero__project-arrow {
+  display: inline-flex;
+  color: var(--color-accent);
+}
+
+.orbit-hero__project-arrow-art {
+  width: clamp(2.1rem, 3vw, 3.4rem);
+  height: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .orbit-hero__project-arrow {
+    transition: transform 0.25s ease;
+  }
+
+  .orbit-hero__project:hover .orbit-hero__project-arrow,
+  .orbit-hero__project:focus-visible .orbit-hero__project-arrow {
+    transform: translateX(4px);
+  }
+}
+
+.orbit-hero__project-description {
+  white-space: nowrap;
+  font-size: 1.7rem;
+  color: var(--color-text-muted);
+}
+
+.orbit-hero__project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  // A deliberate extra beat beyond the column's own 1rem gap, so the tags
+  // read as a distinct row rather than just another evenly-spaced line of
+  // text under the description.
+  margin-top: 0.3rem;
+}
+
+.orbit-hero__project-tag {
+  padding: 0.5rem 1rem;
+  // Design file's tag rectangle: cornerRadius 4.68 on a 23.2-tall pill —
+  // ~20% of its own height, a subtly rounded rectangle, not a full pill.
+  // (A percentage radius here would scale off the pill's much wider width
+  // instead, so this is a fixed px value scaled to roughly the same ratio.)
+  border-radius: 6px;
+  background: var(--color-pill-bg, rgb(147 147 147 / 9.85%));
+  font-size: 1.3rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+// Pure-CSS safety net for the brief pre-hydration window (this is a static
+// export: the server can't know the visitor's motion preference, so the
+// pinned/animated markup renders first and JS swaps to the layout below
+// once it detects prefers-reduced-motion) — collapse the scroll-jacking
+// pin immediately even before that swap happens.
+@media (prefers-reduced-motion: reduce) {
+  .orbit-hero__pin {
+    height: auto;
+  }
+
+  .orbit-hero__stage {
+    position: static;
+    height: auto;
+  }
+}
+
+// Reduced-motion static layout: the classic 4-pane Card per project, in a
+// plain responsive grid, no pinning or measured/animated positioning.
+.orbit-hero__static {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: stretch;
+  gap: 5.6rem 4rem;
+  margin-top: 4rem;
+
+  @include media("<=new-referral-bp") {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}
+
+.orbit-hero__static-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  // Unlike the animated stage's fixed, measured-width columns (where
+  // nowrap keeps the description a single tidy line — see
+  // .orbit-hero__project-description), this card's width is just a grid
+  // column that can get narrow (down to the full viewport width on
+  // mobile), so the description needs to wrap instead of overflowing it.
+  .orbit-hero__project-description {
+    white-space: normal;
+  }
+  color: inherit;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 4px;
+  }
+
+  &:hover .mosaic__pane img,
+  &:focus-visible .mosaic__pane img {
+    filter: brightness(1);
+  }
+}

@@ -3,37 +3,42 @@ import type { OverturePage } from "./types";
 
 export const OvertureMosaic: Mosaic = {
   title: "Overture",
+  description:
+    "An award-winning, nationwide lawyer-to-lawyer referral network I helped start in 2022.",
+  tags: ["Founding designer", "Product design", "Brand identity", "React"],
   link: "/work/overture",
   imgs: [
     {
-      src: "/uploads/overture/mosaic-large@1x.webp",
+      src: "/uploads/overture/mosaic-dashboard@1x.webp",
+      alt: "6,000+ attorney users on the platform, above the Overture member dashboard",
+      width: 362,
+      height: 609,
+    },
+    {
+      src: "/uploads/overture/mosaic-map@1x.webp",
       alt: "Coverage map of US states with active Overture attorneys",
-      width: 542,
-      height: 312,
+      width: 679,
+      height: 390,
     },
     {
-      src: "/uploads/overture/mosaic-tall@1x.webp?v=1791576132",
-      alt: "An attorney's profile page on Overture",
-      width: 176,
-      height: 313,
+      src: "/uploads/overture/mosaic-notifications@1x.webp",
+      alt: "Referral response notification on an attorney's network",
+      width: 679,
+      height: 204,
     },
     {
-      src: "/uploads/overture/mosaic-wide@1x.webp?v=1791478611",
-      alt: "Referral status tracker showing the steps of a referral",
-      width: 542,
-      height: 151,
+      src: "/uploads/overture/mosaic-invoice@1x.webp",
+      alt: "An invoice with fees split automatically across attorneys",
+      width: 202,
+      height: 390,
     },
     {
-      src: "/uploads/overture/mosaic-square@1x.webp?v=1791478611",
-      alt: "The Overture wordmark",
-      width: 177,
-      height: 148,
+      src: "/uploads/overture/mosaic-badge@1x.webp",
+      alt: "Vendor of the Year, California Lawyers Association",
+      width: 202,
+      height: 204,
     },
   ],
-  stat: {
-    title: ["6,000+"],
-    description: "attorneys on the platform",
-  },
 };
 
 export const OverturePageContent: OverturePage = {

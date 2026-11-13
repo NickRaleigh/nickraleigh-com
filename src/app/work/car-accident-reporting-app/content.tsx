@@ -3,37 +3,41 @@ import type { WestwoodLawPage } from "./types";
 
 export const WestwoodLawMosaic: Mosaic = {
   title: "Westwood Law",
+  description: "A personal injury firm I grew with automated, data-driven content.",
+  tags: ["Growth engineering", "Programmatic SEO", "Data tools"],
   link: "/work/car-accident-reporting-app",
   imgs: [
     {
-      src: "/uploads/car-accident-reporting-app/mosaic-large@1x.webp?v=1791478611",
+      src: "/uploads/car-accident-reporting-app/mosaic-dashboard@1x.webp",
+      alt: "5X monthly organic clicks, above the Westwood Law crash-report tool",
+      width: 362,
+      height: 609,
+    },
+    {
+      src: "/uploads/car-accident-reporting-app/mosaic-map@1x.webp",
       alt: "Map of reported crashes clustered by location",
-      width: 542,
-      height: 312,
+      width: 679,
+      height: 390,
     },
     {
-      src: "/uploads/car-accident-reporting-app/mosaic-tall@1x.webp?v=1791478611",
-      alt: "Ranked list of the most dangerous roads by crash count",
-      width: 176,
-      height: 313,
-    },
-    {
-      src: "/uploads/car-accident-reporting-app/mosaic-wide@1x.webp?v=1791478611",
+      src: "/uploads/car-accident-reporting-app/mosaic-chart@1x.webp",
       alt: "Charts of collision types and crash time of day",
-      width: 542,
-      height: 151,
+      width: 679,
+      height: 204,
     },
     {
-      src: "/uploads/car-accident-reporting-app/mosaic-square@1x.webp?v=1791478611",
-      alt: "The Westwood Law logo",
-      width: 177,
-      height: 148,
+      src: "/uploads/car-accident-reporting-app/mosaic-roads@1x.webp",
+      alt: "Ranked list of the most dangerous roads by crash count",
+      width: 202,
+      height: 390,
+    },
+    {
+      src: "/uploads/car-accident-reporting-app/mosaic-stat@1x.webp",
+      alt: "900k search impressions",
+      width: 202,
+      height: 204,
     },
   ],
-  stat: {
-    title: ["260", <span className="arrow" key="arrow">›</span>, "2,000+"],
-    description: "monthly organic clicks in 4 months",
-  },
 };
 
 export const WestwoodLawPageContent: WestwoodLawPage = {
