@@ -270,9 +270,14 @@ export function computeChipFrame(
   // The orbiting chip size is tied to the pane it will settle into, so it
   // scales with the stage instead of using a fixed pixel size — a "large"
   // pane's chip is already bigger than a "square" pane's chip while still
-  // orbiting.
-  const orbitWidth = cellWidth * ORBIT_SIZE_FACTOR * depthScale;
-  const orbitHeight = cellHeight * ORBIT_SIZE_FACTOR * depthScale;
+  // orbiting. Forced to 1:1 (instead of inheriting the cell's own aspect
+  // ratio) so every chip reads as a uniform square while orbiting, and
+  // based on the smaller of the two cell dimensions so a "full" pane's tall,
+  // narrow cell doesn't produce an oversized square that collides with
+  // neighboring orbit paths.
+  const orbitSize = Math.min(cellWidth, cellHeight) * ORBIT_SIZE_FACTOR * depthScale;
+  const orbitWidth = orbitSize;
+  const orbitHeight = orbitSize;
 
   // Both axes subtract the same absolute pixel gap (based on the grid's
   // height, the smaller of its two dimensions given BENTO_ASPECT) — basing
