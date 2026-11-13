@@ -25,7 +25,7 @@ export const homeContent: HomepageContent = {
   ],
   whatIDo: {
     missionStatement: {
-      title: "Software should get out of the way.",
+      title: "",
       description: `
 	I got tired of handing off designs and hoping they\'d
 	survive engineering. So in 2015, long before AI made

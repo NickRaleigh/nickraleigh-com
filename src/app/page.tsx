@@ -44,8 +44,7 @@ export default function Home() {
       <section className="position" id="about">
         <div className="wrap">
           <p className="position__statement">
-            {whatIDo.missionStatement.title}
-            <span className="dim"> {whatIDo.missionStatement.description}</span>
+            {whatIDo.missionStatement.description}
           </p>
 
           <div className="position__pillars">
