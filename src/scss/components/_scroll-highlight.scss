@@ -1,0 +1,17 @@
+// Width of the fade band between words, as a fraction of total scroll
+// progress (0-1). Larger = more words mid-transition at once.
+$scroll-highlight-band: 0.14;
+
+.scroll-highlight {
+  --progress: 0;
+
+  &__word {
+    --t: calc(var(--i) / var(--total));
+    color: color-mix(
+      in srgb,
+      var(--color-text)
+        calc(clamp(0, (var(--progress) - var(--t)) / #{$scroll-highlight-band} + 0.5, 1) * 100%),
+      var(--color-text-muted)
+    );
+  }
+}

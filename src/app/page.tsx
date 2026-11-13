@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { homeContent } from "./content";
 import { OrbitHero } from "@/components/OrbitHero";
+import { ScrollHighlight } from "@/components/ScrollHighlight";
 import { CTA } from "@/components/CTA";
 import { config } from "@/config/site";
 
@@ -43,9 +44,10 @@ export default function Home() {
 
       <section className="position" id="about">
         <div className="wrap">
-          <p className="position__statement">
-            {whatIDo.missionStatement.description}
-          </p>
+          <ScrollHighlight
+            text={whatIDo.missionStatement.description}
+            className="position__statement"
+          />
 
           <div className="position__pillars">
             {whatIDo.competencies.map((area, index) => (
