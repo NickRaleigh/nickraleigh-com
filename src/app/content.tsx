@@ -27,12 +27,13 @@ export const homeContent: HomepageContent = {
     missionStatement: {
       title: "",
       description: `
-	I got tired of handing off designs and hoping they\'d
-	survive engineering. So in 2015, long before AI made
-	it easier, I pushed myself to become an engineer too.
-	Now I take products from concept to production, owning
-	both the design and the code. A decade of craft is what
-	lets me get tasteful results from AI, not just fast ones.`,
+	I’ve been tinkering with computers since the 90s, and I
+	never lost the itch to build what I imagine. I trained as
+	a designer, then in 2015 I pushed myself to become an
+	engineer too. Now I take products from concept to
+	production, owning both the design and the code. A decade
+	of craft is what lets me get tasteful results from AI,
+	not just fast ones.`,
     },
     competencies: [
       {
