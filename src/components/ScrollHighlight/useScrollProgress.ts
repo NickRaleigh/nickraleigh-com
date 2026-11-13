@@ -2,8 +2,8 @@ import { useEffect, type RefObject } from "react";
 
 // Where the element's top/bottom must sit in the viewport (as a fraction of
 // viewport height, 0 = top of viewport) for progress to read 0 and 1.
-const RANGE_START = 0.82;
-const RANGE_END = 0.32;
+const RANGE_START = 0.62;
+const RANGE_END = 0.12;
 
 function clamp01(x: number): number {
   return Math.max(0, Math.min(1, x));

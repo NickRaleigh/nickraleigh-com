@@ -4,6 +4,9 @@ $scroll-highlight-band: 0.14;
 
 .scroll-highlight {
   --progress: 0;
+  // Dimmer than the site's usual muted-text token — this sits unrevealed
+  // most of the time, so it needs to read as background, not just secondary text.
+  --dim: color-mix(in srgb, var(--color-text-muted) 45%, var(--color-surface));
 
   &__word {
     --t: calc(var(--i) / var(--total));
@@ -11,7 +14,7 @@ $scroll-highlight-band: 0.14;
       in srgb,
       var(--color-text)
         calc(clamp(0, (var(--progress) - var(--t)) / #{$scroll-highlight-band} + 0.5, 1) * 100%),
-      var(--color-text-muted)
+      var(--dim)
     );
   }
 }
