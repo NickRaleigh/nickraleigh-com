@@ -1,5 +1,10 @@
+import type { Anchor } from "@/types/base";
 import type { Picture } from "@/types/base";
 import type { TextBlock } from "@/types/base";
+
+export type Competency = TextBlock & {
+  readonly icon: Picture;
+};
 
 // Five images, in a fixed grid position order (see Mosaic/Card): a
 // full-height pane, then the top/bottom pair of the middle column, then the
@@ -27,6 +32,9 @@ export type HomepageContent = {
   readonly mosaics: readonly [Mosaic, Mosaic];
   readonly whatIDo: {
     readonly missionStatement: TextBlock;
-    readonly competencies: TextBlock[];
+    readonly photo: Picture;
+    readonly aboutLink: Anchor;
+    readonly competencies: Competency[];
+    readonly skills: readonly string[];
   };
 };

@@ -35,26 +35,87 @@ export const homeContent: HomepageContent = {
 	of craft is what lets me get tasteful results from AI,
 	not just fast ones.`,
     },
+    photo: {
+      src: "/uploads/nick-90s-square.jpg",
+      alt: "Nick Raleigh as a kid, wearing sunglasses and sitting next to a toy laptop",
+      width: 480,
+      height: 480,
+    },
+    aboutLink: {
+      href: "/about",
+      text: "About me",
+    },
     competencies: [
       {
         title: "Product Design",
         description: `
-	Interface, interaction and brand design, from wireframes to
+	Interface, interaction, and brand, from first wireframe to
 	final UI. I designed Overture\'s product and brand from
-	scratch. `,
+	scratch.`,
+        icon: {
+          src: "/uploads/competencies/product-design.svg",
+          alt: "",
+          width: 530,
+          height: 399,
+        },
       },
       {
         title: "Front-End Engineering",
         description: `
-	Production React, built from my own designs. Components built
-	for the full range of real content, not just the typical case.`,
+	Production React and TypeScript, built from my own designs
+	and built to hold up under real content.`,
+        icon: {
+          src: "/uploads/competencies/frontend-engineering.svg",
+          alt: "",
+          width: 530,
+          height: 399,
+        },
       },
       {
-        title: "Data & Product Engineering",
+        title: "Growth Engineering",
         description: `
-	Data pipelines and programmatic pages that turn public data into
-        tools people actually find, plus the technical SEO behind them.`,
+	Data pipelines and programmatic pages that turn public data
+	into tools people search for. The technical SEO and growth
+	loops run underneath nearly everything I ship.`,
+        icon: {
+          src: "/uploads/competencies/growth-engineering.svg",
+          alt: "",
+          width: 530,
+          height: 399,
+        },
       },
+    ],
+    skills: [
+      "React",
+      "Redux",
+      "TypeScript",
+      "JavaScript",
+      "Next.js",
+      "HTML",
+      "CSS/SCSS",
+      "Layout",
+      "Animation",
+      "Responsive design",
+      "Web accessibility",
+      "Semantic HTML",
+      "Web performance",
+      "Cross-browser compatibility",
+      "State management",
+      "Multi-step workflows",
+      "Component libraries",
+      "REST API integration",
+      "Streaming LLM responses",
+      "Python",
+      "Django",
+      "AI-assisted development",
+      "Claude Code",
+      "LLM APIs",
+      "Interface",
+      "Interaction",
+      "Visual design",
+      "Figma",
+      "jQuery",
+      "Bootstrap",
     ],
   },
 };
